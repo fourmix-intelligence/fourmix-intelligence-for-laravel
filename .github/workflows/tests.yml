@@ -1,0 +1,24 @@
+name: tests
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['8.3', '8.4']
+        laravel: ['12.*', '13.*']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          tools: composer:v2
+      - run: composer require "illuminate/support:${{ matrix.laravel }}" --no-update
+      - run: composer update --prefer-dist --no-interaction
+      - run: composer test
+

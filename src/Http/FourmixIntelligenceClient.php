@@ -1,0 +1,87 @@
+<?php
+
+namespace FourmixIntelligence\Laravel\Http;
+
+use FourmixIntelligence\Laravel\Data\AgentResult;
+use FourmixIntelligence\Laravel\Exceptions\ApiException;
+use Illuminate\Http\Client\Factory;
+use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Http\Client\Response;
+use Illuminate\Support\Str;
+
+final class FourmixIntelligenceClient
+{
+    /** @param array<string, mixed> $config */
+    public function __construct(private readonly Factory $http, private readonly array $config) {}
+
+    /**
+     * @param array<int, array{role:string, content:string}> $messages
+     * @param array<string, mixed> $options
+     */
+    public function run(string $agent, array $messages, array $options = [], ?string $conversationId = null, ?string $customerToken = null): AgentResult
+    {
+        $body = ['messages' => $messages, 'options' => $options];
+        if ($conversationId !== null) $body['conversation_id'] = $conversationId;
+        if ($customerToken !== null) $body['customer_token'] = $customerToken;
+
+        return AgentResult::fromArray($this->json('POST', '/api/v3/ai/plugins/'.rawurlencode($agent).'/runs', $body));
+    }
+
+    /** @return array<string, mixed> */
+    public function history(string $agent, string $conversationId, string $customerToken, ?int $beforeId = null): array
+    {
+        $body = ['conversation_id' => $conversationId, 'customer_token' => $customerToken];
+        if ($beforeId !== null) $body['before_id'] = $beforeId;
+        return $this->json('POST', '/api/v3/ai/plugins/'.rawurlencode($agent).'/customer-history', $body);
+    }
+
+    /**
+     * @param array<int, array<string, mixed>> $records
+     * @return array<string, mixed>
+     */
+    public function syncDocuments(string $dataset, array $records, ?string $idempotencyKey = null): array
+    {
+        return $this->json('POST', '/api/v3/data/'.rawurlencode($dataset).'/documents/sync', ['records' => $records], $idempotencyKey ?? (string) Str::uuid(), true);
+    }
+
+    /** @return array<string, mixed> */
+    public function syncStatus(string $dataset, string $jobId): array
+    {
+        return $this->json('GET', '/api/v3/data/'.rawurlencode($dataset).'/sync/'.rawurlencode($jobId), [], null, true);
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     * @return array<string, mixed>
+     */
+    public function json(string $method, string $path, array $payload = [], ?string $idempotencyKey = null, bool $sync = false): array
+    {
+        $request = $this->request($sync);
+        if ($idempotencyKey !== null) $request = $request->withHeader('Idempotency-Key', $idempotencyKey);
+        $response = $request->send($method, ltrim($path, '/'), $method === 'GET' ? ['query' => $payload] : ['json' => $payload]);
+        $this->ensureSuccessful($response);
+        $json = $response->json();
+        return is_array($json) ? $json : [];
+    }
+
+    private function request(bool $sync = false): PendingRequest
+    {
+        $token = $sync ? ($this->config['sync_token'] ?? null) : ($this->config['token'] ?? null);
+        if (!is_string($token) || $token === '') throw new ApiException($sync ? '資料同期キーが設定されていません。' : '接続トークンが設定されていません。');
+        $retry = is_array($this->config['retry'] ?? null) ? $this->config['retry'] : [];
+
+        return $this->http->baseUrl(rtrim((string) $this->config['url'], '/'))->acceptJson()->asJson()
+            ->withToken($token)->timeout((int) ($this->config['timeout'] ?? 60))
+            ->connectTimeout((int) ($this->config['connect_timeout'] ?? 5))
+            ->retry((int) ($retry['times'] ?? 2), (int) ($retry['sleep_ms'] ?? 250), throw: false)
+            ->withHeaders(['User-Agent' => 'Fourmix-Intelligence-for-Laravel/1.0']);
+    }
+
+    private function ensureSuccessful(Response $response): void
+    {
+        if ($response->successful()) return;
+        $message = $response->json('detail') ?? $response->json('message') ?? 'Fourmix Intelligence との通信に失敗しました。';
+        if (!is_string($message)) $message = 'Fourmix Intelligence との通信に失敗しました。';
+        throw new ApiException($message, $response->status(), $response->header('X-Request-Id'));
+    }
+}
