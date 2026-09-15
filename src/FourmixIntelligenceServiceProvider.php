@@ -5,9 +5,11 @@ namespace FourmixIntelligence\Laravel;
 use FourmixIntelligence\Laravel\Console\DoctorCommand;
 use FourmixIntelligence\Laravel\Console\InstallCommand;
 use FourmixIntelligence\Laravel\Console\KnowledgeSyncCommand;
+use FourmixIntelligence\Laravel\Http\Controllers\NativeBridgeController;
 use FourmixIntelligence\Laravel\Http\FourmixIntelligenceClient;
 use FourmixIntelligence\Laravel\Tools\ToolRegistry;
 use Illuminate\Http\Client\Factory;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 final class FourmixIntelligenceServiceProvider extends ServiceProvider
@@ -24,6 +26,16 @@ final class FourmixIntelligenceServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->publishes([__DIR__.'/../config/fourmix-intelligence.php' => config_path('fourmix-intelligence.php')], 'fourmix-intelligence-config');
+        $registry = $this->app->make(ToolRegistry::class);
+        foreach ((array) config('fourmix-intelligence.bridge.tool_handlers', []) as $handler) {
+            if (is_string($handler) && class_exists($handler)) $registry->register($handler);
+        }
+        if ((bool) config('fourmix-intelligence.bridge.enabled', false)) {
+            Route::prefix('fourmix-intelligence/v1')->group(function (): void {
+                Route::get('manifest', [NativeBridgeController::class, 'manifest']);
+                Route::post('actions/{operation}', [NativeBridgeController::class, 'execute'])->where('operation', '[a-z][a-z0-9_.-]{2,127}');
+            });
+        }
         if ($this->app->runningInConsole()) $this->commands([InstallCommand::class, DoctorCommand::class, KnowledgeSyncCommand::class]);
     }
 }

@@ -25,6 +25,9 @@ FOURMIX_INTELLIGENCE_TOKEN=
 FOURMIX_INTELLIGENCE_AGENT=
 FOURMIX_INTELLIGENCE_DATASET=
 FOURMIX_INTELLIGENCE_SYNC_TOKEN=
+FOURMIX_INTELLIGENCE_BRIDGE_ENABLED=false
+FOURMIX_INTELLIGENCE_BRIDGE_SECRET=
+FOURMIX_INTELLIGENCE_BRIDGE_APPLICATION_ID=
 ```
 
 接続トークンと資料同期キーは用途を分けて発行してください。ブラウザーへ渡したり、URLやログへ記録したりしないでください。
@@ -83,7 +86,44 @@ final class OrderTools
 }
 ```
 
-更新や送信を行うツールは `requiresApproval: true` とし、アプリケーション側でも認可、確認、冪等性、監査を実装してください。
+属性にはモデルへ渡す最小限の入力定義も指定します。登録したクラスだけが候補となり、さらに `bridge.enabled_operations` で公開する機能を絞れます。
+
+```php
+#[FourmixIntelligenceTool(
+    name: 'orders.change_shipping_date',
+    description: '注文の出荷予定日を変更します',
+    scopes: ['orders:write'],
+    requiresApproval: true,
+    readOnly: false,
+    inputSchema: [
+        'type' => 'object',
+        'properties' => [
+            'orderNumber' => ['type' => 'string', 'maxLength' => 40],
+            'shippingDate' => ['type' => 'string', 'maxLength' => 10],
+        ],
+        'required' => ['orderNumber', 'shippingDate'],
+    ],
+    domain: 'orders',
+    keywords: ['注文', '出荷', '配送'],
+)]
+public function changeShippingDate(string $orderNumber, string $shippingDate): array
+{
+    // Laravel 側でも現在の利用者・組織・注文に対する認可を行います。
+}
+```
+
+`config/fourmix-intelligence.php` へハンドラーを登録し、管理対象にする操作だけを選びます。
+
+```php
+'bridge' => [
+    'enabled' => true,
+    'secret' => env('FOURMIX_INTELLIGENCE_BRIDGE_SECRET'),
+    'tool_handlers' => [App\FourmixTools\OrderTools::class],
+    'enabled_operations' => ['orders.lookup', 'orders.change_shipping_date'],
+],
+```
+
+更新や送信を行うツールは `requiresApproval: true` とし、アプリケーション側でも認可、確認、冪等性、監査を実装してください。共有キーは32文字以上のランダム値にし、Fourmix Intelligence のワークスペース接続と同じ値を登録します。Laravel から Studio AI を呼ぶ既存機能と、この業務公開機能は独立して有効・無効を選べます。
 
 ## 運用確認
 

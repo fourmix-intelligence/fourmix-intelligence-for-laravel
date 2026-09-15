@@ -15,6 +15,16 @@ return [
         'secret' => env('FOURMIX_INTELLIGENCE_WEBHOOK_SECRET'),
         'tolerance_seconds' => (int) env('FOURMIX_INTELLIGENCE_WEBHOOK_TOLERANCE', 300),
     ],
+    'bridge' => [
+        'enabled' => (bool) env('FOURMIX_INTELLIGENCE_BRIDGE_ENABLED', false),
+        'secret' => env('FOURMIX_INTELLIGENCE_BRIDGE_SECRET'),
+        'application_id' => env('FOURMIX_INTELLIGENCE_BRIDGE_APPLICATION_ID'),
+        'revision' => (int) env('FOURMIX_INTELLIGENCE_BRIDGE_REVISION', 1),
+        // この配列へ登録したクラスだけが公開候補になります。
+        'tool_handlers' => [],
+        // ['*'] は登録済みの全機能。個別に止める場合は機能名を列挙します。
+        'enabled_operations' => ['*'],
+    ],
     'logging' => ['channel' => env('FOURMIX_INTELLIGENCE_LOG_CHANNEL')],
 ];
 
