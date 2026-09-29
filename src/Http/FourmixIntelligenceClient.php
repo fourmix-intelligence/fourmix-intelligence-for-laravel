@@ -24,7 +24,9 @@ final class FourmixIntelligenceClient
         if ($conversationId !== null) $body['conversation_id'] = $conversationId;
         if ($customerToken !== null) $body['customer_token'] = $customerToken;
 
-        return AgentResult::fromArray($this->json('POST', '/api/v3/ai/plugins/'.rawurlencode($agent).'/runs', $body));
+        // 会話実行は初回通信の結果が不明なまま再送すると、同じ発言を二重に処理する
+        // 可能性がある。利用側で会話IDを受け取る前のため、自動再試行しない。
+        return AgentResult::fromArray($this->json('POST', '/api/v3/ai/plugins/'.rawurlencode($agent).'/runs', $body, allowRetry: false));
     }
 
     /** @return array<string, mixed> */
@@ -54,9 +56,9 @@ final class FourmixIntelligenceClient
      * @param array<string, mixed> $payload
      * @return array<string, mixed>
      */
-    public function json(string $method, string $path, array $payload = [], ?string $idempotencyKey = null, bool $sync = false): array
+    public function json(string $method, string $path, array $payload = [], ?string $idempotencyKey = null, bool $sync = false, bool $allowRetry = true): array
     {
-        $request = $this->request($sync);
+        $request = $this->request($sync, $allowRetry);
         if ($idempotencyKey !== null) $request = $request->withHeader('Idempotency-Key', $idempotencyKey);
         $response = $request->send($method, ltrim($path, '/'), $method === 'GET' ? ['query' => $payload] : ['json' => $payload]);
         $this->ensureSuccessful($response);
@@ -64,17 +66,20 @@ final class FourmixIntelligenceClient
         return is_array($json) ? $json : [];
     }
 
-    private function request(bool $sync = false): PendingRequest
+    private function request(bool $sync = false, bool $allowRetry = true): PendingRequest
     {
         $token = $sync ? ($this->config['sync_token'] ?? null) : ($this->config['token'] ?? null);
         if (!is_string($token) || $token === '') throw new ApiException($sync ? '資料同期キーが設定されていません。' : '接続トークンが設定されていません。');
         $retry = is_array($this->config['retry'] ?? null) ? $this->config['retry'] : [];
 
-        return $this->http->baseUrl(rtrim((string) $this->config['url'], '/'))->acceptJson()->asJson()
+        $request = $this->http->baseUrl(rtrim((string) $this->config['url'], '/'))->acceptJson()->asJson()
             ->withToken($token)->timeout((int) ($this->config['timeout'] ?? 60))
             ->connectTimeout((int) ($this->config['connect_timeout'] ?? 5))
-            ->retry((int) ($retry['times'] ?? 2), (int) ($retry['sleep_ms'] ?? 250), throw: false)
             ->withHeaders(['User-Agent' => 'Fourmix-Intelligence-for-Laravel/1.0']);
+
+        return $allowRetry
+            ? $request->retry((int) ($retry['times'] ?? 2), (int) ($retry['sleep_ms'] ?? 250), throw: false)
+            : $request;
     }
 
     private function ensureSuccessful(Response $response): void
