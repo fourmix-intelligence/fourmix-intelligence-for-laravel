@@ -26,7 +26,12 @@ final class NativeBridgeController extends Controller
     public function execute(Request $request, string $operation, ToolRegistry $tools): JsonResponse
     {
         $this->authorizeRequest($request);
-        $limit = 'fourmix-native:'.hash('sha256', (string) $request->ip());
+        // 連携要求は Fourmix Intelligence 側から届くため、接続元IPで数えると
+        // 複数組織が同じ上限を共有する。署名で検証済みの接続単位で制限する。
+        $limit = 'fourmix-native:'.hash('sha256', implode("\n", [
+            (string) $request->header('X-Fourmix-Workspace', ''),
+            (string) $request->header('X-Fourmix-Connection', ''),
+        ]));
         abort_if(RateLimiter::tooManyAttempts($limit, 120), 429, '処理が混み合っています。');
         RateLimiter::hit($limit, 60);
         $arguments = $request->input('arguments', []);
