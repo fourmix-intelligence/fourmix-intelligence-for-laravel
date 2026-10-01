@@ -16,7 +16,7 @@ final class WebhookTest extends TestCase
     {
         parent::setUp();
         config(['database.default' => 'testing', 'database.connections.testing' => ['driver' => 'sqlite', 'database' => ':memory:', 'prefix' => ''], 'fourmix-intelligence.webhooks.secret' => 'isolated-test-secret', 'fourmix-intelligence.webhooks.connection_id' => 'connection-one']);
-        (require __DIR__.'/../database/migrations/2026_10_01_000000_create_fourmix_intelligence_webhook_receipts.php')->up();
+        (require __DIR__.'/../database/migrations/0001_01_01_000000_create_fourmix_intelligence_tables.php')->up();
         Route::post('/webhook', function () { ++$this->calls; return response()->json(['accepted' => true]); })->middleware(VerifyFourmixIntelligenceWebhook::class);
         Route::post('/failure', function () { ++$this->calls; return response()->json(['accepted' => false], 503); })->middleware(VerifyFourmixIntelligenceWebhook::class);
     }
