@@ -28,6 +28,8 @@ FOURMIX_INTELLIGENCE_SYNC_TOKEN=
 FOURMIX_INTELLIGENCE_BRIDGE_ENABLED=false
 FOURMIX_INTELLIGENCE_BRIDGE_SECRET=
 FOURMIX_INTELLIGENCE_BRIDGE_APPLICATION_ID=
+FOURMIX_INTELLIGENCE_BRIDGE_WORKSPACE_ID=
+FOURMIX_INTELLIGENCE_BRIDGE_CONNECTION_ID=
 ```
 
 接続トークンと資料同期キーは用途を分けて発行してください。ブラウザーへ渡したり、URLやログへ記録したりしないでください。
@@ -127,6 +129,12 @@ public function changeShippingDate(string $orderNumber, string $shippingDate): a
 
 ## 運用確認
 
+### 業務連携の接続先を固定する
+
+管理者は Fourmix Intelligence のワークスペースIDと、そのワークスペースで発行した接続IDを `FOURMIX_INTELLIGENCE_BRIDGE_WORKSPACE_ID` / `FOURMIX_INTELLIGENCE_BRIDGE_CONNECTION_ID` に設定してください。表示名ではなく API が返す `identify` を使用します。両方の設定が必要です。設定後は `php artisan config:cache` を実行し、常駐プロセスを再起動します。
+
+最初の署名要求による自動固定は行いません。キャッシュを消去しても設定された接続先だけを受け付け、別ワークスペースまたは別接続は拒否します。接続先を変更する際は、業務連携を無効にして旧接続を解除し、共有キーを更新した上で両IDを管理者が変更してから再び有効にしてください。共有キーの変更だけで接続先が自動的に変わることはありません。
+
 ```bash
 php artisan fourmix-intelligence:doctor
 ```
@@ -136,3 +144,23 @@ php artisan fourmix-intelligence:doctor
 ## ライセンス
 
 MIT License
+
+## Webhook 受信と再送
+
+この SDK の `VerifyFourmixIntelligenceWebhook` は導入先が選んだ受信 route に適用するミドルウェアです。現在のプラットフォームが自動的にこの契約の Webhook を送る設定はありません。ネイティブ業務操作の署名契約とは別の機能です。
+
+導入先と送信元で、次の契約を合わせてください。
+
+- 本文は JSON。トップレベルの `event_id` は英数字、`_`、`.`、`:`、`-` の 1〜128 文字で、同じ接続の全受信 route を通して一意にします。同じ業務イベントの再送では本文のバイト列と ID を変更しません。
+- `X-Fourmix-Intelligence-Timestamp` は Unix 時刻、`X-Fourmix-Intelligence-Signature` は `timestamp + "." + 生の本文` の HMAC-SHA256（小文字 hex）です。署名の許容時間は既定 300 秒。再送では時刻と署名だけを更新できます。
+- `FOURMIX_INTELLIGENCE_WEBHOOK_CONNECTION_ID` を受信する接続ごとに固定します。別の独立した受信処理には別 ID を使用します。秘密の変更、URL の別名、Cache の削除では受領記録をリセットしません。
+- 複数インスタンスが共有する永続 DB を使用します。必要なら `FOURMIX_INTELLIGENCE_WEBHOOK_DATABASE_CONNECTION` に Laravel の接続名を指定します。業務トランザクションの外側にこのミドルウェアを配置してください。
+
+```sh
+php artisan vendor:publish --tag=fourmix-intelligence-webhooks
+php artisan migrate
+```
+
+受信 route は JSON の HTTP 応答（本文 64 KiB 以内）を返すようにしてください。成功済みの再送には保存した本文、status、Content-Type を返し、業務処理を呼び出しません。同じ ID に別の本文を送ると 409、処理中・結果不明の再送も 409 です。例外、5xx、ストリーム、上限を超えた応答は結果不明として残します。送信元は 409 を無条件に繰り返さず、実行結果を確認してください。
+
+受領記録は自動削除せず、接続終了まで保持します。これにより遅い再送でも二重実行を防ぎます。削除が必要な場合は送信元の再送停止を確認し、導入先の運用者が実行結果と保存方針を判断してください。結果不明の行を削除して自動再実行させないでください。ミドルウェアはリダイレクト、Cookie、独自応答ヘッダーの再現を目的としません。

@@ -56,13 +56,12 @@ final class NativeBridgeController extends Controller
             $workspace, $connection, hash('sha256', $request->getContent()),
         ]);
         abort_unless(hash_equals('v1='.hash_hmac('sha256', $canonical, $secret), $provided), 403, '署名を確認できませんでした。');
+        // 接続先は管理者の設定を正本とし、キャッシュ消去や最初の要求で変更しない。
+        $boundWorkspace = trim((string) config('fourmix-intelligence.bridge.workspace_id'));
+        $boundConnection = trim((string) config('fourmix-intelligence.bridge.connection_id'));
+        abort_unless($boundWorkspace !== '' && $boundConnection !== '', 503, '連携するワークスペースと接続IDを設定してください。');
+        abort_unless(hash_equals($boundWorkspace, $workspace) && hash_equals($boundConnection, $connection), 409, '別の Fourmix Intelligence 接続は利用できません。');
         abort_unless(Cache::add('fourmix-native-nonce:'.hash('sha256', $nonce), true, 600), 403, '同じ要求は再実行できません。');
-
-        $bindingKey = 'fourmix-native-binding';
-        $binding = Cache::get($bindingKey);
-        $current = hash('sha256', $workspace."\n".$connection);
-        abort_if(is_string($binding) && ! hash_equals($binding, $current), 409, '別の Fourmix Intelligence 接続には変更できません。');
-        Cache::forever($bindingKey, $current);
     }
 
     /** @return list<string> */

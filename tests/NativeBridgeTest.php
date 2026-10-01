@@ -12,6 +12,8 @@ final class NativeBridgeTest extends TestCase
     {
         $app['config']->set('fourmix-intelligence.bridge.enabled', true);
         $app['config']->set('fourmix-intelligence.bridge.secret', str_repeat('s', 32));
+        $app['config']->set('fourmix-intelligence.bridge.workspace_id', 'workspace-1');
+        $app['config']->set('fourmix-intelligence.bridge.connection_id', 'connection-1');
         $app['config']->set('fourmix-intelligence.bridge.enabled_operations', ['orders.lookup']);
     }
 
@@ -40,17 +42,38 @@ final class NativeBridgeTest extends TestCase
         $this->signed('GET', '/fourmix-intelligence/v1/manifest', [], $nonce)->assertForbidden();
     }
 
-    private function signed(string $method, string $path, array $body = [], ?string $nonce = null)
+    public function test_cache_flush_cannot_change_the_configured_connection(): void
+    {
+        $this->signed('GET', '/fourmix-intelligence/v1/manifest')->assertOk();
+        Cache::flush();
+        $this->signed('GET', '/fourmix-intelligence/v1/manifest', workspace: 'workspace-2')->assertStatus(409);
+        $this->signed('POST', '/fourmix-intelligence/v1/actions/orders.lookup', ['arguments' => ['number' => 'A-1']], connection: 'connection-2')->assertStatus(409);
+        $this->signed('POST', '/fourmix-intelligence/v1/actions/orders.lookup', ['arguments' => ['number' => 'A-1']])->assertOk();
+        $this->refreshApplication();
+        $this->signed('GET', '/fourmix-intelligence/v1/manifest', connection: 'connection-2')->assertStatus(409);
+    }
+
+    public function test_binding_requires_both_explicit_identifiers(): void
+    {
+        foreach (['workspace_id', 'connection_id'] as $key) {
+            $previous = config('fourmix-intelligence.bridge.'.$key);
+            config(['fourmix-intelligence.bridge.'.$key => null]);
+            $this->signed('GET', '/fourmix-intelligence/v1/manifest')->assertStatus(503);
+            config(['fourmix-intelligence.bridge.'.$key => $previous]);
+        }
+    }
+
+    private function signed(string $method, string $path, array $body = [], ?string $nonce = null, string $workspace = 'workspace-1', string $connection = 'connection-1')
     {
         $timestamp = (string) time();
         $nonce ??= fake()->uuid();
         $raw = $body === [] ? '' : json_encode($body, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
-        $canonical = implode("\n", [$timestamp, $nonce, $method, $path, 'workspace-1', 'connection-1', hash('sha256', $raw)]);
+        $canonical = implode("\n", [$timestamp, $nonce, $method, $path, $workspace, $connection, hash('sha256', $raw)]);
         $headers = [
             'X-Fourmix-Timestamp' => $timestamp,
             'X-Fourmix-Nonce' => $nonce,
-            'X-Fourmix-Workspace' => 'workspace-1',
-            'X-Fourmix-Connection' => 'connection-1',
+            'X-Fourmix-Workspace' => $workspace,
+            'X-Fourmix-Connection' => $connection,
             'X-Fourmix-Signature' => 'v1='.hash_hmac('sha256', $canonical, str_repeat('s', 32)),
         ];
 
