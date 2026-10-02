@@ -2,15 +2,52 @@
 
 namespace FourmixIntelligence\Laravel\Http\Controllers;
 
+use FourmixIntelligence\Laravel\Tools\ToolConsent;
+use FourmixIntelligence\Laravel\Tools\ToolExecutor;
+use FourmixIntelligence\Laravel\Tools\ToolPolicy;
 use FourmixIntelligence\Laravel\Tools\ToolRegistry;
+use FourmixIntelligence\Laravel\Tools\UserBindings;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Validation\ValidationException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 final class NativeBridgeController extends Controller
 {
+    public function binding(Request $request, string $action, UserBindings $bindings): JsonResponse
+    {
+        $this->authorizeRequest($request);
+        if (in_array($action, ['context', 'revoke'], true)) {
+            $input = $request->validate(['binding_id' => ['required', 'uuid'], 'remote_user' => ['required', 'uuid']]);
+            $result = $bindings->context($input['binding_id'], $input['remote_user']);
+            $context = app(ToolPolicy::class)->resolve(['workspace_id' => (string) $request->header('X-Fourmix-Workspace'), 'connection_id' => (string) $request->header('X-Fourmix-Connection'), 'remote_user' => $input['remote_user']]);
+            abort_unless($context->subject === $result['subject'], 403);
+            if ($action === 'revoke') {
+                $bindings->revoke($context);
+
+                return response()->json(['revoked' => true])->header('Cache-Control', 'no-store');
+            }
+            $result['permissions'] = [];
+            $modes = app(ToolConsent::class)->modes($context->subject);
+            foreach (app(ToolRegistry::class)->manifest($this->enabledOperations()) as $tool) {
+                $mode = $modes[$tool['name']] ?? 'disabled';
+                if ($mode !== 'disabled') {
+                    $result['permissions'][$tool['name']] = $mode;
+                }
+            }
+
+            return response()->json($result)->header('Cache-Control', 'no-store');
+        }
+        $input = $request->validate(['code' => ['required', 'string', 'size:48'], 'remote_user' => [$action === 'claim' ? 'required' : 'nullable', 'uuid']]);
+
+        return response()->json($action === 'claim' ? $bindings->claim($input['code'], $input['remote_user']) : $bindings->preview($input['code']))->header('Cache-Control', 'no-store');
+    }
+
     public function manifest(Request $request, ToolRegistry $tools): JsonResponse
     {
         $this->authorizeRequest($request);
@@ -20,10 +57,21 @@ final class NativeBridgeController extends Controller
             'revision' => max(1, (int) config('fourmix-intelligence.bridge.revision', 1)),
             'application' => ['id' => $this->applicationId(), 'version' => app()->version()],
             'capabilities' => $tools->manifest($this->enabledOperations()),
+            'features' => ['user_bound_execution', 'application_reviews', 'durable_idempotency', 'native_chat'],
         ]);
     }
 
-    public function execute(Request $request, string $operation, ToolRegistry $tools): JsonResponse
+    public function receipt(Request $request, string $requestId, ToolExecutor $executor, ToolPolicy $policy): JsonResponse
+    {
+        $this->authorizeRequest($request);
+        $identity = $request->input('identity', []);
+        abort_unless(is_array($identity), 422);
+        $context = $policy->resolve([...$identity, 'workspace_id' => (string) $request->header('X-Fourmix-Workspace'), 'connection_id' => (string) $request->header('X-Fourmix-Connection')]);
+
+        return response()->json($executor->receipt($context, $requestId))->header('Cache-Control', 'no-store');
+    }
+
+    public function execute(Request $request, string $operation, ToolExecutor $executor, ToolPolicy $policy): JsonResponse
     {
         $this->authorizeRequest($request);
         // 連携要求は Fourmix Intelligence 側から届くため、接続元IPで数えると
@@ -37,11 +85,32 @@ final class NativeBridgeController extends Controller
         $arguments = $request->input('arguments', []);
         abort_unless(is_array($arguments), 422, 'arguments の形式を確認してください。');
 
-        return response()->json(['data' => $tools->execute($operation, $arguments, $this->enabledOperations())]);
+        $identity = $request->input('identity', []);
+        abort_unless(is_array($identity), 422);
+        $identity['workspace_id'] = (string) $request->header('X-Fourmix-Workspace');
+        $identity['connection_id'] = (string) $request->header('X-Fourmix-Connection');
+        $context = $policy->resolve($identity);
+        try {
+            $result = $executor->execute($context, $operation, $arguments, $request->input('request_id'));
+        } catch (\Throwable $exception) {
+            if ($exception instanceof ValidationException || $exception instanceof HttpExceptionInterface || $exception instanceof AuthorizationException) {
+                throw $exception;
+            }
+            $row = DB::table('fourmix_intelligence_tool_actions')->where('subject', $context->subject)
+                ->where('request_id', $request->input('request_id'))->where('operation', $operation)->where('state', 'unknown_effect')->first();
+            if ($row === null) {
+                throw $exception;
+            }
+            $result = ['id' => $row->id, 'state' => 'unknown_effect', 'operation' => $operation, 'url' => $policy->reviewUrl($row->id),
+                'message' => '実行結果を確認できません。同じ受付番号では再実行しません。業務画面と操作履歴を確認してください。'];
+        }
+
+        return response()->json($result)->header('Cache-Control', 'no-store');
     }
 
     private function authorizeRequest(Request $request): void
     {
+        abort_if(strlen($request->getContent()) > 256000, 413, '入力内容が大きすぎます。');
         $secret = (string) config('fourmix-intelligence.bridge.secret');
         abort_unless(strlen($secret) >= 32, 503, 'Fourmix Intelligence 連携は設定されていません。');
         $timestamp = (string) $request->header('X-Fourmix-Timestamp', '');

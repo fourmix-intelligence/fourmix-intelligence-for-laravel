@@ -3,6 +3,9 @@
 namespace FourmixIntelligence\Laravel\Tests;
 
 use FourmixIntelligence\Laravel\Attributes\FourmixIntelligenceTool;
+use FourmixIntelligence\Laravel\Tools\ToolConsent;
+use FourmixIntelligence\Laravel\Tools\ToolContext;
+use FourmixIntelligence\Laravel\Tools\ToolPolicy;
 use FourmixIntelligence\Laravel\Tools\ToolRegistry;
 use Illuminate\Support\Facades\Cache;
 
@@ -15,13 +18,19 @@ final class NativeBridgeTest extends TestCase
         $app['config']->set('fourmix-intelligence.bridge.workspace_id', 'workspace-1');
         $app['config']->set('fourmix-intelligence.bridge.connection_id', 'connection-1');
         $app['config']->set('fourmix-intelligence.bridge.enabled_operations', ['orders.lookup']);
+        $app['config']->set('database.default', 'testing');
+        $app['config']->set('cache.default', 'array');
+        $app['config']->set('database.connections.testing', ['driver' => 'sqlite', 'database' => ':memory:', 'prefix' => '']);
     }
 
     protected function setUp(): void
     {
         parent::setUp();
         Cache::flush();
+        (require __DIR__.'/../database/migrations/2026_10_02_000000_create_fourmix_intelligence_business_tables.php')->up();
+        $this->app->bind(ToolPolicy::class, NativeBridgeTestPolicy::class);
         $this->app->make(ToolRegistry::class)->register(new NativeBridgeFixture);
+        $this->app->make(ToolConsent::class)->replace('test-user', ['orders.lookup' => 'review'], $this->app->make(ToolRegistry::class));
     }
 
     public function test_it_exposes_and_executes_only_enabled_registered_operations(): void
@@ -78,9 +87,31 @@ final class NativeBridgeTest extends TestCase
         ];
 
         $server = ['CONTENT_TYPE' => 'application/json', 'HTTP_ACCEPT' => 'application/json'];
-        foreach ($headers as $name => $value) $server['HTTP_'.strtoupper(str_replace('-', '_', $name))] = $value;
+        foreach ($headers as $name => $value) {
+            $server['HTTP_'.strtoupper(str_replace('-', '_', $name))] = $value;
+        }
 
         return $this->call($method, $path, [], [], [], $server, $raw);
+    }
+}
+
+final class NativeBridgeTestPolicy implements ToolPolicy
+{
+    public function resolve(array $identity): ToolContext
+    {
+        return new ToolContext('test-user');
+    }
+
+    public function authorize(ToolContext $context, string $operation, array $arguments): void {}
+
+    public function preview(ToolContext $context, string $operation, array $arguments): array
+    {
+        return $arguments;
+    }
+
+    public function reviewUrl(string $actionId): string
+    {
+        return '/reviews/'.$actionId;
     }
 }
 
@@ -89,10 +120,16 @@ final class NativeBridgeFixture
     #[FourmixIntelligenceTool(name: 'orders.lookup', description: '注文を確認します', inputSchema: [
         'type' => 'object', 'properties' => ['number' => ['type' => 'string']], 'required' => ['number'],
     ], domain: 'orders', keywords: ['注文'])]
-    public function lookup(string $number): array { return ['number' => $number]; }
+    public function lookup(string $number): array
+    {
+        return ['number' => $number];
+    }
 
     #[FourmixIntelligenceTool(name: 'orders.cancel', description: '注文を取消します', requiresApproval: true, readOnly: false, inputSchema: [
         'type' => 'object', 'properties' => ['number' => ['type' => 'string']], 'required' => ['number'],
     ])]
-    public function cancel(string $number): array { return ['number' => $number]; }
+    public function cancel(string $number): array
+    {
+        return ['number' => $number];
+    }
 }

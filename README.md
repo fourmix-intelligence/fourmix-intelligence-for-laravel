@@ -125,7 +125,39 @@ public function changeShippingDate(string $orderNumber, string $shippingDate): a
 ],
 ```
 
-更新や送信を行うツールは `requiresApproval: true` とし、アプリケーション側でも認可、確認、冪等性、監査を実装してください。共有キーは32文字以上のランダム値にし、Fourmix Intelligence のワークスペース接続と同じ値を登録します。Laravel から Studio AI を呼ぶ既存機能と、この業務公開機能は独立して有効・無効を選べます。
+更新や送信を行うツールは `requiresApproval: true` とします。書込みには UUID の `idempotency_key` が自動追加され、同じ依頼の再送でも同じ値を使用します。共有キーは32文字以上のランダム値にし、Fourmix Intelligence のワークスペース接続と同じ値を登録します。Laravel から Studio AI を呼ぶ既存機能と、この業務公開機能は独立して有効・無効を選べます。
+
+### 利用者・許可・確認画面
+
+次期メジャー版の業務接続は、共有キーだけで業務を実行できません。導入先で `Tools\ToolPolicy` を実装し、サービスプロバイダーでその実装を bind してください。既定の `DenyToolPolicy` はすべて拒否します。
+
+- `resolve()`：署名経路で届いた Fourmix Intelligence 利用者を、`UserBindings` の関連付けと現在のアプリケーション利用者へ解決します。モデルが指定した利用者IDを信頼してはいけません。
+- `authorize()`：毎回、現在のアカウント状態、組織、対象レコード、業務権限を検査します。継続許可でもこの検査を省略しません。
+- `preview()`：確認する対象・変更前の情報・入力値を返します。実行前に再取得し、変更されていれば新しい依頼を要求します。
+- `reviewUrl()`：本人だけが閲覧・確認できるアプリケーションの確認画面を返します。確認用 route は通常のログインと CSRF を必要とし、AI ツールには登録しません。
+
+```sh
+php artisan vendor:publish --tag=fourmix-intelligence-business
+php artisan migrate
+```
+
+導入先のログイン済み画面で、`UserBindings::issue()` により10分有効な関連付けコードを発行します。本人が Fourmix Intelligence の `/connections/laravel-user?connection=<接続ID>` へコードを入力して関連付けます。コードを URL やログへ記録しません。両側の解除画面から解除でき、以後の要求と未実行の確認を拒否します。
+
+`ToolConsent::replace()` は本人の設定画面からのみ呼び、操作ごとに `disabled`、`review`、`automatic` を保存します。初期値はすべて `disabled`。`automatic` は金額・削除・権限変更などへの継続許可を明示確認した場合だけ保存してください。許可の変更も導入先の監査へ記録してください。画面表示用の `modes()` は1回の DB 読取りで取得し、実行時の `mode()` は都度最新の値を確認します。
+
+`ToolExecutor` は関連付け済み利用者、操作許可、現在の業務権限を合わせて検査します。`confirmation_required` の返却は保存完了ではありません。本人の画面で `confirm()` / `reject()` を呼び、`succeeded` を確認してください。確認は15分で期限切れになります。受付番号は利用者ごとに一意で、同じ番号の別入力は409です。`receipt()` と署名付き `POST /fourmix-intelligence/v1/receipts/{受付番号}` は状態だけを読み、再実行しません。
+
+業務保存と実行結果は同じ DB トランザクションで処理します。ハンドラーが外部サービスを更新する場合、そのサービス側にも同じ受付番号による重複排除が必要です。例外・実行途中の停止は `unknown_effect` / `running` として扱い、結果を確認するまで新しい番号で同じ書込みを依頼しないでください。受領記録は自動削除せず、削除を伴う migration の巻戻しも拒否します。DB の履歴と暗号化データを読むための `APP_KEY` を運用方針に沿って維持してください。
+
+操作のスキーマ・説明・版が変われば `automatic` は `review` へ戻り、以前の確認依頼は実行できません。ハンドラーの実装が同じ定義のまま意味を変える場合は、属性の `version` またはコールバック定義の `version` を必ず更新してください。新しい操作を発見しても既存の利用者許可は増えません。
+
+### ネイティブ会話
+
+`Http\NativeApplicationClient` は、サーバーから PHP コントロールプレーンへ会話・履歴・状態を署名付きで送ります。設定は `FOURMIX_INTELLIGENCE_PLATFORM_URL`、`FOURMIX_INTELLIGENCE_TENANT`、必要に応じて `FOURMIX_INTELLIGENCE_UI_URL`。`PLATFORM_URL` は AI Python サービスや MCP の URL ではなく PHP API の URL です。共有キーと関連付けIDはブラウザーへ渡しません。
+
+Fourmix Intelligence 側では関連付け済みの本人・一つの接続・一つの会話に限定した短時間トークンで FinCube を実行します。この経路では個人ノート、他の会話、他のワークスペースの知識、別の接続をモデルへ渡しません。通常の Fourmix Intelligence / MCP 利用では、それぞれの画面で選択した権限に加えて、同じアプリケーションの利用者許可と業務認可を検査します。アプリケーションのブラウザーを閉じても利用できますが、双方のサーバーと接続先 API は稼働している必要があります。
+
+業務の操作名、金額の意味、計算、帳票、画面は導入先へ置きます。SDK へ特定の業務を追加する必要はありません。`ValidationSchema::fromRules()` で既存の Laravel 規則から入力メタデータを作れますが、DB の存在・一意性、条件付き規則、独自ルールをすべて JSON Schema へ変換する機能ではありません。保存時には元の FormRequest と業務処理を必ず実行してください。
 
 ## 運用確認
 

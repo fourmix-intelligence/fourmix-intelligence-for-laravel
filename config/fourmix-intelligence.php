@@ -30,5 +30,10 @@ return [
         'enabled_operations' => ['*'],
     ],
     'logging' => ['channel' => env('FOURMIX_INTELLIGENCE_LOG_CHANNEL')],
+    'native' => [
+        'ui_url' => env('FOURMIX_INTELLIGENCE_UI_URL'),
+        'url' => env('FOURMIX_INTELLIGENCE_PLATFORM_URL'),
+        'tenant' => env('FOURMIX_INTELLIGENCE_TENANT'),
+        'timeout' => (int) env('FOURMIX_INTELLIGENCE_NATIVE_TIMEOUT', 250),
+    ],
 ];
-

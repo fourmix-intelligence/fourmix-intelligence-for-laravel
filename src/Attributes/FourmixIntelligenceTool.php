@@ -8,9 +8,9 @@ use Attribute;
 final readonly class FourmixIntelligenceTool
 {
     /**
-     * @param list<string> $scopes
-     * @param array<string,mixed> $inputSchema
-     * @param list<string> $keywords
+     * @param  list<string>  $scopes
+     * @param  array<string,mixed>  $inputSchema
+     * @param  list<string>  $keywords
      */
     public function __construct(
         public string $name,
@@ -22,6 +22,6 @@ final readonly class FourmixIntelligenceTool
         public array $keywords = [],
         public bool $readOnly = true,
         public bool $destructive = false,
+        public string $version = '1',
     ) {}
 }
-
