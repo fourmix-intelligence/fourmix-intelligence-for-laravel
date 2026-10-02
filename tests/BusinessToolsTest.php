@@ -25,7 +25,7 @@ final class BusinessToolsTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        (require __DIR__.'/../database/migrations/2026_10_02_000000_create_fourmix_intelligence_business_tables.php')->up();
+        (require __DIR__.'/../database/migrations/0001_01_01_000000_create_fourmix_intelligence_tables.php')->up();
         $this->app->instance(ToolPolicy::class, new BusinessToolsPolicy);
         $this->register('1');
     }

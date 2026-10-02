@@ -193,7 +193,7 @@ php artisan vendor:publish --tag=fourmix-intelligence-webhooks
 php artisan migrate
 ```
 
-受領記録の表は `0001_01_01_000000_create_fourmix_intelligence_tables.php` に初期構造として定義します。増分 migration は追加しません。Webhook を使用しない導入先では、この初期 migration の公開・適用は不要です。
+業務連携の4表と Webhook 受領記録の表は `0001_01_01_000000_create_fourmix_intelligence_tables.php` に初期構造として定義します。両方の公開タグは同じ migration を公開するため、両機能を使う場合も適用は1回です。業務連携の表はアプリケーションの既定 DB、Webhook の表は `webhooks.database_connection` で指定した DB に作成します。どちらの機能も使用しない導入先では公開・適用は不要です。既に適用した業務アプリケーション側の migration 履歴は変更しません。
 
 受信 route は JSON の HTTP 応答（本文 64 KiB 以内）を返すようにしてください。成功済みの再送には保存した本文、status、Content-Type を返し、業務処理を呼び出しません。同じ ID に別の本文を送ると 409、処理中・結果不明の再送も 409 です。例外、5xx、ストリーム、上限を超えた応答は結果不明として残します。送信元は 409 を無条件に繰り返さず、実行結果を確認してください。
 

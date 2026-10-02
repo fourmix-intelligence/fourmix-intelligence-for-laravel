@@ -27,7 +27,7 @@ final class NativeBridgeTest extends TestCase
     {
         parent::setUp();
         Cache::flush();
-        (require __DIR__.'/../database/migrations/2026_10_02_000000_create_fourmix_intelligence_business_tables.php')->up();
+        (require __DIR__.'/../database/migrations/0001_01_01_000000_create_fourmix_intelligence_tables.php')->up();
         $this->app->bind(ToolPolicy::class, NativeBridgeTestPolicy::class);
         $this->app->make(ToolRegistry::class)->register(new NativeBridgeFixture);
         $this->app->make(ToolConsent::class)->replace('test-user', ['orders.lookup' => 'review'], $this->app->make(ToolRegistry::class));

@@ -39,7 +39,7 @@ final class FourmixIntelligenceServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->publishes([__DIR__.'/../config/fourmix-intelligence.php' => config_path('fourmix-intelligence.php')], 'fourmix-intelligence-config');
-        $this->publishes([__DIR__.'/../database/migrations/2026_10_02_000000_create_fourmix_intelligence_business_tables.php' => database_path('migrations/2026_10_02_000000_create_fourmix_intelligence_business_tables.php')], 'fourmix-intelligence-business');
+        $this->publishes([__DIR__.'/../database/migrations/0001_01_01_000000_create_fourmix_intelligence_tables.php' => database_path('migrations/0001_01_01_000000_create_fourmix_intelligence_tables.php')], 'fourmix-intelligence-business');
         $this->publishes([__DIR__.'/../database/migrations/0001_01_01_000000_create_fourmix_intelligence_tables.php' => database_path('migrations/0001_01_01_000000_create_fourmix_intelligence_tables.php')], 'fourmix-intelligence-webhooks');
         $registry = $this->app->make(ToolRegistry::class);
         foreach ((array) config('fourmix-intelligence.bridge.tool_handlers', []) as $handler) {
