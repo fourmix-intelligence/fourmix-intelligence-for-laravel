@@ -8,6 +8,15 @@ Fourmix Intelligence への接続、双方向通信、AI の選択、会話、�
 - Laravel 12 / 13
 - 標準画面は Blade と Tailwind CSS。Vue / Inertia などの独自画面からも同じ API を利用できます。
 
+## 日本語の開発者ガイド
+
+- [導入と接続](docs/getting-started.md)：新規導入、握手、複数接続、AI の許可と選択。
+- [AI API](docs/ai-api.md)：接続×AI、会話、ストリーミング、添付、ジョブ、対外向け AI。
+- [業務ツールと認可](docs/business-tools.md)：属性による一覧生成、入力、Policy、確認、重複防止。
+- [UI と Artisan](docs/ui-and-artisan.md)：標準画面、独立した設定、生成と配置、カスタマイズ。
+- [テストと運用](docs/testing-and-operations.md)：合成データによる検証、移行、監視、障害対応。
+- [API・設定リファレンス](docs/reference.md)：公開メソッド、拡張インターフェース、構成。
+
 ## 二つの利用方向
 
 | 利用方向 | 使用する AI | 接続・許可の意味 |
@@ -15,62 +24,61 @@ Fourmix Intelligence への接続、双方向通信、AI の選択、会話、�
 | Fourmix Intelligence から Laravel を操作 | 接続範囲の FinCube | Laravel が公開した業務ツールを、個人・組織・ワークスペースのどこで使用できるかを指定 |
 | Laravel 内で AI を使用 | AI Studio で作成したアプリケーション向け AI | Fourmix Intelligence が許可した AI とその能力を、Laravel の標準または独自 UI で使用 |
 
-Fourmix Intelligence の個人・組織・ワークスペースは、Fourmix Intelligence 内の利用範囲です。宿主アプリケーションの部署やワークスペースとは別の概念であり、自動的な権限の対応付けは行いません。同じ業務ツールでも、返すデータと許可する操作は宿主の実行主体と業務認可によって変わります。
+Fourmix Intelligence の個人・組織・ワークスペースは、Fourmix Intelligence 内の利用範囲です。アプリケーションの部署やワークスペースとは別の概念であり、自動的な権限の対応付けは行いません。同じ業務ツールでも、返すデータと許可する操作はアプリケーションの実行主体と業務認可によって変わります。
 
-Laravel 内の AI は FinCube への自動切替を行いません。AI Studio 側で明示的にこの接続への利用を許可した AI を選びます。資料庫や外部サービスの利用可否は、その AI の設定と Fourmix Intelligence の許可に従います。宿主は接続キーの発行時に、その接続へ公開する業務操作と確認方法を選択します。片方向の許可だけで、もう片方向の権限は増えません。
+Laravel 内の AI は FinCube への自動切替を行いません。AI Studio 側で明示的にこの接続への利用を許可した AI を選びます。資料庫や外部サービスの利用可否は、その AI の設定と Fourmix Intelligence の許可に従います。アプリケーションは接続キーの発行時に、その接続へ公開する業務操作と確認方法を選択します。片方向の許可だけで、もう片方向の権限は増えません。
 
-どちらの方向も、宿主のブラウザーを開いておく必要はありません。双方のサーバーと API は稼働し、通信できる必要があります。
+どちらの方向も、アプリケーションのブラウザーを開いておく必要はありません。双方のサーバーと API は稼働し、通信できる必要があります。
 
 ### ChatGPT などの外部 AI から利用する
 
-外部 AI は Fourmix Intelligence の MCP を通じて、許可された Laravel 接続の業務ツールを利用します。SDK を導入しただけで接続や業務データが外部へ公開されることはありません。FI 側で発行する MCP の利用許可と接続範囲に加え、宿主側の本人確認、現在の業務権限、操作ごとの確認ルールを毎回適用します。
+外部 AI は Fourmix Intelligence の MCP を通じて、許可された Laravel 接続の業務ツールを利用します。SDK を導入しただけで接続や業務データが外部へ公開されることはありません。Fourmix Intelligence 側で発行する MCP の利用許可と接続範囲に加え、アプリケーション側の本人確認、現在の業務権限、操作ごとの確認ルールを毎回適用します。
 
-組織の Laravel 接続には、明示的な `organization` コンテキストと専用の `organization.connections.use` 許可が必要です。この許可は FI の既存の組織管理者ルールに従い、管理権限が解除された場合は利用できません。従来の `connections.use` やワークスペースの許可だけで、組織の接続を利用することはできません。FI の組織管理権限を持つ場合も、宿主のシステム権限や別の利用者の業務権限は取得しません。
+組織の Laravel 接続には、明示的な `organization` コンテキストと専用の `organization.connections.use` 許可が必要です。この許可は Fourmix Intelligence の既存の組織管理者ルールに従い、管理権限が解除された場合は利用できません。従来の `connections.use` やワークスペースの許可だけで、組織の接続を利用することはできません。Fourmix Intelligence の組織管理権限を持つ場合も、アプリケーションのシステム権限や別の利用者の業務権限は取得しません。
 
 ## インストールと初期構造
 
 ```bash
 composer config repositories.fourmix-intelligence vcs https://github.com/fourmix-intelligence/fourmix-intelligence-for-laravel
 composer require fourmix-intelligence/laravel
-php artisan vendor:publish --tag=fourmix-intelligence-config --no-interaction
-php artisan vendor:publish --tag=fourmix-intelligence-business --no-interaction
+php artisan fi:install --with-migration --no-interaction
 php artisan migrate --no-interaction
 ```
 
-接続、利用者の関連付け、AI の選択、操作許可、確認依頼、実行結果はデータベースで管理します。接続の秘密と確認・実行データは暗号化して保持するため、`APP_KEY` を維持してください。接続の秘密とトークンはブラウザーへ渡しません。短時間有効な接続確認コードは本人の管理ページに表示し、本人が FI の接続画面へ入力します。コードや秘密を URL・ログ・他の画面へ転記しないでください。
+接続、利用者の関連付け、AI の選択、操作許可、確認依頼、実行結果はデータベースで管理します。接続の秘密と確認・実行データは暗号化して保持するため、`APP_KEY` を維持してください。接続の秘密とトークンはブラウザーへ渡しません。一度限りの接続キーを本人の管理ページで発行し、Fourmix Intelligence のサービス接続でアプリ URL とともに入力します。本人の関連付けは握手で行うため、別の関連付けコードは不要です。キーや秘密を URL・ログへ記録しないでください。
 
-`fourmix-intelligence-business` と `fourmix-intelligence-webhooks` は同じ初期 migration を公開します。両機能を利用する場合も適用は一度です。SDK の新規導入用初期構造を、既に適用済みの宿主 migration に上書きしてはいけません。導入先に既存の SDK 表がある場合は、宿主の増分 migration で必要な差分を適用してください。利用履歴がある初期 migration の巻戻しは拒否します。
+`fourmix-intelligence-business` と `fourmix-intelligence-webhooks` は同じ初期 migration を公開します。両機能を利用する場合も適用は一度です。SDK の新規導入用初期構造を、既に適用済みのアプリケーション migration に上書きしてはいけません。導入先に既存の SDK 表がある場合は、アプリケーションの増分 migration で必要な差分を適用してください。利用履歴がある初期 migration の巻戻しは拒否します。
 
 ## 管理ページから接続する
 
 標準の管理ページは `/fourmix-intelligence`、会話ページは `/fourmix-intelligence/chat` です。名前付きルートは `fourmix-intelligence.manage` と `fourmix-intelligence.chat`。既定で `web` と `auth` ミドルウェアを使用し、更新には CSRF 検証が必要です。
 
-1. 宿主へログインし、管理ページの「新しい接続を作成」で接続名と公開する業務を選びます。操作ごとの参照・毎回確認・継続許可を設定し、一度だけ使える10分有効の接続キーを発行します。未選択の操作は許可しません。
-2. Fourmix Intelligence の「サービス接続」で Laravel アプリケーションの URL と接続キーを入力します。FinCube で使用する個人・組織・ワークスペースの範囲は FI 側で選びます。
-3. サーバー間の握手で、FI の本人・利用範囲と宿主でキーを発行した本人を関連付けます。接続キーは消費され、暗号化した接続ごとの秘密を保存します。FI の利用範囲を広げても、宿主の本人権限は広がりません。
-4. Laravel 内のチャットも使う場合は、FI の AI Studio でこの接続に AI の利用を許可します。宿主の「チャットの設定」でページと側窓それぞれの接続・AIを設定します。二つは別のAIを使用でき、独立して表示を停止できます。利用中のチャットにAI選択メニューは表示しません。
+1. アプリケーションへログインし、管理ページの「新しい接続を作成」で接続名と公開する業務を選びます。操作ごとの参照・毎回確認・継続許可を設定し、一度だけ使える10分有効の接続キーを発行します。未選択の操作は許可しません。
+2. Fourmix Intelligence の「サービス接続」で Laravel アプリケーションの URL と接続キーを入力します。FinCube で使用する個人・組織・ワークスペースの範囲は Fourmix Intelligence 側で選びます。
+3. サーバー間の握手で、Fourmix Intelligence の本人・利用範囲とアプリケーションでキーを発行した本人を関連付けます。接続キーは消費され、暗号化した接続ごとの秘密を保存します。Fourmix Intelligence の利用範囲を広げても、アプリケーションの本人権限は広がりません。
+4. Laravel 内のチャットも使う場合は、Fourmix Intelligence の AI Studio でこの接続に AI の利用を許可します。アプリケーションの「チャットの設定」でページと側窓それぞれの接続・AIを設定します。二つは別のAIを使用でき、独立して表示を停止できます。利用中のチャットにAI選択メニューは表示しません。
 5. 公開業務を変更するときは接続カードの「権限を変更してキーを再発行」を使用します。古い署名鍵・本人関連付け・AI設定を無効にし、FIでの接続確認と必要なチャット設定をやり直します。変更を既存会話へ黙って流用しません。
 
-握手のコールバック先は `native.trusted_platform_urls` の完全一致で制限します。既定では公式の本番・デモ API を許可します。自社運用の FI は構成ファイルで信頼する URL を明示してください。任意の URL をブラウザーから指定して、宿主サーバーを内部ネットワークへの中継に使うことはできません。`local` / `testing` 環境では、localhost・127.0.0.1・host.docker.internal へのローカル接続を許可します。
+握手のコールバック先は `native.trusted_platform_urls` の完全一致で制限します。既定では公式の本番・デモ API を許可します。自社運用の Fourmix Intelligence は構成ファイルで信頼する URL を明示してください。任意の URL をブラウザーから指定して、アプリケーションサーバーを内部ネットワークへの中継に使うことはできません。`local` / `testing` 環境では、localhost・127.0.0.1・host.docker.internal へのローカル接続を許可します。
 
-チャットの有効・無効は、本人のページ・側窓ごとに保存します。表示設定は業務権限の付与やFI側のAI削除を行いません。標準ページは公式の図形ロゴと文字ロゴを使用し、公開したビューとアセットで宿主のブランドへ変更できます。
+チャットの有効・無効は、本人のページ・側窓ごとに保存します。表示設定は業務権限の付与やFI側のAI削除を行いません。標準ページは公式の図形ロゴと文字ロゴを使用し、公開したビューとアセットでアプリケーションのブランドへ変更できます。
 
-新しい接続には FI 専用の環境変数による接続 ID、ワークスペース ID、共有キーの設定は不要です。複数の利用者、接続、AI を独立して管理できます。初回に届いた任意の署名要求を接続として自動登録する仕組みではありません。
+新しい接続には Fourmix Intelligence 専用の環境変数による接続 ID、ワークスペース ID、共有キーの設定は不要です。複数の利用者、接続、AI を独立して管理できます。初回に届いた任意の署名要求を接続として自動登録する仕組みではありません。
 
-### 宿主の実行主体
+### アプリケーションの実行主体
 
-既定の `IntegrationAccess` はログイン済み利用者を `user:<認証ID>` として扱い、`ui.host_modes` は `['user']` のみです。独自のアカウント体系を持つ宿主では、`Tools\IntegrationAccess` を実装してサービスプロバイダーで bind します。
+既定の `IntegrationAccess` はログイン済み利用者を `user:<認証ID>` として扱い、`ui.host_modes` は `['user']` のみです。独自のアカウント体系を持つアプリケーションでは、`Tools\IntegrationAccess` を実装してサービスプロバイダーで bind します。
 
-- `context(Request)`：管理・会話・承認を行う、宿主の認証済み実行主体を返します。ブラウザーから渡された利用者 ID を採用しません。
-- `authorizeSystemConnection(Request)`：システム接続の作成を宿主の管理権限で認可します。
+- `context(Request)`：管理・会話・承認を行う、アプリケーションの認証済み実行主体を返します。ブラウザーから渡された利用者 ID を採用しません。
+- `authorizeSystemConnection(Request)`：システム接続の作成をアプリケーションの管理権限で認可します。
 
-システム接続を提供する場合は、`ui.host_modes` へ `system` を明示設定したうえで、専用の `IntegrationAccess` と `ToolPolicy` を実装してください。`context()` は作成者の個人アカウントではなく、宿主が定義した独立したサービス実行主体を返し、すべての管理要求を適切に保護する必要があります。`ToolPolicy` も同じ主体へ解決し、許可されたデータ・操作のみを実行します。
+システム接続を提供する場合は、`ui.host_modes` へ `system` を明示設定したうえで、専用の `IntegrationAccess` と `ToolPolicy` を実装してください。`context()` は作成者の個人アカウントではなく、アプリケーションが定義した独立したサービス実行主体を返し、すべての管理要求を適切に保護する必要があります。`ToolPolicy` も同じ主体へ解決し、許可されたデータ・操作のみを実行します。
 
 既定の `AuthenticatedIntegrationAccess` は、`fourmix-intelligence.system` Gate が許可されてもシステム接続を拒否します。Gate を追加するだけで作成者の個人権限をシステム権限として代理実行しません。Fourmix Intelligence の組織接続を選ぶこととも別の設定です。
 
-## 業務ツールと宿主の認可
+## 業務ツールとアプリケーションの認可
 
-公開するメソッドを属性で明示します。次の `OrderLookup` は宿主側で実装する業務処理の例です。
+公開するメソッドを属性で明示します。次の `OrderLookup` はアプリケーション側で実装する業務処理の例です。
 
 ```php
 use App\Actions\OrderLookup;
@@ -114,7 +122,7 @@ final class OrderTools
 ],
 ```
 
-属性の `scopes` は宿主が認可で解釈する業務権限の宣言です。FI の個人・組織・ワークスペースを指定する項目ではなく、宣言だけで業務権限を与えるものでもありません。
+属性の `scopes` はアプリケーションが認可で解釈する業務権限の宣言です。Fourmix Intelligence の個人・組織・ワークスペースを指定する項目ではなく、宣言だけで業務権限を与えるものでもありません。
 
 ### 内部向け・顧客向けの公開区分
 
@@ -131,26 +139,26 @@ final class OrderTools
 
 両方に提供する場合は `['internal', 'customer']` を指定します。`ToolRegistry::registerCallback()` の定義では同じ項目を `'audiences' => ['customer']` として指定します。許容値は `internal` と `customer` の非空リストのみで、ワイルドカードはありません。区分は manifest と操作定義の指紋に含まれ、区分変更後は以前の継続許可や確認依頼をそのまま再利用できません。
 
-標準の認証済み管理・チャット画面では `internal` のAIだけを設定できます。`customer` のAIを使う対外画面は、宿主が顧客の本人確認を行う独自APIとUIを実装し、信頼できるサーバーコードから `forUser($ownerContext)->forVisitor($verifiedCustomerId)` を使用してください。接続を所有するFI利用者と、会話する顧客の識別子は別です。`forVisitor()` にブラウザーが自由に指定した値をそのまま渡してはいけません。
+標準の認証済み管理・チャット画面では `internal` のAIだけを設定できます。`customer` のAIを使う対外画面は、アプリケーションが顧客の本人確認を行う独自APIとUIを実装し、信頼できるサーバーコードから `forUser($ownerContext)->forVisitor($verifiedCustomerId)` を使用してください。接続を所有するFI利用者と、会話する顧客の識別子は別です。`forVisitor()` にブラウザーが自由に指定した値をそのまま渡してはいけません。
 
-公開区分だけでは顧客の本人確認や注文の所有者検証を行いません。宿主は `ToolPolicy` で検証済みの顧客主体を解決し、`authorize()` と業務処理で本人に属するレコードだけを扱ってください。ブラウザーやモデルに `audience` や所有者IDを自由に指定させて認可してはいけません。顧客向けAIも、FIの利用許可、接続ごとの業務許可、操作ごとの確認方法、宿主の現在の認可をすべて満たす必要があります。顧客向けの書込みにも確認と重複実行防止が適用されます。
+公開区分だけでは顧客の本人確認や注文の所有者検証を行いません。アプリケーションは `ToolPolicy` で検証済みの顧客主体を解決し、`authorize()` と業務処理で本人に属するレコードだけを扱ってください。ブラウザーやモデルに `audience` や所有者IDを自由に指定させて認可してはいけません。顧客向けAIも、FIの利用許可、接続ごとの業務許可、操作ごとの確認方法、アプリケーションの現在の認可をすべて満たす必要があります。顧客向けの書込みにも確認と重複実行防止が適用されます。
 
 業務ツールを提供する場合は、内部向け・顧客向けのどちらでも以下の認可アダプターが必要です。
 
-宿主の `Tools\ToolPolicy` を bind してください。既定の `BoundUserToolPolicy` は、署名確認済みの接続と明示的な本人の関連付けを照合し、現在の Laravel 認証ガードの `UserProvider` で利用者を毎回取得します。整数・UUID の利用者 ID に対応し、削除済みの利用者、別の接続所有者、システム接続を拒否します。チャットだけを使うプロジェクトでは、この既定処理で本人の Studio AI を使用でき、業務ツール用の認可処理は不要です。業務操作の `authorize()` と `preview()` はすべて拒否するため、操作を公開するには宿主の認可処理が必要です。複数の認証方式、無効化などの独自状態、システム主体の解決も宿主が実装してください。本人の解決も含めてすべて拒否したい場合は、`DenyToolPolicy` を明示的に bind できます。
+アプリケーションの `Tools\ToolPolicy` を bind してください。既定の `BoundUserToolPolicy` は、署名確認済みの接続と明示的な本人の関連付けを照合し、現在の Laravel 認証ガードの `UserProvider` で利用者を毎回取得します。整数・UUID の利用者 ID に対応し、削除済みの利用者、別の接続所有者、システム接続を拒否します。チャットだけを使うプロジェクトでは、この既定処理で本人の Studio AI を使用でき、業務ツール用の認可処理は不要です。業務操作の `authorize()` と `preview()` はすべて拒否するため、操作を公開するにはアプリケーションの認可処理が必要です。複数の認証方式、無効化などの独自状態、システム主体の解決もアプリケーションが実装してください。本人の解決も含めてすべて拒否したい場合は、`DenyToolPolicy` を明示的に bind できます。
 
-| メソッド | 宿主が実装する内容 |
+| メソッド | アプリケーションが実装する内容 |
 | --- | --- |
-| `resolve()` | 署名確認済みの接続・FI 利用者を、現在有効な関連付けと宿主の主体へ解決 |
+| `resolve()` | 署名確認済みの接続・Fourmix Intelligence 利用者を、現在有効な関連付けとアプリケーションの主体へ解決 |
 | `authorize()` | 利用者やサービス主体の状態、組織、対象レコード、業務権限を毎回検査 |
 | `preview()` | 実行せずに対象、入力、現在の内容を取得し、秘密を含まない確認表示を返す |
-| `reviewUrl()` | 本人だけが利用できる宿主の確認画面を返す。標準コンポーネントは同一オリジンの URL を優先して案内 |
+| `reviewUrl()` | 本人だけが利用できるアプリケーションの確認画面を返す。標準コンポーネントは同一オリジンの URL を優先して案内 |
 
 既存の FormRequest、ポリシー、業務サービスを使って保存時にも入力と認可を検証します。`ValidationSchema::fromRules()` は入力メタデータの作成を補助しますが、DB の存在・一意性、条件付き規則、独自ルール、業務認可をすべて代替するものではありません。
 
 ## 操作の許可・承認・実行結果
 
-操作ごとの初期値は `disabled` です。管理ページで参照を許可し、更新は `review`（毎回確認）または明示的に確認した `automatic`（継続許可）を選びます。継続許可でも宿主の業務認可は省略しません。操作許可は接続ごとに保存し、初期状態では業務操作を許可しません。
+操作ごとの初期値は `disabled` です。管理ページで参照を許可し、更新は `review`（毎回確認）または明示的に確認した `automatic`（継続許可）を選びます。継続許可でもアプリケーションの業務認可は省略しません。操作許可は接続ごとに保存し、初期状態では業務操作を許可しません。
 
 更新ツールは `readOnly: false` とし、確認が必要なものは `requiresApproval: true` を指定します。書込みの入力には UUID の `idempotency_key` が追加されます。`ToolExecutor` は公開操作、利用者の許可、接続ごとの許可、現在の業務認可を確認し、確認時と実行直前にも検査します。別の接続・利用者・AI へ許可を流用しません。
 
@@ -195,9 +203,9 @@ if ($history['has_more'] ?? false) {
 }
 ```
 
-ネイティブ会話の履歴・会話一覧は現在の本人、接続、Studio AI の許可に限定します。毎回 FI の許可を確認し、呼び出し時と業務ツールの呼戻し時に宿主の現在の接続の許可を検査します。会話の途中で AI を変更したり業務範囲を拡大したりする場合は、新しい会話を開始してください。
+ネイティブ会話の履歴・会話一覧は現在の本人、接続、Studio AI の許可に限定します。毎回 Fourmix Intelligence の許可を確認し、呼び出し時と業務ツールの呼戻し時にアプリケーションの現在の接続の許可を検査します。会話の途中で AI を変更したり業務範囲を拡大したりする場合は、新しい会話を開始してください。
 
-接続を明示する公開APIでは、接続名は現在の本人が所有する接続から解決し、FIがその接続へ許可したAIだけを使用します。AI Studio固有のモデル・能力・設定を宿主の実行オプションで上書きすることはできません。
+接続を明示する公開APIでは、接続名は現在の本人が所有する接続から解決し、FIがその接続へ許可したAIだけを使用します。AI Studio固有のモデル・能力・設定をアプリケーションの実行オプションで上書きすることはできません。
 
 ```php
 $agent = FourmixIntelligence::connection('お問い合わせ窓口')
@@ -212,19 +220,19 @@ $content = $conversation->file($attachmentId);
 $answer = $conversation->attachments([$attachmentId])->ask('添付を確認してください。');
 $conversation->deleteFile($attachmentId);
 
-// 対外向けAIには宿主で本人確認した顧客の安定した識別子を指定します。
+// 対外向けAIにはアプリケーションで本人確認した顧客の安定した識別子を指定します。
 $customer = $agent->forUser($ownerContext)->forVisitor($verifiedCustomerId);
 ```
 
 添付のアップロード・一覧・取得・削除も会話する本人とAIの許可を再確認します。`customer` のAIではすべての呼出しに同じ検証済み `forVisitor()` を引き継いでください。
 
-ジョブなど HTTP ログインとは別の処理では、信頼できる宿主コードで `->forUser(new ToolContext($verifiedSubject))` を指定します。`$verifiedSubject` をモデルやブラウザーが入力した文字列から作ってはいけません。`context()` の補足情報も実行主体や認可の代わりにはなりません。
+ジョブなど HTTP ログインとは別の処理では、信頼できるアプリケーションコードで `->forUser(new ToolContext($verifiedSubject))` を指定します。`$verifiedSubject` をモデルやブラウザーが入力した文字列から作ってはいけません。`context()` の補足情報も実行主体や認可の代わりにはなりません。
 
 ## 標準 UI と開発用テンプレート
 
-標準ではチャットページ `page` と右下の側窓 `floating` を1つずつ定義します。各画面は独立して有効・無効を切り替え、別の接続とAIを設定できます。利用中のチャットにはAI選択の選択メニューを出さず、設定済みのAIの表示名を示します。内部の呼び出し名は表示しません。時刻は宿主の `app.timezone` に従います。
+標準ではチャットページ `page` と右下の側窓 `floating` を1つずつ定義します。各画面は独立して有効・無効を切り替え、別の接続とAIを設定できます。利用中のチャットにはAI選択の選択メニューを出さず、設定済みのAIの表示名を示します。内部の呼び出し名は表示しません。時刻はアプリケーションの `app.timezone` に従います。
 
-標準ページは `fourmix-intelligence.chat` で開きます。側窓は宿主の必要なレイアウトへ次を配置してください。パッケージが宿主の全ページへ勝手に挿入することはありません。
+標準ページは `fourmix-intelligence.chat` で開きます。側窓はアプリケーションの必要なレイアウトへ次を配置してください。パッケージがアプリケーションの全ページへ勝手に挿入することはありません。
 
 ```blade
 <x-fourmix-intelligence::surface name="floating" />
@@ -253,11 +261,11 @@ php artisan fi:make-ui helper --type=floating --no-interaction
 <x-fourmix-intelligence::surface name="helper" id="helper-chat" position="left" />
 ```
 
-ページ型を独自の認証済みルートに配置する場合は、生成したsurfaceを宿主のページテンプレートから呼び出せます。標準ページルートで表示する場合は `route('fourmix-intelligence.chat', ['surface' => 'support'])` を使用します。同時に複数の画面を配置しても、固有の呼び出し名・接続・AIと各要素の会話状態を分離します。同じ呼び出し名を複数画面の設定へ重複登録することはできません。
+ページ型を独自の認証済みルートに配置する場合は、生成したsurfaceをアプリケーションのページテンプレートから呼び出せます。標準ページルートで表示する場合は `route('fourmix-intelligence.chat', ['surface' => 'support'])` を使用します。同時に複数の画面を配置しても、固有の呼び出し名・接続・AIと各要素の会話状態を分離します。同じ呼び出し名を複数画面の設定へ重複登録することはできません。
 
 `chat` / `floating-chat` の匿名Bladeコンポーネントも編集材料として公開します。通常は有効状態をサーバーで検査する `surface` ラッパーを使用してください。共通の属性は `assistant-name`、`input-placeholder`、`composer-max-height`、`history-layout="drawer|dropdown"` です。側窓には `position="left|right"`、`launcher-hidden`、`fallback-url` も指定できます。寸法は `--fi-floating-width` / `--fi-floating-height`、ページ領域は `--fi-chat-page-offset` で調整できます。
 
-宿主のボタンから側窓を開く公開APIです。必ず固有の `id` を指定してください。
+アプリケーションのボタンから側窓を開く公開APIです。必ず固有の `id` を指定してください。
 
 ```js
 document.dispatchEvent(new CustomEvent('fourmix:open-chat', {
@@ -267,7 +275,7 @@ document.getElementById('helper-chat').open();
 document.getElementById('helper-chat').close();
 ```
 
-`fourmix:response` / `fourmix:error` / `fourmix:history` / `fourmix:attachment` は会話要素から通知します。確認表示はキャンセル可能な `fourmix:review` イベントの `detail.action` と `detail.container` で宿主が独自描画できます。宿主の安全な同一オリジンの確認URLがある場合、標準の確認ダイアログはその業務画面を優先します。contextは補足情報であり、実行主体や権限の付与ではありません。
+`fourmix:response` / `fourmix:error` / `fourmix:history` / `fourmix:attachment` は会話要素から通知します。確認表示はキャンセル可能な `fourmix:review` イベントの `detail.action` と `detail.container` でアプリケーションが独自描画できます。アプリケーションの安全な同一オリジンの確認URLがある場合、標準の確認ダイアログはその業務画面を優先します。contextは補足情報であり、実行主体や権限の付与ではありません。
 
 現在の通信は同期応答です。「応答の待機をやめる」はブラウザーの待機だけを中止します。サーバー処理や保存済み業務は取り消しません。結果不明時は草稿・添付を保持し、履歴と実行結果を確認するまで同じ依頼を自動再送しません。
 
@@ -287,17 +295,17 @@ php artisan vendor:publish --tag=fourmix-intelligence-sources --no-interaction
 
 `mermaid` コードブロックはフロー・シーケンス・クラス・状態・ER・ガント・円・journey・timeline・quadrant・XY・gitGraph・mindmap の図を描画します。strict 設定で HTML ラベル、リンク操作、設定ディレクティブ、外部資源、任意の CSS を許可せず、生成した SVG も再検査します。1つの回答で最大6図、1図につき12,000文字・160行などの複雑さの制限があります。構文不正や制限超過の場合はコードと日本語の案内を表示し、内容を実行しません。
 
-画像は PNG / JPEG / WebP / GIF / AVIF を対象とし、MIME とファイル先頭を検証して8MBを超える読込みを中止します。SVG、data URL、危険な scheme は表示しません。FI の認証付き添付は、宿主の信頼できる設定で示した同一オリジンの添付 URL に限り自動表示します。それ以外は「画像を読み込む」を押すまで外部へ通信せず、読込み時も Cookie と referrer を渡しません。外部提供元の CORS 設定により取得できない場合は、その旨を表示します。
+画像は PNG / JPEG / WebP / GIF / AVIF を対象とし、MIME とファイル先頭を検証して8MBを超える読込みを中止します。SVG、data URL、危険な scheme は表示しません。Fourmix Intelligence の認証付き添付は、アプリケーションの信頼できる設定で示した同一オリジンの添付 URL に限り自動表示します。それ以外は「画像を読み込む」を押すまで外部へ通信せず、読込み時も Cookie と referrer を渡しません。外部提供元の CORS 設定により取得できない場合は、その旨を表示します。
 
 公開できる編集用ソースの `markdown.js` は `configureRendering(options)` と `renderMarkdown(text, options)` を提供します。設定キーは添付の完全 URL 配列 `attachmentUrls`、末尾が `/` の同一オリジンの添付パス配列 `attachmentUrlPrefixes`、明示的に自動表示を許可する提供元配列 `allowedImageOrigins` です。これらをモデルの回答や一般利用者の入力から設定してはいけません。返される DOM の `ready` は図・色分け・自動画像の完了を待つ Promise、`dispose()` は表示を破棄した際の非同期処理・画像の待機を中止します。
 
 ### 会話専用の添付
 
-標準会話では画像・PDF・Office 文書・テキスト類を選択し、この会話に添付できます。共有資料庫への同期は行いません。許可形式・個数・サイズは宿主の `attachments` 設定、PHP のアップロード上限、FI 側の条件の共通範囲だけを使用します。宿主の既定は1ファイル10MB、1回の送信につき5ファイルです。会話全体の累計件数ではありません。拡張子だけでなく内容も検査し、暗号化・マクロを含む Office 文書や SVG / HTML を拒否します。画像の表示上限8MBは添付の保存上限とは別です。
+標準会話では画像・PDF・Office 文書・テキスト類を選択し、この会話に添付できます。共有資料庫への同期は行いません。許可形式・個数・サイズはアプリケーションの `attachments` 設定、PHP のアップロード上限、Fourmix Intelligence 側の条件の共通範囲だけを使用します。アプリケーションの既定は1ファイル10MB、1回の送信につき5ファイルです。会話全体の累計件数ではありません。拡張子だけでなく内容も検査し、暗号化・マクロを含む Office 文書や SVG / HTML を拒否します。画像の表示上限8MBは添付の保存上限とは別です。
 
-FI への通信と添付の取得はサーバーで仲介し、現在の本人、AI の許可、会話、添付の関連付けを毎回確認します。ブラウザーへ FI の認証トークンを渡しません。保管期限は FI の条件に従います。削除は添付の削除であり、すでに生成済みの回答や実行済みの業務を取り消しません。
+Fourmix Intelligence への通信と添付の取得はサーバーで仲介し、現在の本人、AI の許可、会話、添付の関連付けを毎回確認します。ブラウザーへ Fourmix Intelligence の認証トークンを渡しません。保管期限は Fourmix Intelligence の条件に従います。削除は添付の削除であり、すでに生成済みの回答や実行済みの業務を取り消しません。
 
-独自の会話 UI からもブラウザー API を利用できます。ログインの Cookie と CSRF トークンは宿主側の同一オリジンで検証します。FI の秘密をブラウザーへ渡す必要はありません。
+独自の会話 UI からもブラウザー API を利用できます。ログインの Cookie と CSRF トークンはアプリケーション側の同一オリジンで検証します。Fourmix Intelligence の秘密をブラウザーへ渡す必要はありません。
 
 ```js
 const client = new window.FourmixIntelligenceSDK.Client(
@@ -321,7 +329,7 @@ const withFile = await client.ask(alias, '添付の内容を確認してくだ�
 const attachments = await client.attachments(alias, uploaded.conversation_id);
 ```
 
-`localConnectionId` は管理ページの `state.connections[].id` です。FI 側の接続 UUID とは別に保持します。カスタム UI でも利用者の切替後に以前の会話・状態を使い回さないでください。
+`localConnectionId` は管理ページの `state.connections[].id` です。Fourmix Intelligence 側の接続 UUID とは別に保持します。カスタム UI でも利用者の切替後に以前の会話・状態を使い回さないでください。
 
 標準UIは読み込み時の接続・AI・権限の版を `expected_selection` として各会話・履歴・添付要求へ渡します。別画面や別タブで設定が変わると409で拒否し、旧草稿を新しいAIへ黙って送りません。独自UIでも `Client.expectation()` にstateの設定済みAIを渡し、変更を確認してから本人の明示操作で状態を読み直してください。再読み込みは依頼を自動再送しません。
 
@@ -350,15 +358,15 @@ const attachments = await client.attachments(alias, uploaded.conversation_id);
 
 署名付き `/fourmix-intelligence/v1/handshake`、manifest、bindings、actions、receiptsはサーバー間通信専用です。任意の利用者IDを渡すブラウザー認可経路ではありません。
 
-## 接続の解除と低級API
+## 接続の解除と低レベルAPI
 
-接続を削除すると宿主の秘密、本人の関連付け、その接続を使用するAI設定を削除し、新しい呼出しと未実行の確認を拒否します。別の接続・別の利用者の設定や実行履歴は削除しません。FI側の共有AIや利用許可を全体から削除する操作でもありません。FI側での許可撤回と利用者権限の変更は、次の呼出しで確認します。
+接続を削除するとアプリケーションの秘密、本人の関連付け、その接続を使用するAI設定を削除し、新しい呼出しと未実行の確認を拒否します。別の接続・別の利用者の設定や実行履歴は削除しません。FI側の共有AIや利用許可を全体から削除する操作でもありません。FI側での許可撤回と利用者権限の変更は、次の呼出しで確認します。
 
 ページや側窓を無効にすると、その画面の会話・添付APIも停止します。接続自体とFI側のAIは削除しません。接続の権限変更はキーの再発行で行い、古い会話へ新しい権限を引き継ぎません。
 
-接続用の環境変数によるネイティブ接続の代用は廃止しました。`url` / `token` と資料同期用の設定は、開発者が明示的に使う低級クライアント用であり、画面管理接続の未設定時の代替ではありません。`agent()` は本人の画面設定、または `connection()->agent()` の明示的な接続とFI側AIを使用します。
+接続用の環境変数によるネイティブ接続の代用は廃止しました。`url` / `token` と資料同期用の設定は、開発者が明示的に使う低レベルクライアント用であり、画面管理接続の未設定時の代替ではありません。`agent()` は本人の画面設定、または `connection()->agent()` の明示的な接続とFI側AIを使用します。
 
-`fi:install` は設定ファイルの公開コマンドです。`fi:doctor` はSDK表と接続済み件数を読み取り専用で確認し、`--connection=接続ID` で特定の接続と利用可能なAIを確認します。低級クライアントを明示的に診断する場合は `--api` を指定します。接続キーや秘密は診断結果へ表示しません。すべてのSDK Artisanコマンドは `fi:` 接頭辞を使用します。
+`fi:install` は設定ファイルの公開コマンドです。`fi:doctor` はSDK表と接続済み件数を読み取り専用で確認し、`--connection=接続ID` で特定の接続と利用可能なAIを確認します。低レベルクライアントを明示的に診断する場合は `--api` を指定します。接続キーや秘密は診断結果へ表示しません。すべてのSDK Artisanコマンドは `fi:` 接頭辞を使用します。
 
 ### 既存の資料同期
 
@@ -374,12 +382,12 @@ php artisan fi:knowledge:sync storage/app/knowledge.json --no-interaction
 
 ## Webhook 受信と再送
 
-`VerifyFourmixIntelligenceWebhook` は宿主が選んだ受信ルートへ適用する独立したミドルウェアです。現在のプラットフォームがこの契約の Webhook を自動配信する設定ではありません。双方で次の契約を合わせてください。
+`VerifyFourmixIntelligenceWebhook` はアプリケーションが選んだ受信ルートへ適用する独立したミドルウェアです。現在のプラットフォームがこの契約の Webhook を自動配信する設定ではありません。双方で次の契約を合わせてください。
 
 - JSON の `event_id` は英数字、`_`、`.`、`:`、`-` の 1〜128 文字。同じ接続の受信ルート全体で一意とし、再送で本文と ID を変更しません。
 - `X-Fourmix-Intelligence-Timestamp` は Unix 時刻。`X-Fourmix-Intelligence-Signature` は `timestamp + "." + 生の本文` の HMAC-SHA256、小文字 hex。既定の許容時間は 300 秒です。
 - 既存の Webhook 設定は `FOURMIX_INTELLIGENCE_WEBHOOK_CONNECTION_ID` などで受信境界を指定します。秘密変更・URL 別名・キャッシュ削除では受領履歴を初期化しません。
-- 複数インスタンスで永続 DB を共有します。必要なら `webhooks.database_connection` を指定します。宿主の業務トランザクションの外側に配置してください。
+- 複数インスタンスで永続 DB を共有します。必要なら `webhooks.database_connection` を指定します。アプリケーションの業務トランザクションの外側に配置してください。
 
 受信ルートは 64 KiB 以内の JSON HTTP 応答を返します。成功した再送には保存済みの本文・status・Content-Type を返し、業務処理を再実行しません。同じ ID の別本文、処理中、結果不明は 409 です。例外・5xx・ストリーム・上限超過は結果不明として残します。409 を無条件に再試行したり、結果不明の履歴を削除して再実行させたりしないでください。
 

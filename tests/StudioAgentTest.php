@@ -9,6 +9,7 @@ use FourmixIntelligence\Laravel\Tools\ToolContext;
 use FourmixIntelligence\Laravel\Tools\ToolRegistry;
 use GuzzleHttp\Psr7\PumpStream;
 use Illuminate\Auth\GenericUser;
+use Illuminate\Database\RecordNotFoundException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -78,6 +79,44 @@ final class StudioAgentTest extends TestCase
 
             return Http::response(['run_id' => 'synthetic-run', 'plugin' => 'studio', 'conversation_id' => '11111111-1111-4111-8111-111111111111', 'result' => ['answer' => '承知しました。']]);
         });
+    }
+
+    public function test_connection_lists_only_its_authorized_agents_without_selecting_or_running_them(): void
+    {
+        $agents = app(FourmixIntelligenceManager::class)->connection('合成アプリ')->forUser(new ToolContext('user:1'))->agents();
+        self::assertSame([$this->grant], array_column($agents, 'grant_id'));
+        self::assertArrayNotHasKey('private_token', $agents[0]);
+        self::assertSame(0, DB::table('fourmix_intelligence_agent_bindings')->count());
+        Http::assertSentCount(1);
+        Http::assertSent(fn ($request) => str_ends_with($request->url(), '/agents'));
+        $this->granted = false;
+        self::assertSame([], app(FourmixIntelligenceManager::class)->connection($this->local)->forUser(new ToolContext('user:1'))->agents());
+    }
+
+    public function test_connection_agent_listing_uses_current_account_and_rejects_another_account(): void
+    {
+        $this->actingAs(new GenericUser(['id' => 1]));
+        app('request')->setUserResolver(fn () => auth()->user());
+        self::assertCount(1, app(FourmixIntelligenceManager::class)->connection('合成アプリ')->agents());
+        $this->actingAs(new GenericUser(['id' => 2]));
+        try {
+            app(FourmixIntelligenceManager::class)->connection($this->local)->agents();
+            self::fail('別の利用者の接続を利用できません。');
+        } catch (RecordNotFoundException $exception) {
+            Http::assertSentCount(1);
+        }
+    }
+
+    public function test_connection_agent_listing_requires_an_authenticated_owner_without_implicit_fallback(): void
+    {
+        app('request')->setUserResolver(fn () => null);
+        try {
+            app(FourmixIntelligenceManager::class)->connection($this->local)->agents();
+            self::fail('本人がいない一覧取得は拒否する必要があります。');
+        } catch (HttpException $exception) {
+            self::assertSame(401, $exception->getStatusCode());
+            Http::assertNothingSent();
+        }
     }
 
     private function select(): void

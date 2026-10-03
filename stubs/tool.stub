@@ -1,0 +1,23 @@
+<?php
+
+namespace {{ namespace }};
+
+use FourmixIntelligence\Laravel\Attributes\FourmixIntelligenceTool;
+use FourmixIntelligence\Laravel\Tools\ToolContext;
+use LogicException;
+
+final class {{ class }}
+{
+    #[FourmixIntelligenceTool(
+        name: '{{ operation }}',
+        description: '業務の目的と返す情報を記述してください。',
+        scopes: ['{{ scope }}'],
+        inputSchema: ['type' => 'object', 'properties' => [], 'additionalProperties' => false],
+    )]
+    /** @return array<string, mixed> */
+    public function handle(ToolContext $context): array
+    {
+        // 現在の利用者に許可されたデータだけを既存の業務サービスから取得します。
+        throw new LogicException('業務ツールの処理を実装してください。');
+    }
+}

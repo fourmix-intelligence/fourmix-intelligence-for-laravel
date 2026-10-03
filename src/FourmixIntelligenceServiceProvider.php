@@ -5,7 +5,10 @@ namespace FourmixIntelligence\Laravel;
 use FourmixIntelligence\Laravel\Console\DoctorCommand;
 use FourmixIntelligence\Laravel\Console\InstallCommand;
 use FourmixIntelligence\Laravel\Console\KnowledgeSyncCommand;
+use FourmixIntelligence\Laravel\Console\MakePolicyCommand;
+use FourmixIntelligence\Laravel\Console\MakeToolCommand;
 use FourmixIntelligence\Laravel\Console\MakeUiCommand;
+use FourmixIntelligence\Laravel\Console\ToolsCommand;
 use FourmixIntelligence\Laravel\Http\Controllers\AssetController;
 use FourmixIntelligence\Laravel\Http\Controllers\AttachmentController;
 use FourmixIntelligence\Laravel\Http\Controllers\ConnectionHandshakeController;
@@ -54,6 +57,8 @@ final class FourmixIntelligenceServiceProvider extends ServiceProvider
             $blade->anonymousComponentNamespace('fourmix-intelligence::components', 'fourmix-intelligence');
         });
         $this->publishes([__DIR__.'/../resources/views' => resource_path('views/vendor/fourmix-intelligence')], 'fourmix-intelligence-views');
+        $this->publishes([__DIR__.'/../stubs/tool.stub' => base_path('stubs/fi.tool.stub'),
+            __DIR__.'/../stubs/policy.stub' => base_path('stubs/fi.policy.stub')], 'fourmix-intelligence-stubs');
         $this->publishes([__DIR__.'/../resources/dist' => public_path('vendor/fourmix-intelligence'),
             __DIR__.'/../resources/brand' => public_path('vendor/fourmix-intelligence')], 'fourmix-intelligence-assets');
         $this->publishes([__DIR__.'/../resources/js' => resource_path('vendor/fourmix-intelligence/js'),
@@ -102,7 +107,8 @@ final class FourmixIntelligenceServiceProvider extends ServiceProvider
             });
         }
         if ($this->app->runningInConsole()) {
-            $this->commands([InstallCommand::class, DoctorCommand::class, KnowledgeSyncCommand::class, MakeUiCommand::class]);
+            $this->commands([InstallCommand::class, DoctorCommand::class, KnowledgeSyncCommand::class, MakeUiCommand::class,
+                MakeToolCommand::class, MakePolicyCommand::class, ToolsCommand::class]);
         }
     }
 }

@@ -2226,7 +2226,7 @@ var Et = class extends HTMLElement {
 			e.key === "Escape" && !this.historyPanel.hidden && (e.preventDefault(), e.stopPropagation(), this.toggleHistory(!1));
 		}, this.notice = q("p", "", "fi-chat-notice fi:shrink-0 fi:px-5 fi:py-3 fi:text-sm fi:leading-relaxed fi:text-secondary"), this.notice.hidden = !0, this.notice.setAttribute("role", "status"), this.notice.setAttribute("aria-live", "polite"), this.notice.setAttribute("aria-atomic", "true"), this.panel.append(this.notice), this.setupLink = q("a", "接続とチャットを設定", "fi:shrink-0 fi:px-5 fi:py-2 fi:text-sm fi:underline fi:underline-offset-4"), this.setupLink.href = `${this.api.base}#fi-surfaces`, this.setupLink.hidden = !0, this.panel.append(this.setupLink), this.viewport = q("div", "", "fi-chat-viewport fi:min-h-0 fi:flex-1 fi:overflow-y-auto fi:overscroll-contain fi:px-5 fi:py-6 fi:sm:px-7"), this.empty = q("div", "", "fi-chat-empty fi:flex fi:min-h-52 fi:h-full fi:flex-col fi:items-center fi:justify-center fi:gap-4 fi:py-6 fi:text-center");
 		let o = q("div", "", "fi:flex fi:size-14 fi:shrink-0 fi:items-center fi:justify-center fi:rounded-2xl fi:bg-raised fi:text-secondary");
-		o.append(J("chat")), this.empty.append(o, q("h2", "どのようなお手伝いをしましょうか？", "fi:text-lg fi:font-semibold fi:tracking-tight"), q("p", "質問や依頼を入力してください。選択したAIが、利用許可の範囲でお手伝いします。", "fi:max-w-sm fi:text-sm fi:leading-relaxed fi:text-secondary"));
+		o.append(J("chat")), this.empty.append(o, q("h2", "どのようなお手伝いをしましょうか？", "fi:text-lg fi:font-semibold fi:tracking-tight"), q("p", "質問や相談したいことを入力してください。", "fi:max-w-sm fi:text-sm fi:leading-relaxed fi:text-secondary"));
 		let s = q("div", "", "fi:flex fi:flex-wrap fi:justify-center fi:gap-2 fi:pt-1");
 		for (let e of [
 			"情報を整理する",

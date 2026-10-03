@@ -1,0 +1,40 @@
+<?php
+
+namespace {{ namespace }};
+
+use FourmixIntelligence\Laravel\Tools\BoundUserToolPolicy;
+use FourmixIntelligence\Laravel\Tools\ToolContext;
+use FourmixIntelligence\Laravel\Tools\ToolPolicy;
+
+final class {{ class }} implements ToolPolicy
+{
+    public function __construct(private BoundUserToolPolicy $identities) {}
+
+    /** @param array<string, string> $identity */
+    public function resolve(array $identity): ToolContext
+    {
+        return $this->identities->resolve($identity);
+    }
+
+    /** @param array<string, mixed> $arguments */
+    public function authorize(ToolContext $context, string $operation, array $arguments): void
+    {
+        // 対象データと現在の業務権限を、既存の Policy・Gate で確認します。
+        abort(403, 'この業務の認可処理を実装してください。');
+    }
+
+    /**
+     * @param array<string, mixed> $arguments
+     * @return array<string, mixed>
+     */
+    public function preview(ToolContext $context, string $operation, array $arguments): array
+    {
+        // 対象・変更内容を表示するだけで、保存や外部送信は行いません。
+        abort(403, 'この業務の確認表示を実装してください。');
+    }
+
+    public function reviewUrl(string $actionId): string
+    {
+        return '';
+    }
+}

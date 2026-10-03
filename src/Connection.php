@@ -2,6 +2,7 @@
 
 namespace FourmixIntelligence\Laravel;
 
+use FourmixIntelligence\Laravel\Tools\IntegrationAccess;
 use FourmixIntelligence\Laravel\Tools\ToolContext;
 
 /** A host-owned connection selects the FI AI without changing its capabilities. */
@@ -20,5 +21,13 @@ final readonly class Connection
         $agent = (new Agent($name))->onConnection($this->name);
 
         return $this->context === null ? $agent : $agent->forUser($this->context);
+    }
+
+    /** @return list<array<string, mixed>> */
+    public function agents(): array
+    {
+        $context = $this->context ?? app(IntegrationAccess::class)->context(app('request'));
+
+        return app(AgentSelection::class)->availableForConnection($context, $this->name);
     }
 }

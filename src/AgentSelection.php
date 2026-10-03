@@ -15,6 +15,12 @@ final class AgentSelection
     public function __construct(private ConnectionManager $connections, private NativeApplicationClient $client) {}
 
     /** @return list<array<string, mixed>> */
+    public function availableForConnection(ToolContext $context, string $connection): array
+    {
+        return $this->available($context, $this->connectionId($context, $connection));
+    }
+
+    /** @return list<array<string, mixed>> */
     public function available(ToolContext $context, string $connectionId): array
     {
         $bound = $this->bound($context, $connectionId);
