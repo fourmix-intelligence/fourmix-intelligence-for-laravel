@@ -11,10 +11,24 @@ final readonly class FourmixIntelligenceManager
     public function agent(?string $name = null): Agent
     {
         $resolved = $name ?: $this->defaultAgent;
-        if (!is_string($resolved) || $resolved === '') throw new \InvalidArgumentException('利用する AI の識別子を指定してください。');
-        return new Agent($this->client, $resolved);
+        if (! is_string($resolved) || $resolved === '') {
+            throw new \InvalidArgumentException('利用する AI の識別子を指定してください。');
+        }
+
+        return new Agent($resolved);
     }
 
-    public function client(): FourmixIntelligenceClient { return $this->client; }
-}
+    public function client(): FourmixIntelligenceClient
+    {
+        return $this->client;
+    }
 
+    public function connection(string $name): Connection
+    {
+        if (trim($name) === '') {
+            throw new \InvalidArgumentException('接続名または接続IDを指定してください。');
+        }
+
+        return new Connection($name);
+    }
+}

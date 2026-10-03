@@ -11,6 +11,7 @@ final readonly class FourmixIntelligenceTool
      * @param  list<string>  $scopes
      * @param  array<string,mixed>  $inputSchema
      * @param  list<string>  $keywords
+     * @param  list<string>  $audiences
      */
     public function __construct(
         public string $name,
@@ -23,5 +24,6 @@ final readonly class FourmixIntelligenceTool
         public bool $readOnly = true,
         public bool $destructive = false,
         public string $version = '1',
+        public array $audiences = ['internal'],
     ) {}
 }

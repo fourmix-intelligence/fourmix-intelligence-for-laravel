@@ -2,6 +2,7 @@
 
 namespace FourmixIntelligence\Laravel\Tests;
 
+use FourmixIntelligence\Laravel\Tools\ConnectionManager;
 use FourmixIntelligence\Laravel\Tools\ToolConsent;
 use FourmixIntelligence\Laravel\Tools\ToolContext;
 use FourmixIntelligence\Laravel\Tools\ToolExecutor;
@@ -9,6 +10,7 @@ use FourmixIntelligence\Laravel\Tools\ToolPolicy;
 use FourmixIntelligence\Laravel\Tools\ToolRegistry;
 use FourmixIntelligence\Laravel\Tools\ValidationSchema;
 use Illuminate\Database\RecordNotFoundException;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -20,6 +22,7 @@ final class BusinessToolsTest extends TestCase
         $app['config']->set('database.default', 'testing');
         $app['config']->set('database.connections.testing', ['driver' => 'sqlite', 'database' => ':memory:', 'prefix' => '']);
         $app['config']->set('app.key', 'base64:'.base64_encode(str_repeat('s', 32)));
+        $app['config']->set('fourmix-intelligence.native.trusted_platform_urls', ['https://platform.example.test']);
     }
 
     protected function setUp(): void
@@ -41,6 +44,20 @@ final class BusinessToolsTest extends TestCase
         return $registry;
     }
 
+    /** 合成データで、実行に必要な接続と本人の関連付けを作ります。 */
+    private function context(array $modes): ToolContext
+    {
+        $subject = 'user:synthetic';
+        $key = app(ConnectionManager::class)->issue(new ToolContext($subject), '合成接続', $modes);
+        $remote = (string) Str::uuid();
+        DB::table('fourmix_intelligence_connections')->where('id', $key['id'])->update(['state' => 'ready', 'scope' => 'personal',
+            'remote_connection' => $remote, 'workspace_id' => '', 'secret' => Crypt::encryptString(str_repeat('s', 64)), 'code_hash' => null]);
+        DB::table('fourmix_intelligence_user_bindings')->insert(['id' => (string) Str::uuid(), 'subject' => $subject,
+            'display_name' => '合成利用者', 'connection_id' => $remote, 'workspace_id' => '', 'remote_user' => (string) Str::uuid()]);
+
+        return new ToolContext($subject, identity: ['connection_id' => $remote, 'connection_revision' => '1']);
+    }
+
     public function test_review_then_replay_has_one_durable_execution(): void
     {
         $calls = 0;
@@ -49,8 +66,7 @@ final class BusinessToolsTest extends TestCase
 
             return ['saved' => $arguments['name']];
         });
-        $context = new ToolContext('user:synthetic');
-        app(ToolConsent::class)->replace($context->subject, ['records.save' => 'review'], app(ToolRegistry::class));
+        $context = $this->context(['records.save' => 'review']);
         $id = (string) Str::uuid();
         $executor = app(ToolExecutor::class);
         $proposal = $executor->execute($context, 'records.save', ['name' => '合成'], $id);
@@ -61,14 +77,41 @@ final class BusinessToolsTest extends TestCase
         self::assertSame(1, $calls);
     }
 
+    public function test_connection_permission_is_rechecked_when_human_confirms(): void
+    {
+        $context = $this->context(['records.save' => 'review']);
+        $proposal = app(ToolExecutor::class)->execute($context, 'records.save', ['name' => '合成'], (string) Str::uuid());
+        $local = DB::table('fourmix_intelligence_connections')->where('remote_connection', $context->identity['connection_id'])->value('id');
+        app(ConnectionManager::class)->renew(new ToolContext($context->subject), $local, []);
+        try {
+            app(ToolExecutor::class)->confirm(new ToolContext($context->subject), $proposal['id']);
+            $this->fail('接続の業務許可が撤回された後の実行を拒否する必要があります。');
+        } catch (HttpException $exception) {
+            $this->assertSame(403, $exception->getStatusCode());
+        }
+        $this->assertDatabaseHas('fourmix_intelligence_tool_actions', ['id' => $proposal['id'], 'state' => 'confirmation_required']);
+    }
+
+    public function test_an_unknown_connection_cannot_use_another_connections_permission(): void
+    {
+        $this->context(['records.save' => 'automatic']);
+        $context = new ToolContext('user:synthetic', 'fourmix-intelligence', ['connection_id' => (string) Str::uuid(),
+            'grant_id' => (string) Str::uuid(), 'host_agent_alias' => 'unselected-assistant']);
+        $this->expectException(HttpException::class);
+        try {
+            app(ToolExecutor::class)->execute($context, 'records.save', ['name' => '合成'], (string) Str::uuid());
+        } finally {
+            $this->assertDatabaseCount('fourmix_intelligence_tool_actions', 0);
+        }
+    }
+
     public function test_operation_upgrade_downgrades_standing_consent_and_invalidates_old_review(): void
     {
-        $context = new ToolContext('user:synthetic');
-        app(ToolConsent::class)->replace($context->subject, ['records.save' => 'review'], app(ToolRegistry::class));
+        $context = $this->context(['records.save' => 'review']);
         $proposal = app(ToolExecutor::class)->execute($context, 'records.save', ['name' => '合成'], (string) Str::uuid());
-        app(ToolConsent::class)->replace($context->subject, ['records.save' => 'automatic'], app(ToolRegistry::class));
+        DB::table('fourmix_intelligence_connections')->where('remote_connection', $context->identity['connection_id'])->update(['permissions' => app(ToolConsent::class)->encode(['records.save' => 'automatic'])]);
         $this->register('2');
-        self::assertSame('review', app(ToolConsent::class)->mode($context->subject, 'records.save'));
+        self::assertSame('review', app(ToolConsent::class)->mode($context, 'records.save'));
         $this->expectException(HttpException::class);
         app(ToolExecutor::class)->confirm($context, $proposal['id']);
     }
@@ -80,8 +123,7 @@ final class BusinessToolsTest extends TestCase
             $calls++;
             throw new \RuntimeException('synthetic failure');
         });
-        $context = new ToolContext('user:synthetic');
-        app(ToolConsent::class)->replace($context->subject, ['records.save' => 'automatic'], app(ToolRegistry::class));
+        $context = $this->context(['records.save' => 'automatic']);
         $id = (string) Str::uuid();
         try {
             app(ToolExecutor::class)->execute($context, 'records.save', ['name' => '合成'], $id);
@@ -95,10 +137,9 @@ final class BusinessToolsTest extends TestCase
 
     public function test_revoked_consent_blocks_human_confirmation(): void
     {
-        $context = new ToolContext('user:synthetic');
-        app(ToolConsent::class)->replace($context->subject, ['records.save' => 'review'], app(ToolRegistry::class));
+        $context = $this->context(['records.save' => 'review']);
         $proposal = app(ToolExecutor::class)->execute($context, 'records.save', ['name' => '合成'], (string) Str::uuid());
-        app(ToolConsent::class)->replace($context->subject, [], app(ToolRegistry::class));
+        app(ConnectionManager::class)->renew(new ToolContext($context->subject), DB::table('fourmix_intelligence_connections')->where('remote_connection', $context->identity['connection_id'])->value('id'), []);
         $this->expectException(HttpException::class);
         app(ToolExecutor::class)->confirm($context, $proposal['id']);
     }
@@ -117,8 +158,7 @@ final class BusinessToolsTest extends TestCase
 
             return ['saved' => true];
         });
-        $context = new ToolContext('user:synthetic');
-        app(ToolConsent::class)->replace($context->subject, ['records.save' => 'review'], app(ToolRegistry::class));
+        $context = $this->context(['records.save' => 'review']);
         $requestId = (string) Str::uuid();
         $executor = app(ToolExecutor::class);
         $proposal = $executor->execute($context, 'records.save', ['name' => '合成'], $requestId);
@@ -132,8 +172,7 @@ final class BusinessToolsTest extends TestCase
 
     public function test_removed_public_operation_cannot_execute_a_pending_review(): void
     {
-        $context = new ToolContext('user:synthetic');
-        app(ToolConsent::class)->replace($context->subject, ['records.save' => 'review'], app(ToolRegistry::class));
+        $context = $this->context(['records.save' => 'review']);
         $executor = app(ToolExecutor::class);
         $proposal = $executor->execute($context, 'records.save', ['name' => '合成'], (string) Str::uuid());
         config(['fourmix-intelligence.bridge.enabled_operations' => []]);

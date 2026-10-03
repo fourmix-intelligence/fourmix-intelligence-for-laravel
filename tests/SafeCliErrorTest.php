@@ -57,8 +57,8 @@ final class SafeCliErrorTest extends TestCase
             file_put_contents($file, '{"records":[{"key":"synthetic","text":"synthetic"}]}');
         }
         Exceptions::fake();
-        $parameters = $command === 'sync' ? ['file' => $file] : [];
-        $name = $command === 'doctor' ? 'fourmix-intelligence:doctor' : 'fourmix-intelligence:knowledge:sync';
+        $parameters = $command === 'sync' ? ['file' => $file] : ['--api' => true];
+        $name = $command === 'doctor' ? 'fi:doctor' : 'fi:knowledge:sync';
 
         try {
             $this->artisan($name, $parameters)->expectsOutputToContain($expected)
@@ -85,7 +85,7 @@ final class SafeCliErrorTest extends TestCase
         config(['fourmix-intelligence.url' => 'https://example.test', 'fourmix-intelligence.token' => 'synthetic-private-token']);
         Http::fake(['https://example.test/api/v3/ai/plugins/metadata' => Http::response(['plugins' => [], 'private' => 'synthetic-private-body'])]);
 
-        $this->artisan('fourmix-intelligence:doctor')->doesntExpectOutputToContain('synthetic-private-body')->assertExitCode(0);
+        $this->artisan('fi:doctor', ['--api' => true])->doesntExpectOutputToContain('synthetic-private-body')->assertExitCode(0);
         Http::assertSentCount(1);
     }
 
@@ -98,7 +98,7 @@ final class SafeCliErrorTest extends TestCase
         file_put_contents($file, '{"synthetic-private-body":');
 
         try {
-            $this->artisan('fourmix-intelligence:knowledge:sync', ['file' => $file])
+            $this->artisan('fi:knowledge:sync', ['file' => $file])
                 ->doesntExpectOutputToContain('synthetic-private-body')->assertExitCode(2);
             Http::assertNothingSent();
         } finally {

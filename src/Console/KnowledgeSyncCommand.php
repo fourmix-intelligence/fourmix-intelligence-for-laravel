@@ -10,7 +10,7 @@ use Throwable;
 
 final class KnowledgeSyncCommand extends Command
 {
-    protected $signature = 'fourmix-intelligence:knowledge:sync {file : 同期対象の JSON ファイル} {--dataset=} {--key=}';
+    protected $signature = 'fi:knowledge:sync {file : 同期対象の JSON ファイル} {--dataset=} {--key=}';
 
     protected $description = 'JSON で用意した知識を Fourmix Intelligence に同期します';
 

@@ -17,6 +17,7 @@ final class ToolExecutor
      */
     public function execute(ToolContext $context, string $operation, array $arguments, ?string $requestId = null): array
     {
+        $context = $this->consent->bind($context);
         $tool = $this->tool($operation);
         if (! $tool['read_only'] && isset($tool['input_schema']['properties']['idempotency_key'])) {
             $arguments['idempotency_key'] ??= $requestId;
@@ -25,7 +26,12 @@ final class ToolExecutor
         $arguments = $this->tools->validateArguments($tool['input_schema'], $arguments);
         $this->authorized($context, $operation, $arguments);
         if ($tool['read_only']) {
-            return ['state' => 'succeeded', 'data' => $this->tools->execute($operation, $arguments, context: $context)];
+            return DB::transaction(function () use ($context, $operation, $arguments): array {
+                $this->consent->lock($context->subject);
+                $this->authorized($context, $operation, $arguments);
+
+                return ['state' => 'succeeded', 'data' => $this->tools->execute($operation, $arguments, context: $context)];
+            });
         }
         abort_unless(is_string($requestId) && Str::isUuid($requestId), 422, '更新操作には一意の受付番号が必要です。');
         $hash = hash('sha256', json_encode($this->canonical([$operation, $arguments, $context->identity]), JSON_THROW_ON_ERROR));
@@ -48,7 +54,7 @@ final class ToolExecutor
 
             return $id;
         });
-        if ($this->consent->mode($context->subject, $operation) === 'automatic') {
+        if ($this->consent->mode($context, $operation) === 'automatic') {
             return $this->run($context, $id, false);
         }
 
@@ -60,7 +66,18 @@ final class ToolExecutor
     {
         $row = $this->row($context, $id);
         $payload = json_decode(Crypt::decryptString($row->payload), true, 512, JSON_THROW_ON_ERROR);
-        $this->authorized($context, $row->operation, $payload['arguments']);
+        if (isset($context->identity['connection_id'])) {
+            abort_unless($context->identity['connection_id'] === ($payload['identity']['connection_id'] ?? null), 403, '別の接続の操作履歴は利用できません。');
+        }
+        foreach (['grant_id', 'binding_id', 'conversation_id'] as $field) {
+            if (isset($context->identity[$field])) {
+                abort_unless($context->identity[$field] === ($payload['identity'][$field] ?? null), 403, '別のAIまたは会話の操作履歴は利用できません。');
+            }
+        }
+        $this->authorized(new ToolContext($context->subject, $row->channel, $payload['identity']), $row->operation, $payload['arguments']);
+        if (isset($context->identity['connection_id']) || isset($context->identity['audience'])) {
+            $this->authorized($context, $row->operation, $payload['arguments']);
+        }
         $result = ['id' => $row->id, 'operation' => $row->operation, 'state' => $row->state, 'channel' => $row->channel];
         if ($row->state === 'succeeded') {
             $result['data'] = json_decode(Crypt::decryptString($row->result), true, 512, JSON_THROW_ON_ERROR);
@@ -98,7 +115,7 @@ final class ToolExecutor
     {
         DB::transaction(function () use ($context, $id): void {
             $this->consent->lock($context->subject);
-            $this->row($context, $id);
+            $this->action($context, $id);
             DB::table('fourmix_intelligence_tool_actions')->where('id', $id)->where('state', 'confirmation_required')->update(['state' => 'rejected', 'updated_at' => now()]);
         });
 
@@ -111,6 +128,7 @@ final class ToolExecutor
         $claimed = DB::transaction(function () use ($context, $id, $human): bool {
             $this->consent->lock($context->subject);
             $row = $this->row($context, $id);
+            $this->action($context, $id);
             if ($row->state !== 'confirmation_required') {
                 return false;
             }
@@ -119,7 +137,7 @@ final class ToolExecutor
             $original = new ToolContext($context->subject, $row->channel, $payload['identity']);
             abort_unless(hash_equals($payload['definition_hash'], $this->tools->fingerprint($row->operation)), 409, '業務機能が更新されています。新しい内容で依頼してください。');
             $this->authorized($original, $row->operation, $payload['arguments']);
-            abort_unless($human || $this->consent->mode($context->subject, $row->operation) === 'automatic', 403, 'この操作は確認が必要です。');
+            abort_unless($human || $this->consent->mode($original, $row->operation) === 'automatic', 403, 'この操作は確認が必要です。');
             abort_unless($this->canonical($payload['preview']) === $this->canonical($this->policy->preview($original, $row->operation, $payload['arguments'])), 409, '対象の内容が変更されています。最新の内容で依頼してください。');
             DB::table('fourmix_intelligence_tool_actions')->where('id', $id)->update(['state' => 'running', 'authorization' => $human ? 'human' : 'standing', 'updated_at' => now()]);
 
@@ -136,7 +154,7 @@ final class ToolExecutor
                 $original = new ToolContext($context->subject, $row->channel, $payload['identity']);
                 abort_unless(hash_equals($payload['definition_hash'], $this->tools->fingerprint($row->operation)), 409, '業務機能が更新されています。新しい内容で依頼してください。');
                 $this->authorized($original, $row->operation, $payload['arguments']);
-                abort_if($row->authorization === 'standing' && $this->consent->mode($context->subject, $row->operation) !== 'automatic', 403, '継続許可が撤回されました。');
+                abort_if($row->authorization === 'standing' && $this->consent->mode($original, $row->operation) !== 'automatic', 403, '継続許可が撤回されました。');
                 $result = $this->tools->execute($row->operation, $payload['arguments'], context: $original);
                 $encoded = json_encode($result, JSON_THROW_ON_ERROR);
                 abort_if(strlen($encoded) > 512000, 422, '処理結果が大きすぎます。');
@@ -153,8 +171,9 @@ final class ToolExecutor
     /** @param array<string, mixed> $arguments */
     private function authorized(ToolContext $context, string $operation, array $arguments): void
     {
-        $this->tool($operation);
-        abort_unless($this->consent->mode($context->subject, $operation) !== 'disabled', 403, 'このAI操作は許可されていません。');
+        $tool = $this->tool($operation);
+        abort_unless(in_array($context->identity['audience'] ?? 'internal', $tool['audiences'] ?? ['internal'], true), 403, 'このAIの利用対象にはこの業務を公開していません。');
+        abort_unless($this->consent->mode($context, $operation) !== 'disabled', 403, 'この接続にはこの業務を許可していません。');
         $this->policy->authorize($context, $operation, $arguments);
     }
 

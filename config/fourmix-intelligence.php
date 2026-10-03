@@ -18,22 +18,24 @@ return [
         'tolerance_seconds' => (int) env('FOURMIX_INTELLIGENCE_WEBHOOK_TOLERANCE', 300),
     ],
     'bridge' => [
-        'enabled' => (bool) env('FOURMIX_INTELLIGENCE_BRIDGE_ENABLED', false),
-        'secret' => env('FOURMIX_INTELLIGENCE_BRIDGE_SECRET'),
-        'application_id' => env('FOURMIX_INTELLIGENCE_BRIDGE_APPLICATION_ID'),
-        'workspace_id' => env('FOURMIX_INTELLIGENCE_BRIDGE_WORKSPACE_ID'),
-        'connection_id' => env('FOURMIX_INTELLIGENCE_BRIDGE_CONNECTION_ID'),
-        'revision' => (int) env('FOURMIX_INTELLIGENCE_BRIDGE_REVISION', 1),
+        'enabled' => true,
         // この配列へ登録したクラスだけが公開候補になります。
         'tool_handlers' => [],
         // ['*'] は登録済みの全機能。個別に止める場合は機能名を列挙します。
         'enabled_operations' => ['*'],
     ],
+    'ui' => ['prefix' => 'fourmix-intelligence', 'middleware' => ['web', 'auth'], 'host_modes' => ['user'],
+        'surfaces' => ['page' => ['type' => 'page', 'enabled' => true, 'alias' => 'ui-page', 'title' => 'AIアシスタント'],
+            'floating' => ['type' => 'floating', 'enabled' => true, 'alias' => 'ui-floating', 'title' => 'AIアシスタント']]],
+    // 会話専用添付。FI の上限より厳しい値だけを適用し、共有資料庫へは同期しません。
+    'attachments' => [
+        'max_bytes' => 10 * 1024 * 1024,
+        'max_files' => 5,
+        'extensions' => ['png', 'jpg', 'jpeg', 'webp', 'pdf', 'txt', 'md', 'csv', 'tsv', 'docx', 'xlsx', 'pptx'],
+    ],
     'logging' => ['channel' => env('FOURMIX_INTELLIGENCE_LOG_CHANNEL')],
     'native' => [
-        'ui_url' => env('FOURMIX_INTELLIGENCE_UI_URL'),
-        'url' => env('FOURMIX_INTELLIGENCE_PLATFORM_URL'),
-        'tenant' => env('FOURMIX_INTELLIGENCE_TENANT'),
+        'trusted_platform_urls' => ['https://platform.ai.fourmix.co.jp', 'https://demo.platform.ai.fourmix.co.jp'],
         'timeout' => (int) env('FOURMIX_INTELLIGENCE_NATIVE_TIMEOUT', 250),
     ],
 ];

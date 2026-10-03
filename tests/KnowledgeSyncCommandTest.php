@@ -33,7 +33,7 @@ final class KnowledgeSyncCommandTest extends TestCase
         ]], JSON_THROW_ON_ERROR));
 
         try {
-            $this->artisan('fourmix-intelligence:knowledge:sync', ['file' => $file, '--key' => 'synthetic-idempotency-key'])
+            $this->artisan('fi:knowledge:sync', ['file' => $file, '--key' => 'synthetic-idempotency-key'])
                 ->expectsOutputToContain('ジョブ: 10000000-0000-4000-8000-000000000002')
                 ->assertExitCode(0);
             Http::assertSentCount(1);

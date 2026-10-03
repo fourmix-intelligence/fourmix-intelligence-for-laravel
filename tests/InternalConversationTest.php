@@ -28,10 +28,10 @@ final class InternalConversationTest extends TestCase
         ])]);
 
         $manager = $this->manager();
-        $first = $manager->agent()->ask('合成の相談');
+        $first = $manager->client()->run('staff', [['role' => 'user', 'content' => '合成の相談']]);
         self::assertSame(self::CONVERSATION, $first->conversationId);
         self::assertNull($first->customerToken);
-        $manager->agent()->conversation(self::CONVERSATION)->ask('続けて相談');
+        $manager->client()->run('staff', [['role' => 'user', 'content' => '続けて相談']], [], self::CONVERSATION);
 
         Http::assertSentCount(2);
         Http::assertSent(fn ($request): bool => $request['messages'][0]['content'] === '続けて相談'
@@ -47,7 +47,7 @@ final class InternalConversationTest extends TestCase
             $this->manager()->agent()->conversation(self::CONVERSATION)->history();
             self::fail('外部会話専用 API は呼び出せません。');
         } catch (\LogicException $exception) {
-            self::assertStringContainsString('外部会話専用', $exception->getMessage());
+            self::assertStringContainsString('forUser()', $exception->getMessage());
         }
         Http::assertNothingSent();
     }

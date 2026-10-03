@@ -37,6 +37,7 @@ final class ToolRegistry
                 'domain' => $tool->domain ?: explode('.', $tool->name, 2)[0],
                 'keywords' => array_values(array_unique($tool->keywords)),
                 'scopes' => array_values(array_unique($tool->scopes)),
+                'audiences' => $this->audiences($tool->audiences),
                 'requires_approval' => $tool->requiresApproval,
                 'read_only' => $readOnly,
                 'destructive' => $tool->requiresApproval || $tool->destructive,
@@ -74,6 +75,7 @@ final class ToolRegistry
             throw new \LogicException('参照・更新の区分と入力項目を明示してください。');
         }
         $definition['input_schema'] = $this->writeSchema($definition['input_schema'], $definition['read_only']);
+        $definition['audiences'] = $this->audiences(array_key_exists('audiences', $definition) ? $definition['audiences'] : ['internal']);
         $this->tools[$name] = [...$definition, 'name' => $name, 'callback' => $callback];
     }
 
@@ -100,6 +102,8 @@ final class ToolRegistry
         abort_unless(isset($this->tools[$name]), 404, '指定された業務機能が見つかりません。');
         abort_unless(in_array('*', $enabledOperations, true) || in_array($name, $enabledOperations, true), 403, 'この業務機能は公開されていません。');
         $tool = $this->tools[$name];
+        $audience = $context?->identity['audience'] ?? 'internal';
+        abort_unless(in_array($audience, ['internal', 'customer'], true) && in_array($audience, $tool['audiences'], true), 403, 'この利用者区分には業務機能を公開していません。');
         $arguments = $this->validateArguments($tool['input_schema'], $arguments);
         if (isset($tool['callback'])) {
             return ($tool['callback'])($arguments, $context);
@@ -179,5 +183,20 @@ final class ToolRegistry
         }
 
         return $schema;
+    }
+
+    /** @return list<string> */
+    private function audiences(mixed $audiences): array
+    {
+        if (! is_array($audiences) || ! array_is_list($audiences) || $audiences === []) {
+            throw new \InvalidArgumentException('業務機能の利用者区分をリストで指定してください。');
+        }
+        foreach ($audiences as $audience) {
+            if (! is_string($audience) || ! in_array($audience, ['internal', 'customer'], true)) {
+                throw new \InvalidArgumentException('業務機能の利用者区分は internal または customer を指定してください。');
+            }
+        }
+
+        return array_values(array_unique($audiences));
     }
 }

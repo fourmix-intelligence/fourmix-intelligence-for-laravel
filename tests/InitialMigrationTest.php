@@ -26,9 +26,12 @@ final class InitialMigrationTest extends TestCase
         $migration = require array_key_first($business);
         $migration->up();
 
-        foreach (['fourmix_intelligence_tool_subjects', 'fourmix_intelligence_tool_permissions', 'fourmix_intelligence_tool_actions', 'fourmix_intelligence_user_bindings'] as $table) {
+        foreach (['fourmix_intelligence_tool_subjects', 'fourmix_intelligence_connections', 'fourmix_intelligence_agent_bindings', 'fourmix_intelligence_ui_surfaces', 'fourmix_intelligence_tool_actions', 'fourmix_intelligence_user_bindings'] as $table) {
             $this->assertTrue(Schema::hasTable($table));
         }
+        $this->assertTrue(Schema::hasColumns('fourmix_intelligence_connections', ['permissions', 'revision']));
+        $this->assertFalse(Schema::hasTable('fourmix_intelligence_tool_permissions'));
+        $this->assertFalse(Schema::hasColumn('fourmix_intelligence_agent_bindings', 'allowed_operations'));
         $this->assertFalse(Schema::hasTable('fourmix_intelligence_webhook_receipts'));
         $this->assertTrue(Schema::connection('webhook_testing')->hasTable('fourmix_intelligence_webhook_receipts'));
 

@@ -2,7 +2,9 @@
 
 namespace FourmixIntelligence\Laravel\Http\Controllers;
 
+use FourmixIntelligence\Laravel\Tools\BridgeConnections;
 use FourmixIntelligence\Laravel\Tools\ToolConsent;
+use FourmixIntelligence\Laravel\Tools\ToolContext;
 use FourmixIntelligence\Laravel\Tools\ToolExecutor;
 use FourmixIntelligence\Laravel\Tools\ToolPolicy;
 use FourmixIntelligence\Laravel\Tools\ToolRegistry;
@@ -14,6 +16,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
@@ -23,20 +26,25 @@ final class NativeBridgeController extends Controller
     {
         $this->authorizeRequest($request);
         if (in_array($action, ['context', 'revoke'], true)) {
-            $input = $request->validate(['binding_id' => ['required', 'uuid'], 'remote_user' => ['required', 'uuid']]);
-            $result = $bindings->context($input['binding_id'], $input['remote_user']);
+            $input = $request->validate(['binding_id' => ['required', 'uuid'], 'remote_user' => ['required', 'uuid'],
+                'audience' => ['sometimes', 'required', Rule::in(['internal', 'customer'])]]);
+            $result = $bindings->context($input['binding_id'], $input['remote_user'], (string) $request->header('X-Fourmix-Connection'));
             $context = app(ToolPolicy::class)->resolve(['workspace_id' => (string) $request->header('X-Fourmix-Workspace'), 'connection_id' => (string) $request->header('X-Fourmix-Connection'), 'remote_user' => $input['remote_user']]);
             abort_unless($context->subject === $result['subject'], 403);
+            $context = new ToolContext($context->subject, $context->channel, [...$context->identity,
+                'connection_id' => (string) $request->header('X-Fourmix-Connection'),
+                'connection_revision' => (string) $request->attributes->get('fourmix_connection_revision')]);
             if ($action === 'revoke') {
-                $bindings->revoke($context);
+                $bindings->revoke($context, (string) $request->header('X-Fourmix-Connection'));
 
                 return response()->json(['revoked' => true])->header('Cache-Control', 'no-store');
             }
             $result['permissions'] = [];
-            $modes = app(ToolConsent::class)->modes($context->subject);
+            $modes = app(ToolConsent::class)->modes($context);
             foreach (app(ToolRegistry::class)->manifest($this->enabledOperations()) as $tool) {
                 $mode = $modes[$tool['name']] ?? 'disabled';
-                if ($mode !== 'disabled') {
+                if ($mode !== 'disabled'
+                    && in_array($input['audience'] ?? 'internal', $tool['audiences'] ?? ['internal'], true)) {
                     $result['permissions'][$tool['name']] = $mode;
                 }
             }
@@ -45,18 +53,23 @@ final class NativeBridgeController extends Controller
         }
         $input = $request->validate(['code' => ['required', 'string', 'size:48'], 'remote_user' => [$action === 'claim' ? 'required' : 'nullable', 'uuid']]);
 
-        return response()->json($action === 'claim' ? $bindings->claim($input['code'], $input['remote_user']) : $bindings->preview($input['code']))->header('Cache-Control', 'no-store');
+        $connection = (string) $request->header('X-Fourmix-Connection');
+
+        return response()->json($action === 'claim' ? $bindings->claim($input['code'], $input['remote_user'], $connection) : $bindings->preview($input['code'], $connection))->header('Cache-Control', 'no-store');
     }
 
     public function manifest(Request $request, ToolRegistry $tools): JsonResponse
     {
         $this->authorizeRequest($request);
+        $configured = app(BridgeConnections::class)->get((string) $request->header('X-Fourmix-Connection'));
+        $modes = app(ToolConsent::class)->modes(new ToolContext($configured['subject'], identity: [
+            'connection_id' => $configured['id'], 'connection_revision' => (string) $request->attributes->get('fourmix_connection_revision')]));
 
         return response()->json([
             'protocol' => 'fourmix-laravel/1.0',
-            'revision' => max(1, (int) config('fourmix-intelligence.bridge.revision', 1)),
+            'revision' => max(1, $configured['revision'], (int) config('fourmix-intelligence.bridge.revision', 1)),
             'application' => ['id' => $this->applicationId(), 'version' => app()->version()],
-            'capabilities' => $tools->manifest($this->enabledOperations()),
+            'capabilities' => $tools->manifest(array_keys(array_filter($modes, fn (string $mode): bool => $mode !== 'disabled'))),
             'features' => ['user_bound_execution', 'application_reviews', 'durable_idempotency', 'native_chat'],
         ]);
     }
@@ -64,9 +77,7 @@ final class NativeBridgeController extends Controller
     public function receipt(Request $request, string $requestId, ToolExecutor $executor, ToolPolicy $policy): JsonResponse
     {
         $this->authorizeRequest($request);
-        $identity = $request->input('identity', []);
-        abort_unless(is_array($identity), 422);
-        $context = $policy->resolve([...$identity, 'workspace_id' => (string) $request->header('X-Fourmix-Workspace'), 'connection_id' => (string) $request->header('X-Fourmix-Connection')]);
+        $context = $this->trustedContext($request, $policy);
 
         return response()->json($executor->receipt($context, $requestId))->header('Cache-Control', 'no-store');
     }
@@ -85,11 +96,7 @@ final class NativeBridgeController extends Controller
         $arguments = $request->input('arguments', []);
         abort_unless(is_array($arguments), 422, 'arguments の形式を確認してください。');
 
-        $identity = $request->input('identity', []);
-        abort_unless(is_array($identity), 422);
-        $identity['workspace_id'] = (string) $request->header('X-Fourmix-Workspace');
-        $identity['connection_id'] = (string) $request->header('X-Fourmix-Connection');
-        $context = $policy->resolve($identity);
+        $context = $this->trustedContext($request, $policy);
         try {
             $result = $executor->execute($context, $operation, $arguments, $request->input('request_id'));
         } catch (\Throwable $exception) {
@@ -108,29 +115,48 @@ final class NativeBridgeController extends Controller
         return response()->json($result)->header('Cache-Control', 'no-store');
     }
 
+    private function trustedContext(Request $request, ToolPolicy $policy): ToolContext
+    {
+        $identity = $request->input('identity', []);
+        abort_unless(is_array($identity), 422, 'identity の形式を確認してください。');
+        $rules = [
+            'identity.audience' => ['sometimes', 'required', Rule::in(['internal', 'customer'])],
+            'identity.grant_id' => ['sometimes', 'required', 'uuid'],
+            'identity.binding_id' => ['sometimes', 'required', 'uuid'],
+            'identity.conversation_id' => ['sometimes', 'required', 'uuid'],
+        ];
+        $validated = $request->validate($rules);
+        $metadata = (array) ($validated['identity'] ?? []);
+        $metadata['audience'] ??= 'internal';
+        $signed = ['workspace_id' => (string) $request->header('X-Fourmix-Workspace'),
+            'connection_id' => (string) $request->header('X-Fourmix-Connection'),
+            'connection_revision' => (string) $request->attributes->get('fourmix_connection_revision')];
+        $context = $policy->resolve([...$identity, ...$signed, ...$metadata]);
+
+        return new ToolContext($context->subject, $context->channel, [...$context->identity, ...$signed, ...$metadata]);
+    }
+
     private function authorizeRequest(Request $request): void
     {
         abort_if(strlen($request->getContent()) > 256000, 413, '入力内容が大きすぎます。');
-        $secret = (string) config('fourmix-intelligence.bridge.secret');
-        abort_unless(strlen($secret) >= 32, 503, 'Fourmix Intelligence 連携は設定されていません。');
         $timestamp = (string) $request->header('X-Fourmix-Timestamp', '');
         $nonce = (string) $request->header('X-Fourmix-Nonce', '');
         $workspace = (string) $request->header('X-Fourmix-Workspace', '');
         $connection = (string) $request->header('X-Fourmix-Connection', '');
         $provided = (string) $request->header('X-Fourmix-Signature', '');
         abort_unless(ctype_digit($timestamp) && abs(time() - (int) $timestamp) <= 300, 403, '署名の有効期限が切れています。');
-        abort_unless($nonce !== '' && strlen($nonce) <= 100 && $workspace !== '' && $connection !== '', 403, '署名情報が不足しています。');
+        abort_unless($nonce !== '' && strlen($nonce) <= 100 && $connection !== '', 403, '署名情報が不足しています。');
+        $configured = app(BridgeConnections::class)->get($connection);
+        $secret = $configured['secret'];
         $canonical = implode("\n", [
             $timestamp, $nonce, strtoupper($request->method()), '/'.$request->path(),
             $workspace, $connection, hash('sha256', $request->getContent()),
         ]);
         abort_unless(hash_equals('v1='.hash_hmac('sha256', $canonical, $secret), $provided), 403, '署名を確認できませんでした。');
+        $request->attributes->set('fourmix_connection_revision', $configured['revision']);
         // 接続先は管理者の設定を正本とし、キャッシュ消去や最初の要求で変更しない。
-        $boundWorkspace = trim((string) config('fourmix-intelligence.bridge.workspace_id'));
-        $boundConnection = trim((string) config('fourmix-intelligence.bridge.connection_id'));
-        abort_unless($boundWorkspace !== '' && $boundConnection !== '', 503, '連携するワークスペースと接続IDを設定してください。');
-        abort_unless(hash_equals($boundWorkspace, $workspace) && hash_equals($boundConnection, $connection), 409, '別の Fourmix Intelligence 接続は利用できません。');
-        abort_unless(Cache::add('fourmix-native-nonce:'.hash('sha256', $nonce), true, 600), 403, '同じ要求は再実行できません。');
+        abort_unless(hash_equals($configured['workspace_id'], $workspace), 409, '別の Fourmix Intelligence 接続は利用できません。');
+        abort_unless(Cache::add('fourmix-native-nonce:'.hash('sha256', $connection.'|'.$nonce), true, 600), 403, '同じ要求は再実行できません。');
     }
 
     /** @return list<string> */

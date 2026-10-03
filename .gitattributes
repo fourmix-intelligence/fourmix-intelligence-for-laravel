@@ -3,3 +3,4 @@
 /AGENTS.md export-ignore
 /phpstan.neon.dist export-ignore
 /phpunit.xml.dist export-ignore
+/resources/dist/** -text

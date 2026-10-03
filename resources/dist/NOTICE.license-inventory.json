@@ -1,0 +1,372 @@
+[
+  {
+    "package": "@braintree/sanitize-url@7.1.2",
+    "file": "LICENSE._braintree_sanitize-url_7.1.2.LICENSE.txt",
+    "sha256": "0984740e0c3d725c8044dec7edcefe1dbce180ef5a7bc710c251e19607000158"
+  },
+  {
+    "package": "@chevrotain/cst-dts-gen@13.2.0",
+    "file": "LICENSE._chevrotain_cst-dts-gen_13.2.0.LICENSE.txt.txt",
+    "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+  },
+  {
+    "package": "@chevrotain/gast@13.2.0",
+    "file": "LICENSE._chevrotain_gast_13.2.0.LICENSE.txt.txt",
+    "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+  },
+  {
+    "package": "@chevrotain/regexp-to-ast@13.2.0",
+    "file": "LICENSE._chevrotain_regexp-to-ast_13.2.0.LICENSE.txt.txt",
+    "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+  },
+  {
+    "package": "@chevrotain/utils@13.2.0",
+    "file": "LICENSE._chevrotain_utils_13.2.0.LICENSE.txt.txt",
+    "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+  },
+  {
+    "package": "@iconify/utils@3.1.7",
+    "file": "LICENSE._iconify_utils_3.1.7.license.txt.txt",
+    "sha256": "a86793ac023162ce98b91899601c15f6712f44943163c4f92a0a4bf89152b3bf"
+  },
+  {
+    "package": "@mermaid-js/parser@2.0.1",
+    "file": "LICENSE._mermaid-js_parser_2.0.1.LICENSE.txt",
+    "sha256": "d374061c40bfb6f99c5033290caefda97a9b3e7e477e5ee02f487143ef2177e8"
+  },
+  {
+    "package": "@upsetjs/venn.js@2.0.0",
+    "file": "LICENSE._upsetjs_venn.js_2.0.0.LICENSE.txt",
+    "sha256": "6a3508febf2cfccfee96597394543a6154a4bb0b1f91f28404be42c09e9fcb54"
+  },
+  {
+    "package": "chevrotain@13.2.0",
+    "file": "LICENSE.chevrotain_13.2.0.LICENSE.txt.txt",
+    "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+  },
+  {
+    "package": "cose-base@1.0.3",
+    "file": "LICENSE.cose-base_1.0.3.LICENSE.txt",
+    "sha256": "5fb3cf4a14c3c5af6e473a192df8bca10c77754e3a0c6492c79fb92a76a5478a"
+  },
+  {
+    "package": "cose-base@2.2.0",
+    "file": "LICENSE.cose-base_2.2.0.LICENSE.txt",
+    "sha256": "5fb3cf4a14c3c5af6e473a192df8bca10c77754e3a0c6492c79fb92a76a5478a"
+  },
+  {
+    "package": "cytoscape-cose-bilkent@4.1.0",
+    "file": "LICENSE.cytoscape-cose-bilkent_4.1.0.LICENSE.txt",
+    "sha256": "440fc58a56a12814e417d2b341da89b050da052dc75bdb235607d37ec5fe74ef"
+  },
+  {
+    "package": "cytoscape-fcose@2.2.0",
+    "file": "LICENSE.cytoscape-fcose_2.2.0.LICENSE.txt",
+    "sha256": "2837634f403949215760fcdd2fa1ed0c64875d02099ecc8318c704b852f1421d"
+  },
+  {
+    "package": "cytoscape@3.34.3",
+    "file": "LICENSE.cytoscape_3.34.3.LICENSE.txt",
+    "sha256": "eb319c6e6f233607f71e8e2f450391751883cfc0eeb3ca7ef574c13d1d9c2203"
+  },
+  {
+    "package": "cytoscape@3.34.3",
+    "file": "LICENSE.cytoscape_3.34.3.license-update.mjs.txt",
+    "sha256": "4a5a644717fc90d678e8fbbc537a08452d0566726710eef47b196abd6363e635"
+  },
+  {
+    "package": "d3-array@2.12.1",
+    "file": "LICENSE.d3-array_2.12.1.LICENSE.txt",
+    "sha256": "0747bebeb06b10954913149be9b9a8bdf6fad3e6fdcbd9f9524e7a94c13d2cea"
+  },
+  {
+    "package": "d3-array@3.2.4",
+    "file": "LICENSE.d3-array_3.2.4.LICENSE.txt",
+    "sha256": "3e6849627f74ff73c257a3ae1efb574015d94fc1035c05ec3c15805165efcbc4"
+  },
+  {
+    "package": "d3-axis@3.0.0",
+    "file": "LICENSE.d3-axis_3.0.0.LICENSE.txt",
+    "sha256": "e008c5e25a6be382593089c29bfabbc553c6378eee02895aec46ce396cc404ee"
+  },
+  {
+    "package": "d3-brush@3.0.0",
+    "file": "LICENSE.d3-brush_3.0.0.LICENSE.txt",
+    "sha256": "e008c5e25a6be382593089c29bfabbc553c6378eee02895aec46ce396cc404ee"
+  },
+  {
+    "package": "d3-chord@3.0.1",
+    "file": "LICENSE.d3-chord_3.0.1.LICENSE.txt",
+    "sha256": "e008c5e25a6be382593089c29bfabbc553c6378eee02895aec46ce396cc404ee"
+  },
+  {
+    "package": "d3-color@3.1.0",
+    "file": "LICENSE.d3-color_3.1.0.LICENSE.txt",
+    "sha256": "faa682e3e430941f958d26180458f5934a62f58dac4d70ccdd15608c15d0f884"
+  },
+  {
+    "package": "d3-contour@4.0.2",
+    "file": "LICENSE.d3-contour_4.0.2.LICENSE.txt",
+    "sha256": "e51cba0e4fa1d8c078e15319868f2b90188f413f9ce9dac1043b62db32901e93"
+  },
+  {
+    "package": "d3-delaunay@6.0.4",
+    "file": "LICENSE.d3-delaunay_6.0.4.LICENSE.txt",
+    "sha256": "582c3022bd01942336095f92b58a90b1be624dc547d987555c6c956512dd24c1"
+  },
+  {
+    "package": "d3-dispatch@3.0.1",
+    "file": "LICENSE.d3-dispatch_3.0.1.LICENSE.txt",
+    "sha256": "e008c5e25a6be382593089c29bfabbc553c6378eee02895aec46ce396cc404ee"
+  },
+  {
+    "package": "d3-drag@3.0.0",
+    "file": "LICENSE.d3-drag_3.0.0.LICENSE.txt",
+    "sha256": "e008c5e25a6be382593089c29bfabbc553c6378eee02895aec46ce396cc404ee"
+  },
+  {
+    "package": "d3-dsv@3.0.1",
+    "file": "LICENSE.d3-dsv_3.0.1.LICENSE.txt",
+    "sha256": "7842a82012622e5a37bfe4f6c1b67cd3bae6350716b5bf87f36cea0bdc1319dc"
+  },
+  {
+    "package": "d3-ease@3.0.1",
+    "file": "LICENSE.d3-ease_3.0.1.LICENSE.txt",
+    "sha256": "b989d9085148d21ff64a75e14462aefa06b2589a55553b07b1460c70081c7d08"
+  },
+  {
+    "package": "d3-fetch@3.0.1",
+    "file": "LICENSE.d3-fetch_3.0.1.LICENSE.txt",
+    "sha256": "ffdc17dc9040006bddeb891c95bfbb492e86d6bc64a4a4233666febab1be35e0"
+  },
+  {
+    "package": "d3-force@3.0.0",
+    "file": "LICENSE.d3-force_3.0.0.LICENSE.txt",
+    "sha256": "e008c5e25a6be382593089c29bfabbc553c6378eee02895aec46ce396cc404ee"
+  },
+  {
+    "package": "d3-format@3.1.2",
+    "file": "LICENSE.d3-format_3.1.2.LICENSE.txt",
+    "sha256": "2a6d2d5f32ba0b755ddbc1c833f766e30cdbe6ebe9a6d4e3e24427721f0b63d3"
+  },
+  {
+    "package": "d3-geo@3.1.1",
+    "file": "LICENSE.d3-geo_3.1.1.LICENSE.txt",
+    "sha256": "3e3edc1224eec9c39cd26491a21304a62883c1e5b6a65c5283ccc7a6cc94baee"
+  },
+  {
+    "package": "d3-hierarchy@3.1.2",
+    "file": "LICENSE.d3-hierarchy_3.1.2.LICENSE.txt",
+    "sha256": "e008c5e25a6be382593089c29bfabbc553c6378eee02895aec46ce396cc404ee"
+  },
+  {
+    "package": "d3-interpolate@3.0.1",
+    "file": "LICENSE.d3-interpolate_3.0.1.LICENSE.txt",
+    "sha256": "e008c5e25a6be382593089c29bfabbc553c6378eee02895aec46ce396cc404ee"
+  },
+  {
+    "package": "d3-path@1.0.9",
+    "file": "LICENSE.d3-path_1.0.9.LICENSE.txt",
+    "sha256": "b8265327ab678f554800e71188b1cc6b1ff57522e292d2b1c0be66f27cf328b6"
+  },
+  {
+    "package": "d3-path@3.1.0",
+    "file": "LICENSE.d3-path_3.1.0.LICENSE.txt",
+    "sha256": "a09b0d6d76e768fca2085fad05743ee81ddd11946bcda160a3cf5e1081a479aa"
+  },
+  {
+    "package": "d3-polygon@3.0.1",
+    "file": "LICENSE.d3-polygon_3.0.1.LICENSE.txt",
+    "sha256": "e008c5e25a6be382593089c29bfabbc553c6378eee02895aec46ce396cc404ee"
+  },
+  {
+    "package": "d3-quadtree@3.0.1",
+    "file": "LICENSE.d3-quadtree_3.0.1.LICENSE.txt",
+    "sha256": "e008c5e25a6be382593089c29bfabbc553c6378eee02895aec46ce396cc404ee"
+  },
+  {
+    "package": "d3-random@3.0.1",
+    "file": "LICENSE.d3-random_3.0.1.LICENSE.txt",
+    "sha256": "e008c5e25a6be382593089c29bfabbc553c6378eee02895aec46ce396cc404ee"
+  },
+  {
+    "package": "d3-sankey@0.12.3",
+    "file": "LICENSE.d3-sankey_0.12.3.LICENSE.txt",
+    "sha256": "2bf785e778d67a4f5266cffcd4f2cc5bb98cde73791666e7efeb8002ba32dfa5"
+  },
+  {
+    "package": "d3-scale-chromatic@3.1.0",
+    "file": "LICENSE.d3-scale-chromatic_3.1.0.LICENSE.txt",
+    "sha256": "0986d93944902cca9af86824b6a641b4b7c2d10602fc510c433a8bcd443919fe"
+  },
+  {
+    "package": "d3-scale@4.0.2",
+    "file": "LICENSE.d3-scale_4.0.2.LICENSE.txt",
+    "sha256": "e008c5e25a6be382593089c29bfabbc553c6378eee02895aec46ce396cc404ee"
+  },
+  {
+    "package": "d3-selection@3.0.0",
+    "file": "LICENSE.d3-selection_3.0.0.LICENSE.txt",
+    "sha256": "e008c5e25a6be382593089c29bfabbc553c6378eee02895aec46ce396cc404ee"
+  },
+  {
+    "package": "d3-shape@1.3.7",
+    "file": "LICENSE.d3-shape_1.3.7.LICENSE.txt",
+    "sha256": "7eea8533ea92bd8c32a901e89ecb0305890905bb12711449565ddff96891146d"
+  },
+  {
+    "package": "d3-shape@3.2.0",
+    "file": "LICENSE.d3-shape_3.2.0.LICENSE.txt",
+    "sha256": "faa682e3e430941f958d26180458f5934a62f58dac4d70ccdd15608c15d0f884"
+  },
+  {
+    "package": "d3-time-format@4.1.0",
+    "file": "LICENSE.d3-time-format_4.1.0.LICENSE.txt",
+    "sha256": "e008c5e25a6be382593089c29bfabbc553c6378eee02895aec46ce396cc404ee"
+  },
+  {
+    "package": "d3-time@3.1.0",
+    "file": "LICENSE.d3-time_3.1.0.LICENSE.txt",
+    "sha256": "faa682e3e430941f958d26180458f5934a62f58dac4d70ccdd15608c15d0f884"
+  },
+  {
+    "package": "d3-timer@3.0.1",
+    "file": "LICENSE.d3-timer_3.0.1.LICENSE.txt",
+    "sha256": "e008c5e25a6be382593089c29bfabbc553c6378eee02895aec46ce396cc404ee"
+  },
+  {
+    "package": "d3-transition@3.0.1",
+    "file": "LICENSE.d3-transition_3.0.1.LICENSE.txt",
+    "sha256": "e008c5e25a6be382593089c29bfabbc553c6378eee02895aec46ce396cc404ee"
+  },
+  {
+    "package": "d3-zoom@3.0.0",
+    "file": "LICENSE.d3-zoom_3.0.0.LICENSE.txt",
+    "sha256": "e008c5e25a6be382593089c29bfabbc553c6378eee02895aec46ce396cc404ee"
+  },
+  {
+    "package": "d3@7.9.0",
+    "file": "LICENSE.d3_7.9.0.LICENSE.txt",
+    "sha256": "3e6849627f74ff73c257a3ae1efb574015d94fc1035c05ec3c15805165efcbc4"
+  },
+  {
+    "package": "dagre-d3-es@7.0.14",
+    "file": "LICENSE.dagre-d3-es_7.0.14.LICENSE.md.txt",
+    "sha256": "d01eb84ccce437dbf5fd40853bceea0f287930920acea066597a4a25ead63858"
+  },
+  {
+    "package": "dayjs@1.11.23",
+    "file": "LICENSE.dayjs_1.11.23.LICENSE.txt",
+    "sha256": "5faab7526d055651be3aab769d58897be6bd91f3d39d137f25f12dba1b31d5dc"
+  },
+  {
+    "package": "delaunator@5.1.0",
+    "file": "LICENSE.delaunator_5.1.0.LICENSE.txt",
+    "sha256": "0b348fff56384b43dbb37593906904e56d0f9deb51eae590d4dc6d427fbf1808"
+  },
+  {
+    "package": "dompurify@3.4.16",
+    "file": "LICENSE.dompurify_3.4.16.LICENSE.txt",
+    "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+  },
+  {
+    "package": "dompurify@3.4.16",
+    "file": "LICENSE.dompurify_3.4.16.LICENSE-MPL.txt",
+    "sha256": "fab3dd6bdab226f1c08630b1dd917e11fcb4ec5e1e020e2c16f83a0a13863e85"
+  },
+  {
+    "package": "elkjs@0.9.3",
+    "file": "LICENSE.elkjs_0.9.3.LICENSE.md.txt",
+    "sha256": "89591d4578fb1ebd91501312a3d25f021bd865a2e436641c1cf7b1bc7e3c1617"
+  },
+  {
+    "package": "es-toolkit@1.52.0",
+    "file": "LICENSE.es-toolkit_1.52.0.LICENSE.txt",
+    "sha256": "51f3674294d988d89dbebd31273baaeb3c697a15482d9699b14d1fded2e132a7"
+  },
+  {
+    "package": "es-toolkit@1.52.0",
+    "file": "LICENSE.es-toolkit_1.52.0.NOTICE.txt",
+    "sha256": "11ee5e3bce9b0a4dde7f73811caf98978e710228d891c3111ad8ef8d7d2a916f"
+  },
+  {
+    "package": "highlight.js@11.12.0",
+    "file": "LICENSE.highlight.js_11.12.0.LICENSE.txt",
+    "sha256": "6c081431591d9df696c82dc598fe1423765b8a299b200ed00b281afd0f64c490"
+  },
+  {
+    "package": "internmap@1.0.1",
+    "file": "LICENSE.internmap_1.0.1.LICENSE.txt",
+    "sha256": "9ea8903938dab5f12c4572d60725069bec2d1b0dc3bcc210b09bae946a5ebb1f"
+  },
+  {
+    "package": "internmap@2.0.3",
+    "file": "LICENSE.internmap_2.0.3.LICENSE.txt",
+    "sha256": "9ea8903938dab5f12c4572d60725069bec2d1b0dc3bcc210b09bae946a5ebb1f"
+  },
+  {
+    "package": "katex@0.16.47",
+    "file": "LICENSE.katex_0.16.47.LICENSE.txt",
+    "sha256": "766ccc1f306c885aa45542a9846bbd0a505b27a0374f146778171c2254ce18e3"
+  },
+  {
+    "package": "khroma@2.1.0",
+    "file": "LICENSE.khroma_2.1.0.license.txt",
+    "sha256": "66b333b0f66759a0b710459e03f7029abe17f4358114a128d2c972e642961b49"
+  },
+  {
+    "package": "layout-base@1.0.2",
+    "file": "LICENSE.layout-base_1.0.2.LICENSE.txt",
+    "sha256": "eabb762d8a95109a39c9be3247325529a5239a7aca327d909c3ccdc41f3a06bf"
+  },
+  {
+    "package": "layout-base@2.0.1",
+    "file": "LICENSE.layout-base_2.0.1.LICENSE.txt",
+    "sha256": "eabb762d8a95109a39c9be3247325529a5239a7aca327d909c3ccdc41f3a06bf"
+  },
+  {
+    "package": "lodash-es@4.18.1",
+    "file": "LICENSE.lodash-es_4.18.1.LICENSE.txt",
+    "sha256": "f71e8ed126b46346494aad5486874cd8f0aafe95092ed67d2e3cb6110f939abc"
+  },
+  {
+    "package": "marked@16.4.2",
+    "file": "LICENSE.marked_16.4.2.LICENSE.md.txt",
+    "sha256": "8e3a3f82f59a60958f56ca08f445647c32a4733dc7ca6c2c46f6eb898471ab9c"
+  },
+  {
+    "package": "marked@18.0.14",
+    "file": "LICENSE.marked_18.0.14.LICENSE.txt",
+    "sha256": "8e3a3f82f59a60958f56ca08f445647c32a4733dc7ca6c2c46f6eb898471ab9c"
+  },
+  {
+    "package": "mermaid@12.1.0",
+    "file": "LICENSE.mermaid_12.1.0.LICENSE.txt",
+    "sha256": "ec9fb67dcb25eccc416ed56e1aab819222c805a2a4bfe4cb19e7556bf2ffde80"
+  },
+  {
+    "package": "robust-predicates@3.0.3",
+    "file": "LICENSE.robust-predicates_3.0.3.LICENSE.txt",
+    "sha256": "88d9b4eb60579c191ec391ca04c16130572d7eedc4a86daa58bf28c6e14c9bcd"
+  },
+  {
+    "package": "roughjs@4.6.6",
+    "file": "LICENSE.roughjs_4.6.6.LICENSE.txt",
+    "sha256": "dca9a392272606ac748ac0976a2a1133f14eef841c27beaa51a844d53c56a09d"
+  },
+  {
+    "package": "stylis@4.4.0",
+    "file": "LICENSE.stylis_4.4.0.LICENSE.txt",
+    "sha256": "88c579c6ee44b41137a21321190d177982e5b17d4fa1b83a4a2e3ea325a8fc9a"
+  },
+  {
+    "package": "ts-dedent@2.3.0",
+    "file": "LICENSE.ts-dedent_2.3.0.LICENSE.txt",
+    "sha256": "eff13095d9d762c3bd9dda74370c81e2130c28f2691bc455603abf973bac25b9"
+  },
+  {
+    "package": "uuid@14.0.2",
+    "file": "LICENSE.uuid_14.0.2.LICENSE.md.txt",
+    "sha256": "beaa6b04fb82e41dd2ad679e19e27953afb5999b1abbb455b6564e78ebfeb332"
+  }
+]
