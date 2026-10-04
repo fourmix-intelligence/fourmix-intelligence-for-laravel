@@ -88,6 +88,14 @@ final class NativeBridgeTest extends TestCase
         $this->signed('GET', '/fourmix-intelligence/v1/manifest', [], $nonce)->assertForbidden();
     }
 
+    public function test_unsigned_query_arguments_cannot_supplement_a_signed_request_body(): void
+    {
+        $this->signed('POST', '/fourmix-intelligence/v1/actions/orders.lookup?arguments[number]=unsigned', ['identity' => []])
+            ->assertUnprocessable();
+        $this->signed('POST', '/fourmix-intelligence/v1/actions/orders.lookup', ['arguments' => ['number' => 'signed']])
+            ->assertOk()->assertJsonPath('data.number', 'signed');
+    }
+
     #[DataProvider('restrictedReceiptCallers')]
     public function test_receipts_recheck_signed_caller_metadata_even_when_host_policy_discards_it(string $scenario): void
     {
@@ -226,7 +234,7 @@ final class NativeBridgeTest extends TestCase
         $timestamp = (string) time();
         $nonce ??= fake()->uuid();
         $raw = $body === [] ? '' : json_encode($body, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
-        $canonical = implode("\n", [$timestamp, $nonce, $method, $path, $workspace, $connection, hash('sha256', $raw)]);
+        $canonical = implode("\n", [$timestamp, $nonce, $method, parse_url($path, PHP_URL_PATH), $workspace, $connection, hash('sha256', $raw)]);
         $headers = [
             'X-Fourmix-Timestamp' => $timestamp,
             'X-Fourmix-Nonce' => $nonce,

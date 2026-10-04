@@ -35,6 +35,9 @@ final class StudioAgentTest extends TestCase
 
     private string $audience = 'internal';
 
+    /** @var array<string, mixed> */
+    private array $chatPayload = [];
+
     private string|\Psr\Http\Message\StreamInterface|null $streamBody = null;
 
     protected function defineEnvironment($app): void
@@ -77,7 +80,7 @@ final class StudioAgentTest extends TestCase
                 return Http::response(['messages' => [['role' => 'assistant', 'content' => '履歴の応答']]]);
             }
 
-            return Http::response(['run_id' => 'synthetic-run', 'plugin' => 'studio', 'conversation_id' => '11111111-1111-4111-8111-111111111111', 'result' => ['answer' => '承知しました。']]);
+            return Http::response($this->chatPayload + ['run_id' => 'synthetic-run', 'plugin' => 'studio', 'conversation_id' => '11111111-1111-4111-8111-111111111111', 'result' => ['answer' => '承知しました。']]);
         });
     }
 
@@ -123,6 +126,25 @@ final class StudioAgentTest extends TestCase
     {
         $this->actingAs(new GenericUser(['id' => 1]))->putJson(route('fourmix-intelligence.agents.select', 'sales-assistant'),
             ['connection_id' => $this->local, 'grant_id' => $this->grant])->assertOk();
+    }
+
+    public function test_standard_agent_selection_rejects_customer_ai_without_replacing_the_current_ai(): void
+    {
+        $this->select();
+        $previous = $this->grant;
+        $this->audience = 'customer';
+        $this->grant = (string) Str::uuid();
+
+        $this->putJson(route('fourmix-intelligence.agents.select', 'sales-assistant'), [
+            'connection_id' => $this->local, 'grant_id' => $this->grant,
+        ])->assertUnprocessable();
+        $this->assertDatabaseHas('fourmix_intelligence_agent_bindings', ['alias' => 'sales-assistant', 'grant_id' => $previous]);
+
+        app(AgentSelection::class)->select(new ToolContext('user:1'), 'customer-assistant', $this->local, $this->grant);
+        $result = app(FourmixIntelligenceManager::class)->agent('customer-assistant')
+            ->forUser(new ToolContext('user:1'))->forVisitor('verified-customer')->ask('商品についての相談');
+        self::assertSame('承知しました。', $result->answer);
+        Http::assertSent(fn ($request): bool => str_ends_with($request->url(), '/agent_chat') && $request['visitor_id'] === 'verified-customer');
     }
 
     public function test_native_stream_delivers_events_in_order_with_the_same_signed_owner_and_selection(): void
@@ -288,6 +310,26 @@ final class StudioAgentTest extends TestCase
         Http::assertSent(fn ($request): bool => str_ends_with($request->url(), '/agent_chat') && $request['binding_id'] === $this->binding && $request['grant_id'] === $this->grant && ! isset($request['allowed_operations'], $request['host_agent_alias']) && $request->header('X-Fourmix-Workspace') === ['']);
         $result = app(FourmixIntelligenceManager::class)->agent('sales-assistant')->forUser(new ToolContext('user:1'))->ask('追加の相談');
         self::assertSame('承知しました。', $result->answer);
+    }
+
+    public function test_synchronous_browser_chat_only_returns_display_fields_while_php_retains_the_full_result(): void
+    {
+        $this->select();
+        $this->chatPayload = [
+            'customer_token' => 'synthetic-private-token',
+            'events' => [['type' => 'tool.started', 'data' => ['arguments' => ['internal_note' => 'service-only']]]],
+            'result' => ['answer' => '内容を確認してください。', 'data' => ['run_outcome' => 'confirmation_required', 'internal_note' => 'service-only']],
+        ];
+
+        $this->postJson(route('fourmix-intelligence.chat.send'), ['surface' => 'page', 'message' => '合成の依頼'])
+            ->assertOk()->assertHeader('Cache-Control', 'no-store, private')
+            ->assertExactJson(['run_id' => 'synthetic-run', 'plugin' => 'studio',
+                'conversation_id' => '11111111-1111-4111-8111-111111111111',
+                'result' => ['answer' => '内容を確認してください。', 'data' => ['run_outcome' => 'confirmation_required']]]);
+
+        $result = app(FourmixIntelligenceManager::class)->agent('sales-assistant')->forUser(new ToolContext('user:1'))->ask('サーバーで処理');
+        self::assertSame($this->chatPayload['events'], $result->raw['events']);
+        self::assertSame('synthetic-private-token', $result->customerToken);
     }
 
     public function test_revoked_platform_grant_prevents_the_next_run(): void

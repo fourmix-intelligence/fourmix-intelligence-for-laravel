@@ -4,8 +4,12 @@ namespace FourmixIntelligence\Laravel\Tests;
 
 use FourmixIntelligence\Laravel\Exceptions\ApiException;
 use FourmixIntelligence\Laravel\Http\FourmixIntelligenceClient;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Factory;
+use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 
 final class HttpClientContractTest extends TestCase
@@ -117,6 +121,48 @@ final class HttpClientContractTest extends TestCase
             self::assertSame('denied-1', $exception->requestId);
         }
         Http::assertSentCount(1);
+    }
+
+    public function test_remote_error_details_are_not_copied_into_exceptions(): void
+    {
+        Http::fake(['example.test/*' => Http::response(['detail' => 'synthetic-private-value'], 500, ['X-Request-Id' => 'request-error'])]);
+        try {
+            $this->client()->run('assistant', [['role' => 'user', 'content' => '合成の相談']]);
+            self::fail('失敗を通知する必要があります。');
+        } catch (ApiException $exception) {
+            self::assertSame(500, $exception->status);
+            self::assertSame('request-error', $exception->requestId);
+            self::assertStringNotContainsString('synthetic-private-value', $exception->getMessage());
+        }
+        Http::assertSentCount(1);
+    }
+
+    public function test_a_redirect_cannot_forward_a_private_conversation_body(): void
+    {
+        $handler = new MockHandler([
+            new Response(307, ['Location' => 'https://unexpected.example.test/capture']),
+            new Response(200, ['Content-Type' => 'application/json'], '{"result":{"answer":"転送先"}}'),
+        ]);
+        $factory = new class($handler) extends Factory
+        {
+            public function __construct(private MockHandler $handler)
+            {
+                parent::__construct();
+            }
+
+            protected function newPendingRequest(): PendingRequest
+            {
+                return parent::newPendingRequest()->setHandler(HandlerStack::create($this->handler));
+            }
+        };
+        $client = new FourmixIntelligenceClient($factory, ['url' => 'https://example.test', 'token' => 'synthetic-token']);
+        try {
+            $client->run('assistant', [['role' => 'user', 'content' => '合成の相談']], customerToken: 'synthetic-customer-secret');
+            self::fail('秘密を含む依頼のリダイレクトは拒否する必要があります。');
+        } catch (ApiException $exception) {
+            self::assertSame(307, $exception->status);
+        }
+        self::assertSame(1, $handler->count(), '転送先の応答を消費しません。');
     }
 
     public function test_a_missing_sync_key_does_not_fall_back_to_the_agent_token(): void

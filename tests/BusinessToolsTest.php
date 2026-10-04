@@ -9,10 +9,12 @@ use FourmixIntelligence\Laravel\Tools\ToolExecutor;
 use FourmixIntelligence\Laravel\Tools\ToolPolicy;
 use FourmixIntelligence\Laravel\Tools\ToolRegistry;
 use FourmixIntelligence\Laravel\Tools\ValidationSchema;
+use Illuminate\Database\Events\TransactionCommitted;
 use Illuminate\Database\RecordNotFoundException;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use PHPUnit\Framework\Attributes\TestWith;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 final class BusinessToolsTest extends TestCase
@@ -75,6 +77,98 @@ final class BusinessToolsTest extends TestCase
         self::assertSame('succeeded', $executor->confirm($context, $proposal['id'])['state']);
         self::assertSame('succeeded', app(ToolExecutor::class)->execute($context, 'records.save', ['name' => '合成'], $id)['state']);
         self::assertSame(1, $calls);
+    }
+
+    #[TestWith(['review'])]
+    #[TestWith(['automatic'])]
+    public function test_callback_approval_classification_uses_durable_execution(string $mode): void
+    {
+        $calls = 0;
+        $registry = new ToolRegistry($this->app);
+        $registry->registerCallback('records.release', [
+            'read_only' => true, 'requires_approval' => true,
+            'input_schema' => ['type' => 'object', 'properties' => []],
+        ], function () use (&$calls): array {
+            $calls++;
+
+            return ['released' => true];
+        });
+        $this->app->instance(ToolRegistry::class, $registry);
+        $context = $this->context(['records.release' => $mode]);
+        $executor = app(ToolExecutor::class);
+        $requestId = (string) Str::uuid();
+        $action = $executor->execute($context, 'records.release', [], $requestId);
+
+        if ($mode === 'review') {
+            self::assertSame(0, $calls, '確認対象の参照も承認前には実行しません。');
+            self::assertSame('confirmation_required', $action['state']);
+            self::assertSame('succeeded', $executor->confirm($context, $action['id'])['state']);
+        }
+        self::assertSame('succeeded', $executor->execute($context, 'records.release', [], $requestId)['state']);
+        self::assertSame(1, $calls);
+        $this->assertDatabaseCount('fourmix_intelligence_tool_actions', 1);
+        self::assertFalse($registry->all()['records.release']['read_only']);
+        self::assertTrue($registry->all()['records.release']['destructive']);
+    }
+
+    #[TestWith(['true'])]
+    #[TestWith([1])]
+    #[TestWith([null])]
+    public function test_callback_approval_requires_an_explicit_boolean(mixed $value): void
+    {
+        $this->expectException(\LogicException::class);
+        app(ToolRegistry::class)->registerCallback('records.release', [
+            'read_only' => true, 'requires_approval' => $value,
+            'input_schema' => ['type' => 'object', 'properties' => []],
+        ], static fn (): array => []);
+    }
+
+    public function test_target_changed_after_claim_is_rejected_before_the_handler_runs(): void
+    {
+        $state = (object) ['version' => 1, 'calls' => 0];
+        $this->register('1', function () use ($state): array {
+            $state->calls++;
+
+            return ['saved' => true];
+        });
+        $this->app->instance(ToolPolicy::class, new class($state) implements ToolPolicy
+        {
+            public function __construct(private object $state) {}
+
+            public function resolve(array $identity): ToolContext
+            {
+                return new ToolContext('user:synthetic');
+            }
+
+            public function authorize(ToolContext $context, string $operation, array $arguments): void {}
+
+            public function preview(ToolContext $context, string $operation, array $arguments): array
+            {
+                return ['version' => $this->state->version];
+            }
+
+            public function reviewUrl(string $actionId): string
+            {
+                return '/reviews/'.$actionId;
+            }
+        });
+        $context = $this->context(['records.save' => 'review']);
+        $executor = app(ToolExecutor::class);
+        $requestId = (string) Str::uuid();
+        $action = $executor->execute($context, 'records.save', ['name' => '合成'], $requestId);
+        $this->app['events']->listen(TransactionCommitted::class, function () use ($state): void {
+            $state->version = 2;
+        });
+
+        try {
+            $executor->confirm($context, $action['id']);
+            self::fail('実行権の取得後に対象が変化した場合も拒否する必要があります。');
+        } catch (HttpException $exception) {
+            self::assertSame(409, $exception->getStatusCode());
+        }
+        self::assertSame(0, $state->calls);
+        self::assertSame('rejected', $executor->execute($context, 'records.save', ['name' => '合成'], $requestId)['state']);
+        self::assertSame(0, $state->calls);
     }
 
     public function test_connection_permission_is_rechecked_when_human_confirms(): void

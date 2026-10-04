@@ -190,6 +190,8 @@ app(ToolRegistry::class)->registerCallback('notes.lookup', [
 
 上記のクラスは `Tools\ToolRegistry`、`Tools\ValidationSchema` を import します。同名登録は拒否します。属性とコールバックは同じ manifest・接続許可・確認・認可の経路を通ります。
 
+`requires_approval` を指定する場合は真偽値を使います。`true` は属性の `requiresApproval: true` と同様に `read_only: false` として登録され、確認記録と受付 UUID による重複防止の対象になります。実際の確認方法は接続の `review` / `automatic` に従います。
+
 ## 対外向けツール
 
 既定の `audiences` は `['internal']` です。顧客へ提供するツールだけ `['customer']`、両方向なら `['internal', 'customer']` を明示します。公開区分だけで顧客の本人確認が成立することはありません。`ToolPolicy` で検証済みの顧客を解決し、顧客本人のデータだけに限定してください。
@@ -200,9 +202,13 @@ app(ToolRegistry::class)->registerCallback('notes.lookup', [
 
 `preview()` は副作用を起こさず、対象・入力・変更内容を分かりやすく返します。秘密や巨大なデータを返しません。実行直前に preview が変化していれば古い確認を拒否します。
 
+SDK は実行権の取得時と業務実行のトランザクション内で `preview()` を再確認します。可変レコードに依存する場合は、保存処理と同じ順序で `lockForUpdate()` を取得し、保存処理でも現在の権限・版を確認してください。ロックを取得しない参照や別 DB・外部 API まで SDK だけで整合性を保証することはできません。時刻や乱数など、業務と無関係に変わる値は preview に含めないでください。
+
 同じ受付 UUID に別入力を送ると 409 です。操作定義が変わると以前の継続許可は確認へ戻り、古い確認依頼は使用できません。実装の意味が変わる場合は `version` も更新してください。
 
 SDK の `ToolExecutor` を通る更新は、業務保存と結果記録を同じ DB トランザクションで扱います。別 DB や外部 API はこの原子性に含まれません。外部の重複排除や outbox などをアプリ側で設計します。`running` / `unknown_effect` は成功と扱わず、結果照会は再実行しません。
+
+実行権の取得後でも、ハンドラーを呼ぶ前の内容・権限チェックで拒否した操作は `rejected`（未実行）になります。ハンドラーを呼び始めた後の例外は `unknown_effect` として扱い、同じ受付 UUID では自動再実行しません。
 
 `ToolRegistry::execute()` はハンドラーの低レベル実行 API です。Policy・確認・重複防止をすべて担当する API ではないため、外部から呼ぶ独自ルートに直接接続しないでください。標準の署名済み業務経路と `ToolExecutor` を使用します。
 

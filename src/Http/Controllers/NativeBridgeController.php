@@ -138,6 +138,7 @@ final class NativeBridgeController extends Controller
 
     private function authorizeRequest(Request $request): void
     {
+        abort_unless($request->query->count() === 0, 422, '連携の入力は署名対象のリクエスト本文で送信してください。');
         abort_if(strlen($request->getContent()) > 256000, 413, '入力内容が大きすぎます。');
         $timestamp = (string) $request->header('X-Fourmix-Timestamp', '');
         $nonce = (string) $request->header('X-Fourmix-Nonce', '');

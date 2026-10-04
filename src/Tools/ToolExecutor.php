@@ -86,6 +86,8 @@ final class ToolExecutor
             if (now()->gte($row->expires_at)) {
                 $result['state'] = 'expired';
             }
+        } elseif ($row->state === 'rejected') {
+            $result['message'] = '操作は実行されませんでした。必要な場合は最新の内容で改めて依頼してください。';
         } else {
             $result['message'] = '実行結果を確認してから、必要な操作を改めて依頼してください。同じ受付番号では再実行しません。';
         }
@@ -138,7 +140,7 @@ final class ToolExecutor
             abort_unless(hash_equals($payload['definition_hash'], $this->tools->fingerprint($row->operation)), 409, '業務機能が更新されています。新しい内容で依頼してください。');
             $this->authorized($original, $row->operation, $payload['arguments']);
             abort_unless($human || $this->consent->mode($original, $row->operation) === 'automatic', 403, 'この操作は確認が必要です。');
-            abort_unless($this->canonical($payload['preview']) === $this->canonical($this->policy->preview($original, $row->operation, $payload['arguments'])), 409, '対象の内容が変更されています。最新の内容で依頼してください。');
+            $this->assertPreview($original, $row->operation, $payload);
             DB::table('fourmix_intelligence_tool_actions')->where('id', $id)->update(['state' => 'running', 'authorization' => $human ? 'human' : 'standing', 'updated_at' => now()]);
 
             return true;
@@ -146,8 +148,9 @@ final class ToolExecutor
         if (! $claimed) {
             return $this->action($context, $id);
         }
+        $executionStarted = false;
         try {
-            DB::transaction(function () use ($context, $id): void {
+            DB::transaction(function () use ($context, $id, &$executionStarted): void {
                 $this->consent->lock($context->subject);
                 $row = $this->row($context, $id);
                 $payload = json_decode(Crypt::decryptString($row->payload), true, 512, JSON_THROW_ON_ERROR);
@@ -155,17 +158,28 @@ final class ToolExecutor
                 abort_unless(hash_equals($payload['definition_hash'], $this->tools->fingerprint($row->operation)), 409, '業務機能が更新されています。新しい内容で依頼してください。');
                 $this->authorized($original, $row->operation, $payload['arguments']);
                 abort_if($row->authorization === 'standing' && $this->consent->mode($original, $row->operation) !== 'automatic', 403, '継続許可が撤回されました。');
+                $this->assertPreview($original, $row->operation, $payload);
+                $executionStarted = true;
                 $result = $this->tools->execute($row->operation, $payload['arguments'], context: $original);
                 $encoded = json_encode($result, JSON_THROW_ON_ERROR);
                 abort_if(strlen($encoded) > 512000, 422, '処理結果が大きすぎます。');
                 DB::table('fourmix_intelligence_tool_actions')->where('id', $id)->update(['state' => 'succeeded', 'result' => Crypt::encryptString($encoded), 'updated_at' => now()]);
             }, 1);
         } catch (Throwable $exception) {
-            DB::table('fourmix_intelligence_tool_actions')->where('id', $id)->where('state', 'running')->update(['state' => 'unknown_effect', 'updated_at' => now()]);
+            DB::table('fourmix_intelligence_tool_actions')->where('id', $id)->where('state', 'running')->update([
+                'state' => $executionStarted ? 'unknown_effect' : 'rejected', 'updated_at' => now(),
+            ]);
             throw $exception;
         }
 
         return $this->action($context, $id);
+    }
+
+    /** @param array<string, mixed> $payload */
+    private function assertPreview(ToolContext $context, string $operation, array $payload): void
+    {
+        abort_unless($this->canonical($payload['preview']) === $this->canonical($this->policy->preview($context, $operation, $payload['arguments'])),
+            409, '対象の内容が変更されています。最新の内容で依頼してください。');
     }
 
     /** @param array<string, mixed> $arguments */

@@ -70,7 +70,7 @@ final class ManagementController
     public function selectAgent(Request $request, string $alias, AgentSelection $agents): JsonResponse
     {
         $input = $request->validate(['connection_id' => ['required', 'uuid'], 'grant_id' => ['required', 'uuid'], 'allowed_operations' => ['prohibited']]);
-        $agents->select($this->access->context($request), $alias, $input['connection_id'], $input['grant_id']);
+        $agents->select($this->access->context($request), $alias, $input['connection_id'], $input['grant_id'], requiredAudience: 'internal');
 
         return response()->json(['saved' => true]);
     }
@@ -120,7 +120,12 @@ final class ManagementController
             }, 200, ['Content-Type' => 'application/x-ndjson', 'Cache-Control' => 'private, no-store, no-transform', 'X-Accel-Buffering' => 'no']);
         }
 
-        return response()->json($agent->ask($input['message'])->raw)->header('Cache-Control', 'no-store');
+        $result = $agent->ask($input['message']);
+        $outcome = $result->data['run_outcome'] ?? null;
+
+        return response()->json(['run_id' => $result->runId, 'plugin' => $result->agent,
+            'conversation_id' => $result->conversationId,
+            'result' => ['answer' => $result->answer, 'data' => is_string($outcome) ? ['run_outcome' => $outcome] : []]])->header('Cache-Control', 'no-store');
     }
 
     public function history(Request $request, FourmixIntelligenceManager $manager): JsonResponse

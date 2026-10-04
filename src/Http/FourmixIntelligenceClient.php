@@ -89,7 +89,7 @@ final class FourmixIntelligenceClient
         }
         $retry = is_array($this->config['retry'] ?? null) ? $this->config['retry'] : [];
 
-        $request = $this->http->baseUrl(rtrim((string) $this->config['url'], '/'))->acceptJson()->asJson()
+        $request = $this->http->baseUrl(rtrim((string) $this->config['url'], '/'))->acceptJson()->asJson()->withoutRedirecting()
             ->withToken($token)->timeout((int) ($this->config['timeout'] ?? 60))
             ->connectTimeout((int) ($this->config['connect_timeout'] ?? 5))
             ->withHeaders(['User-Agent' => 'Fourmix-Intelligence-for-Laravel/1.0']);
@@ -104,10 +104,6 @@ final class FourmixIntelligenceClient
         if ($response->successful()) {
             return;
         }
-        $message = $response->json('detail') ?? $response->json('message') ?? 'Fourmix Intelligence との通信に失敗しました。';
-        if (! is_string($message)) {
-            $message = 'Fourmix Intelligence との通信に失敗しました。';
-        }
-        throw new ApiException($message, $response->status(), $response->header('X-Request-Id'));
+        throw new ApiException('Fourmix Intelligence との通信に失敗しました。', $response->status(), $response->header('X-Request-Id'));
     }
 }

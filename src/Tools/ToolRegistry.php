@@ -74,6 +74,13 @@ final class ToolRegistry
         if (! is_bool($definition['read_only'] ?? null) || ! is_array($definition['input_schema'] ?? null)) {
             throw new \LogicException('参照・更新の区分と入力項目を明示してください。');
         }
+        if (array_key_exists('requires_approval', $definition) && ! is_bool($definition['requires_approval'])) {
+            throw new \LogicException('確認対象の指定は true または false にしてください。');
+        }
+        if ($definition['requires_approval'] ?? false) {
+            $definition['read_only'] = false;
+            $definition['destructive'] = true;
+        }
         $definition['input_schema'] = $this->writeSchema($definition['input_schema'], $definition['read_only']);
         $definition['audiences'] = $this->audiences(array_key_exists('audiences', $definition) ? $definition['audiences'] : ['internal']);
         $this->tools[$name] = [...$definition, 'name' => $name, 'callback' => $callback];
