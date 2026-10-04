@@ -12,7 +12,7 @@ final class DocumentationExamplesTest extends TestCase
         self::assertNotEmpty($files);
         $examples = 0;
         foreach ($files as $file) {
-            $markdown = file_get_contents($file);
+            $markdown = str_replace("\r\n", "\n", file_get_contents($file));
             preg_match_all('/```php\n(.*?)\n```/s', $markdown, $blocks);
             foreach ($blocks[1] as $code) {
                 $withoutComments = preg_replace('/^\s*\/\/[^\n]*$/m', '', $code);
