@@ -92,7 +92,7 @@ chat.close();
 
 ## 独自 UI
 
-Vue / Inertia などから PHP の公開 API を呼ぶ独自の認証済み API を作成できます。標準 Web Components を使う場合は `window.FourmixIntelligenceSDK.Client` と標準の管理・会話 API も利用できます。CSRF、セッション、用途別認可を省略しません。詳細な既存 HTTP API は [README](../README.md#管理会話-api) を参照してください。
+Vue / Inertia などから PHP の公開 API を呼ぶ独自の認証済み API を作成できます。標準 Web Components を使う場合は `window.FourmixIntelligenceSDK.Client` と標準の管理・会話 API も利用できます。CSRF、セッション、用途別認可を省略しません。詳細な既存 HTTP API は [API・設定リファレンス](reference.md) を参照してください。
 
 確認表示のカスタマイズは `fourmix:review` イベントでできます。確認本文を描画し直しても、サーバーの本人確認、`acknowledge`、実行前再認可は省略しません。`fourmix:action-changed` を受けた後に対象の業務一覧を再取得する設計にできます。
 
@@ -116,4 +116,3 @@ php artisan vendor:publish --tag=fourmix-intelligence-stubs --no-interaction
 ```
 
 公開後の `stubs/fi.tool.stub` と `stubs/fi.policy.stub` を組織の規約へ合わせます。置換変数は `{{ namespace }}`、`{{ class }}`、ツールでは `{{ operation }}` と `{{ scope }}` です。変更したスタブにも未認可の実行を防ぐ初期値を維持してください。
-

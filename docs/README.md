@@ -9,6 +9,7 @@ Fourmix Intelligence for Laravel は、接続・AI 呼出し・業務ツール�
 | [業務ツールと認可](business-tools.md) | 属性、登録、スキーマ、Policy、確認と重複実行防止 |
 | [UI と Artisan](ui-and-artisan.md) | 標準 UI、独立した設定、生成、配置、カスタマイズ |
 | [テストと運用](testing-and-operations.md) | 合成データ、通信を偽装したテスト、移行、監視、障害対応 |
+| [資料同期とWebhook受信](sync-and-webhooks.md) | 同期キー、JSON、受付と完了、署名、再送と結果不明 |
 | [API・設定リファレンス](reference.md) | 公開メソッド、拡張インターフェース、設定、低レベル API |
 
 ## どこまで SDK が担当するか
@@ -31,4 +32,3 @@ Fourmix Intelligence の組織やワークスペースと、Laravel 側の部署
 例中の `App\Models\Note`、`App\Models\User`、既存 Policy は説明用です。SDK がこれらのテーブルや業務を追加することはありません。実際のアプリケーションの業務サービスと認可へ置き換えてください。
 
 このガイドは現在のソースと公開 API に対応します。導入する版の [CHANGELOG](../CHANGELOG.md) と一緒に確認してください。
-
