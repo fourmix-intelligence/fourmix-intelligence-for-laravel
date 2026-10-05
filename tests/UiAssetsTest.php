@@ -3,6 +3,8 @@
 namespace FourmixIntelligence\Laravel\Tests;
 
 use FourmixIntelligence\Laravel\Http\UiAssets;
+use FourmixIntelligence\Laravel\Tools\ToolContext;
+use FourmixIntelligence\Laravel\UiSurfaces;
 use Illuminate\Auth\GenericUser;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Schema;
@@ -19,6 +21,7 @@ final class UiAssetsTest extends TestCase
     public function test_pages_version_assets_and_unchanged_content_can_be_revalidated(): void
     {
         (require __DIR__.'/../database/migrations/0001_01_01_000000_create_fourmix_intelligence_tables.php')->up();
+        app(UiSurfaces::class)->save(new ToolContext('user:1'), 'page', true);
         $assets = app(UiAssets::class);
         $url = $assets->url('sdk.js');
         self::assertStringContainsString('v='.$assets->version('sdk.js'), $url);
@@ -33,6 +36,7 @@ final class UiAssetsTest extends TestCase
     public function test_official_brand_assets_are_served_and_displayed_as_images(): void
     {
         (require __DIR__.'/../database/migrations/0001_01_01_000000_create_fourmix_intelligence_tables.php')->up();
+        app(UiSurfaces::class)->save(new ToolContext('user:1'), 'page', true);
         $assets = app(UiAssets::class);
         $page = $this->actingAs(new GenericUser(['id' => 1]))->get(route('fourmix-intelligence.chat'))->assertOk();
         foreach (['brand-icon.png' => 'image/png', 'brand-wordmark.svg' => 'image/svg+xml'] as $name => $mime) {
