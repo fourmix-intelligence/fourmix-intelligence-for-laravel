@@ -109,5 +109,38 @@ php artisan fi:knowledge:sync storage/app/knowledge.json --dataset=<資料庫ID>
 
 資料同期は会話添付とは別で、指定した資料庫へ情報を送ります。送信対象、所有者、削除・更新の運用はアプリケーションが決めます。`--key` は同期の重複排除キーです。
 
-Webhook の署名・重複検証、受信イベント、資料同期の詳細は [README](../README.md) の該当節を参照してください。AI 利用許可や Laravel の業務認可を低レベルのトークン設定で迂回することはできません。
+Webhook の署名・重複検証、受信イベント、資料同期の詳細は [資料同期とWebhook受信](sync-and-webhooks.md) を参照してください。AI 利用許可や Laravel の業務認可を低レベルのトークン設定で迂回することはできません。
 
+## 標準の管理・会話HTTP API
+
+既定の `/fourmix-intelligence` 配下でアプリのログインとCSRFを検証します。会話・添付APIは `surface` を受け取り、サーバーの設定からAIを解決します。任意の `alias` でAIを切り替えることはできず、無効なsurfaceは拒否します。ブラウザーへ接続秘密を渡すAPIではありません。
+
+| メソッド・パス | 用途 |
+| --- | --- |
+| `GET /` | 認証済みの接続・AI設定画面 |
+| `GET /chat` | 有効なpage型surfaceのチャット画面 |
+| `GET /state` | 本人の接続、画面別設定、AI表示名、最新操作履歴 |
+| `POST /connections/key` | `name`、接続ごとの `modes`、必要な継続許可の確認を保存しキーを発行 |
+| `PATCH /connections/{id}` | 本人の接続名を変更 |
+| `PUT /connections/{id}/permissions` | 権限変更とキー再発行。古い接続・AI設定を無効化 |
+| `DELETE /connections/{id}` | 本人の接続を削除 |
+| `GET /agents?connection_id={id}` | Fourmix Intelligenceがこの接続に許可したAIと能力の一覧 |
+| `PUT /agents/{alias}` | 本人の用途別AI選択。`connection_id`・`grant_id`を指定し、現在の許可を検証 |
+| `DELETE /agents/{alias}` | 本人の用途別AI選択を解除 |
+| `PUT /surfaces/{name}` | `enabled` と任意の `connection_id` / `grant_id` の組で画面を設定 |
+| `PUT /preferences` | 本人の相談入口。`chat_entry`はheader・floating・both・hidden |
+| `POST /chat` | `surface`、`message`、任意の会話・添付・補足情報で会話 |
+| `POST /history` | `surface` の会話一覧。会話IDでメッセージ、`before_id` で前ページ |
+| `GET /attachments` | `surface` と任意の会話IDで私有添付と条件を確認 |
+| `POST /attachments` | multipartで `surface`、file、UUIDのrequest_idと任意の会話ID |
+| `GET /attachments/{conversation}/{attachment}/content` | `surface` を指定し本人の添付を取得 |
+| `DELETE /attachments/{conversation}/{attachment}` | `surface` を指定し本人の添付を削除 |
+| `GET /actions/{id}` | 本人の確認内容または実行結果 |
+| `POST /actions/{id}/confirm` | 本人が `acknowledge: true` を指定して承認 |
+| `POST /actions/{id}/reject` | 本人が実行せず終了 |
+
+署名付きの `/fourmix-intelligence/v1/handshake`、manifest、bindings、actions、receiptsはサーバー間通信専用です。ブラウザーから任意の利用者IDを渡して認可する経路ではありません。独自UIのルートも本人・接続・AI・会話を毎回検証します。
+
+`GET /assets/{asset}` は公開表示用の同梱資産を配信し、業務データを返しません。`POST /chat` は `Accept: application/x-ndjson` の場合に逐次応答を返し、それ以外はJSON応答です。各行をイベントとして処理し、HTTP 200だけでAI処理の成功と判断しません。未知のイベントも安全に扱います。
+
+独自画面で選択変更を検出する場合は `expected_selection` に `connection_id`・`grant_id`・`connection_revision` を含めます。画面に読み込んだ組を維持し、別の接続にすり替わった場合は再読取します。チャットは既定20回／分、添付アップロードは12回／分、キー発行は6回／分の制限があり、429では画面に待機と再試行を案内します。AI側の作業予算や利用料金の上限とは別です。
