@@ -2936,7 +2936,7 @@ function Pt(e, { request: t, Client: n, showAction: r, datetime: i, renderToolGr
 			let g = Z("button", "このチャットの設定を保存", "fi-button");
 			g.type = "submit";
 			let _ = [], v = 0, y = !1, b = () => {
-				g.disabled = y && !(c.value && d.value && _.some((e) => e.grant_id === d.value && (e.audience || "internal") === "internal"));
+				g.disabled = i.checked && y && !(c.value && d.value && _.some((e) => e.grant_id === d.value && (e.audience || "internal") === "internal"));
 			}, x = () => {
 				let e = _.find((e) => e.grant_id === d.value);
 				f.textContent = e ? `Fourmix Intelligenceの利用範囲：${Ot[e.scope] || "未確認"} · 資料庫 ${(e.dataset_ids || []).length}件 · 外部サービス ${(e.capability_ids || []).length}件。能力はFourmix Intelligenceで管理します。` : "この接続に利用を許可したAIがありません。Fourmix IntelligenceでAIの利用許可を確認してください。", b();
@@ -2944,11 +2944,7 @@ function Pt(e, { request: t, Client: n, showAction: r, datetime: i, renderToolGr
 				let t = ++v, n = c.value;
 				_ = [], d.replaceChildren(), d.disabled = !0, g.disabled = !0;
 				let i = Z("option", n ? "AIを読み込んでいます…" : "接続を選択してください");
-				if (i.value = "", d.append(i), f.textContent = "接続と、このチャットで使うAIを設定してください。", !n) {
-					b();
-					return;
-				}
-				try {
+				if (i.value = "", d.append(i), f.textContent = "接続と、このチャットで使うAIを設定してください。", b(), n) try {
 					h.has(n) || h.set(n, o.agents(n));
 					let i = await h.get(n);
 					if (v !== t || !r.isConnected) return;
@@ -2979,7 +2975,7 @@ function Pt(e, { request: t, Client: n, showAction: r, datetime: i, renderToolGr
 				try {
 					let t = {
 						enabled: i.checked,
-						...y && c.value && d.value ? {
+						...i.checked && y && c.value && d.value ? {
 							connection_id: c.value,
 							grant_id: d.value
 						} : {}

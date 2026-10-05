@@ -51,7 +51,7 @@ final class UiSurfaces
         foreach ($this->definitions() as $name => $definition) {
             $agent = $agents[$definition['alias']] ?? null;
             $result[] = ['name' => $name, 'type' => $definition['type'], 'alias' => $definition['alias'], 'title' => $definition['title'],
-                'enabled' => $definition['enabled'] && (bool) ($preferences[$name] ?? true), 'configured' => $agent !== null,
+                'enabled' => $definition['enabled'] && (bool) ($preferences[$name] ?? false), 'configured' => $agent !== null,
                 'agent_name' => $agent['name'] ?? $definition['title'], 'connection_id' => $agent['connection_id'] ?? null, 'grant_id' => $agent['grant_id'] ?? null,
                 'connection_revision' => $agent['connection_revision'] ?? null];
         }
@@ -63,7 +63,7 @@ final class UiSurfaces
     {
         $definition = $this->definition($name);
 
-        return $definition['enabled'] && (bool) (DB::table('fourmix_intelligence_ui_surfaces')->where('subject', $context->subject)->where('name', $name)->value('enabled') ?? true);
+        return $definition['enabled'] && (bool) (DB::table('fourmix_intelligence_ui_surfaces')->where('subject', $context->subject)->where('name', $name)->value('enabled') ?? false);
     }
 
     public function resolve(ToolContext $context, string $name): string
