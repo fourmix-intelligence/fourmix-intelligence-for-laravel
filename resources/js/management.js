@@ -56,7 +56,7 @@ export function mountManagement(root, { request, Client, showAction, datetime, r
                     if (connectionId === surface.connection_id && grants.some(item => item.grant_id === surface.grant_id)) grantSelect.value = surface.grant_id;
                     const internal = grants.filter(item => (item.audience || 'internal') === 'internal'); grantSelect.disabled = !internal.length; if (!internal.some(item => item.grant_id === grantSelect.value)) grantSelect.value = internal[0]?.grant_id || ''; capability();
                     if (grants.length && !internal.length) summary.textContent = '対外向けAIには顧客の識別が必要です。標準チャットには社内向けAIを設定してください。';
-                } catch (error) { if (generation !== current || !form.isConnected) return; grantCache.delete(connectionId); summary.textContent = error.message; controls(); }
+                } catch (error) { if (generation !== current || !form.isConnected) return; grantCache.delete(connectionId); grantSelect.replaceChildren(); const option = node('option', 'AIの一覧を取得できませんでした'); option.value = ''; grantSelect.append(option); grantSelect.disabled = true; summary.textContent = error.message; controls(); }
             };
             connectionSelect.onchange = () => { selectionChanged = true; return load(); }; grantSelect.onchange = () => { selectionChanged = true; capability(); }; enabled.onchange = controls;
             form.append(enabledLabel, field('接続', connectionSelect), field('使用するAI', grantSelect), summary, submit); card.append(form); surfaces.append(card); load();

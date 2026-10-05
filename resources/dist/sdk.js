@@ -1,4 +1,4 @@
-import { t as e } from "./purify-es-BMC2t3Ry.js";
+import { t as e } from "./purify-es-DSFSk3Xv.js";
 //#region resources/js/floating.js
 var t = (e, t = "", n = "") => {
 	let r = document.createElement(e);
@@ -153,7 +153,7 @@ var t = (e, t = "", n = "") => {
 };
 customElements.get("fourmix-intelligence-floating-chat") || customElements.define("fourmix-intelligence-floating-chat", a);
 //#endregion
-//#region ../../../work/node_modules/marked/lib/marked.esm.js
+//#region node_modules/marked/lib/marked.esm.js
 function o() {
 	return {
 		async: !1,
@@ -1802,7 +1802,7 @@ function _t(t, n, r, i) {
 		} catch {
 			c.textContent = "コピーできません", c.title = "コードを選択してコピーしてください。";
 		}
-	}, o.append(s, c), a.before(o), a.classList.add("fi-code-content"), n && n !== "mermaid" && l.length <= 5e4 && r.push(import("./common-D_F75aM2.js").then(({ default: r }) => {
+	}, o.append(s, c), a.before(o), a.classList.add("fi-code-content"), n && n !== "mermaid" && l.length <= 5e4 && r.push(import("./common-CrXoIpMT.js").then(({ default: r }) => {
 		if (i.aborted || !r.getLanguage(n)) return;
 		let a = e.sanitize(r.highlight(l, {
 			language: n,
@@ -1880,7 +1880,7 @@ function K(t, n = {}) {
 				let n = (e.code.lang || "").split(/\s+/)[0].toLowerCase(), o = /^[a-z0-9_.+#-]{1,40}$/.test(n) ? n : "", s = W("div", "", "fi-code-block fi:min-w-0 fi:overflow-hidden"), c = W("pre"), l = W("code", e.code.text);
 				if (c.append(l), s.append(c), t.replaceWith(s), r.streaming || _t(l, o, a, i.signal), !r.streaming && o === "mermaid" && ++d <= 6) {
 					let t = W("figure", "", "fi-diagram fi:max-w-full fi:overflow-x-auto"), n = W("p", "図を作成しています…", "fi:my-2 fi:text-sm");
-					n.setAttribute("role", "status"), t.append(n), s.before(t), a.push(import("./mermaid-B_eGDdsg.js").then(({ renderDiagram: t }) => t(e.code.text, { signal: i.signal })).then((e) => {
+					n.setAttribute("role", "status"), t.append(n), s.before(t), a.push(import("./mermaid-D3tOjArB.js").then(({ renderDiagram: t }) => t(e.code.text, { signal: i.signal })).then((e) => {
 						if (i.signal.aborted) return;
 						t.replaceChildren(e);
 						let n = W("details");
@@ -2966,7 +2966,9 @@ function Pt(e, { request: t, Client: n, showAction: r, datetime: i, renderToolGr
 					d.disabled = !a.length, a.some((e) => e.grant_id === d.value) || (d.value = a[0]?.grant_id || ""), x(), _.length && !a.length && (f.textContent = "対外向けAIには顧客の識別が必要です。標準チャットには社内向けAIを設定してください。");
 				} catch (e) {
 					if (v !== t || !r.isConnected) return;
-					h.delete(n), f.textContent = e.message, b();
+					h.delete(n), d.replaceChildren();
+					let i = Z("option", "AIの一覧を取得できませんでした");
+					i.value = "", d.append(i), d.disabled = !0, f.textContent = e.message, b();
 				}
 			};
 			c.onchange = () => (y = !0, S()), d.onchange = () => {

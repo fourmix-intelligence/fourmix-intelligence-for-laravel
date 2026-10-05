@@ -14,6 +14,7 @@ use FourmixIntelligence\Laravel\Tools\ToolRegistry;
 use FourmixIntelligence\Laravel\Tools\UiPreferences;
 use FourmixIntelligence\Laravel\UiSurfaces;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -64,7 +65,24 @@ final class ManagementController
     {
         $input = $request->validate(['connection_id' => ['required', 'uuid']]);
 
-        return response()->json(['agents' => $agents->available($this->access->context($request), $input['connection_id'])])->header('Cache-Control', 'no-store');
+        $context = $this->access->context($request);
+        try {
+            $available = $agents->available($context, $input['connection_id']);
+        } catch (ApiException $exception) {
+            $message = match ($exception->status) {
+                401 => '接続の認証を確認できませんでした。接続キーを再発行し、Fourmix Intelligenceで接続し直してください。',
+                403 => 'この接続を利用できません。Fourmix Intelligenceで接続の利用設定を確認してください。',
+                404, 409, 410 => '接続が見つからないか、更新されています。接続状態を確認してください。',
+                429 => 'AIの一覧取得が混み合っています。少し待ってから再試行してください。',
+                default => 'AIの一覧を取得できませんでした。しばらくしてから再試行してください。',
+            };
+
+            return response()->json(['message' => $message], $exception->status === 429 ? 429 : 502)->header('Cache-Control', 'no-store');
+        } catch (ConnectionException $exception) {
+            return response()->json(['message' => 'Fourmix Intelligenceに接続できませんでした。しばらくしてから再試行してください。'], 503)->header('Cache-Control', 'no-store');
+        }
+
+        return response()->json(['agents' => $available])->header('Cache-Control', 'no-store');
     }
 
     public function selectAgent(Request $request, string $alias, AgentSelection $agents): JsonResponse

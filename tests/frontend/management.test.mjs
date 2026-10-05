@@ -116,3 +116,31 @@ test('保存に失敗した場合は日本語で案内し、選択内容を残�
     const { root } = await fixture(baseState, { handle: (url, options) => url.endsWith('/surfaces/page') && options.method === 'PUT' ? Promise.reject(new Error('接続を確認してください。')) : undefined });
     const form = root.querySelector('[data-surface="page"]'); await submit(form); assert.match(root.querySelector('[data-notice]').textContent, /接続を確認/); assert.equal(form.querySelector('button').disabled, false); assert.equal(form.querySelector('select').value, 'connection-a');
 });
+
+test('AIが未許可の場合は空の状態を表示し、読み込み中や通信エラーとして扱わない', async () => {
+    const state = structuredClone(baseState); state.surfaces[0].configured = false;
+    const { root } = await fixture(state, { agents: async () => ({ agents: [] }) });
+    const form = root.querySelector('[data-surface="page"]');
+    assert.match(form.textContent, /利用できるAIがありません/);
+    assert.doesNotMatch(form.textContent, /読み込んでいます|取得できませんでした/);
+    assert.equal(form.querySelectorAll('select')[1].disabled, true);
+});
+
+test('AI一覧の通信失敗を空一覧と区別し、読み込み中の表示を残さず再取得できる', async () => {
+    let failed = true;
+    const state = structuredClone(baseState); state.surfaces[0].configured = false;
+    const { root, agentCalls } = await fixture(state, { agents: async () => {
+        if (failed) throw new Error('接続の認証を確認できませんでした。');
+        return { agents: [{ grant_id: 'grant-a', name: '確認AI', audience: 'internal' }] };
+    } });
+    const form = root.querySelector('[data-surface="page"]');
+    assert.match(form.textContent, /AIの一覧を取得できませんでした/);
+    assert.match(form.textContent, /接続の認証/);
+    assert.doesNotMatch(form.textContent, /読み込んでいます|利用できるAIがありません/);
+    assert.equal(form.querySelectorAll('select')[1].disabled, true);
+    failed = false;
+    await form.querySelector('select').onchange();
+    assert.equal(agentCalls.length, 2);
+    assert.equal(form.querySelectorAll('select')[1].value, 'grant-a');
+    assert.equal(form.querySelector('button').disabled, false);
+});

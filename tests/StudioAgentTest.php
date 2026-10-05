@@ -10,6 +10,7 @@ use FourmixIntelligence\Laravel\Tools\ToolRegistry;
 use GuzzleHttp\Psr7\PumpStream;
 use Illuminate\Auth\GenericUser;
 use Illuminate\Database\RecordNotFoundException;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -30,6 +31,10 @@ final class StudioAgentTest extends TestCase
     private string $grant;
 
     private bool $granted = true;
+
+    private int $agentStatus = 200;
+
+    private bool $connectionFailed = false;
 
     private mixed $grantName = 'アプリ秘書';
 
@@ -70,6 +75,13 @@ final class StudioAgentTest extends TestCase
                 return Http::response($this->streamBody, 200, ['Content-Type' => 'application/x-ndjson']);
             }
             if (str_ends_with($request->url(), '/agents')) {
+                if ($this->connectionFailed) {
+                    throw new ConnectionException('private-network-detail-must-not-be-shared');
+                }
+                if ($this->agentStatus !== 200) {
+                    return Http::response(['message' => 'private-upstream-detail-must-not-be-shared'], $this->agentStatus);
+                }
+
                 return Http::response(['agents' => $this->granted ? [['grant_id' => $this->grant, 'slug' => 'product-advisor', 'audience' => $this->audience, 'identify' => 'ai-1', 'name' => $this->grantName, 'scope' => 'personal', 'dataset_ids' => ['fixture'], 'private_token' => 'must-never-be-shared']] : []]);
             }
             if (str_ends_with($request->url(), '/agent_history')) {
@@ -126,6 +138,39 @@ final class StudioAgentTest extends TestCase
     {
         $this->actingAs(new GenericUser(['id' => 1]))->putJson(route('fourmix-intelligence.agents.select', 'sales-assistant'),
             ['connection_id' => $this->local, 'grant_id' => $this->grant])->assertOk();
+    }
+
+    public function test_management_agent_listing_returns_an_empty_success_when_no_ai_is_authorized(): void
+    {
+        $this->granted = false;
+        $this->actingAs(new GenericUser(['id' => 1]))->getJson(route('fourmix-intelligence.agents', ['connection_id' => $this->local]))
+            ->assertOk()->assertExactJson(['agents' => []]);
+        Http::assertSentCount(1);
+        self::assertSame(0, DB::table('fourmix_intelligence_agent_bindings')->count());
+    }
+
+    public function test_management_agent_listing_reports_unreachable_platform_without_disclosing_network_details(): void
+    {
+        $this->connectionFailed = true;
+        $response = $this->actingAs(new GenericUser(['id' => 1]))->getJson(route('fourmix-intelligence.agents', ['connection_id' => $this->local]));
+        $response->assertStatus(503)->assertJson(['message' => 'Fourmix Intelligenceに接続できませんでした。しばらくしてから再試行してください。']);
+        self::assertStringNotContainsString('private-network-detail', $response->getContent());
+    }
+
+    #[TestWith([401, 502, '接続の認証'])]
+    #[TestWith([403, 502, 'この接続を利用できません'])]
+    #[TestWith([404, 502, '接続が見つからない'])]
+    #[TestWith([429, 429, '混み合っています'])]
+    #[TestWith([500, 502, 'AIの一覧を取得できません'])]
+    public function test_management_agent_listing_distinguishes_upstream_failure_from_no_authorized_ai(int $upstreamStatus, int $expectedStatus, string $message): void
+    {
+        $this->agentStatus = $upstreamStatus;
+        $response = $this->actingAs(new GenericUser(['id' => 1]))->getJson(route('fourmix-intelligence.agents', ['connection_id' => $this->local]));
+        $response->assertStatus($expectedStatus)->assertHeader('Cache-Control', 'no-store, private');
+        self::assertStringContainsString($message, $response->json('message'));
+        self::assertStringNotContainsString('private-upstream-detail', $response->getContent());
+        self::assertArrayNotHasKey('agents', $response->json());
+        Http::assertSentCount(1);
     }
 
     public function test_standard_agent_selection_rejects_customer_ai_without_replacing_the_current_ai(): void
