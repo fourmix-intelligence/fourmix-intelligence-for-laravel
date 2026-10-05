@@ -254,107 +254,107 @@ var f = ((e = "") => {
 	hrRegex: u((e) => RegExp(`^ {0,${e}}((?:-[ 	]*){3,}|(?:_[ 	]*){3,}|(?:\\*[ 	]*){3,})(?:\\n+|$)`)),
 	fencesBeginRegex: u((e) => RegExp(`^ {0,${e}}(?:\`\`\`|~~~)`)),
 	headingBeginRegex: u((e) => RegExp(`^ {0,${e}}#`)),
-	htmlBeginRegex: u((e) => RegExp(`^ {0,${e}}(?:</?(?:${C})(?: +|$|/?>)|<(?:script|pre|style|textarea|!--))`, "i")),
+	htmlBeginRegex: u((e) => RegExp(`^ {0,${e}}(?:</?(?:${S})(?: +|$|/?>)|<(?:script|pre|style|textarea|!--))`, "i")),
 	blockquoteBeginRegex: u((e) => RegExp(`^ {0,${e}}>`))
-}, m = /^(?:[ \t]*(?:\n|$))+/, h = /^((?: {4}| {0,3}\t)[^\n]+(?:\n(?:[ \t]*(?:\n|$))*)?)+/, g = /^ {0,3}(`{3,}(?=[^`\n]*(?:\n|$))|~{3,})([^\n]*)(?:\n|$)(?:|([\s\S]*?)(?:\n|$))(?: {0,3}\1[~`]* *(?=\n|$)|$)/, _ = /^ {0,3}((?:-[\t ]*){3,}|(?:_[ \t]*){3,}|(?:\*[ \t]*){3,})(?:\n+|$)/, v = /^ {0,3}(#{1,6})(?=\s|$)(.*)(?:\n+|$)/, y = / {0,3}(?:[*+-]|\d{1,9}[.)])/, b = /^(?!bull |blockCode|fences|blockquote|heading|html|table)((?:.|\n(?!\s*?\n|bull |fences|blockquote|heading|hr|html|table))+?)\n {0,3}(=+|-+) *(?:\n+|$)/, x = d(b).replace(/bull/g, y).replace(/blockCode/g, /(?: {4}| {0,3}\t)/).replace(/fences/g, / {0,3}(?:`{3,}|~{3,})/).replace(/blockquote/g, / {0,3}>/).replace(/heading/g, / {0,3}#{1,6}(?:\s|$)/).replace(/hr/g, / {0,3}(?:(?:-[\t ]*){3,}|(?:_[ \t]*){3,}|(?:\*[ \t]*){3,})(?:\n+|$)/).replace(/html/g, / {0,3}<[^\n>]+>\n/).replace(/\|table/g, "").getRegex(), S = d(b).replace(/bull/g, y).replace(/blockCode/g, /(?: {4}| {0,3}\t)/).replace(/fences/g, / {0,3}(?:`{3,}|~{3,})/).replace(/blockquote/g, / {0,3}>/).replace(/heading/g, / {0,3}#{1,6}(?:\s|$)/).replace(/hr/g, / {0,3}(?:(?:-[\t ]*){3,}|(?:_[ \t]*){3,}|(?:\*[ \t]*){3,})(?:\n+|$)/).replace(/html/g, / {0,3}<[^\n>]+>\n/).replace(/table/g, / {0,3}\|?(?:[:\- ]*\|)+[\:\- ]*\n/).getRegex(), ee = /^([^\n]+(?:\n(?!hr|heading|lheading|blockquote|fences|list|html|table|[ \t]+\n)[^\n]+)*)/, te = /^[^\n]+/, ne = /(?!\s*\])(?:\\[\s\S]|[^\[\]\\])+/, re = d(/^ {0,3}\[(label)\]: *(?:\n[ \t]*)?([^<\s][^\s]*|<.*?>)(?:(?: +(?:\n[ \t]*)?| *\n[ \t]*)(title))? *(?:\n+|$)/).replace("label", ne).replace("title", /(?:"(?:\\"?|[^"\\])*"|'[^'\n]*(?:\n[^'\n]+)*\n?'|\([^()]*\))/).getRegex(), ie = d(/^(bull)([ \t][^\n]*?)?(?:\n|$)/).replace(/bull/g, y).getRegex(), C = "address|article|aside|base|basefont|blockquote|body|caption|center|col|colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|frame|frameset|h[1-6]|head|header|hr|html|iframe|legend|li|link|main|menu|menuitem|meta|nav|noframes|ol|optgroup|option|p|param|search|section|summary|table|tbody|td|tfoot|th|thead|title|tr|track|ul", w = /<!--(?:-?>|[\s\S]*?(?:-->|$))/, ae = d("^ {0,3}(?:<(script|pre|style|textarea)[\\s>][\\s\\S]*?(?:</\\1>[^\\n]*\\n*|$)|comment[^\\n]*(\\n+|$)|<\\?[\\s\\S]*?(?:\\?>[^\\n]*\\n*|$)|<![A-Z][\\s\\S]*?(?:>[^\\n]*\\n*|$)|<!\\[CDATA\\[[\\s\\S]*?(?:\\]\\]>[^\\n]*\\n*|$)|</?(tag)(?: +|\\n|/?>)[\\s\\S]*?(?:(?:\\n[ 	]*)+\\n|$)|<(?!script|pre|style|textarea)([a-z][a-z0-9-]*)(?:attribute)*? */?>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:(?:\\n[ 	]*)+\\n|$)|</(?!script|pre|style|textarea)[a-z][a-z0-9-]*\\s*>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:(?:\\n[ 	]*)+\\n|$))", "i").replace("comment", w).replace("tag", C).replace("attribute", / +[a-zA-Z:_][\w.:-]*(?: *= *"[^"\n]*"| *= *'[^'\n]*'| *= *[^\s"'=<>`]+)?/).getRegex(), oe = (e) => d(ee).replace("hr", _).replace("heading", " {0,3}#{1,6}(?:\\s|$)").replace("|lheading", "").replace("|table", "").replace("blockquote", " {0,3}>").replace("fences", " {0,3}(?:`{3,}(?=[^`\\n]*(?:\\n|$))|~~~)[^\\n]*(?:\\n|$)").replace("list", e).replace("html", "</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)").replace("tag", C).getRegex(), se = oe(/ {0,3}(?:[*+-]|1[.)])[ \t]+[^ \t\n]/), ce = oe(/ {0,3}(?:[*+-]|\d{1,9}[.)])(?:[ \t]|\n|$)/), T = {
-	blockquote: d(/^( {0,3}> ?(paragraph|[^\n]*)(?:\n|$))+/).replace("paragraph", ce).getRegex(),
+}, m = /^(?:[ \t]*(?:\n|$))+/, h = /^((?: {4}| {0,3}\t)[^\n]+(?:\n(?:[ \t]*(?:\n|$))*)?)+/, g = /^ {0,3}(`{3,}(?=[^`\n]*(?:\n|$))|~{3,})([^\n]*)(?:\n|$)(?:|([\s\S]*?)(?:\n|$))(?: {0,3}\1[~`]* *(?=\n|$)|$)/, _ = /^ {0,3}((?:-[\t ]*){3,}|(?:_[ \t]*){3,}|(?:\*[ \t]*){3,})(?:\n+|$)/, v = /^ {0,3}(#{1,6})(?=\s|$)(.*)(?:\n+|$)/, y = / {0,3}(?:[*+-]|\d{1,9}[.)])/, b = /^(?!bull |blockCode|fences|blockquote|heading|html|table)((?:.|\n(?!\s*?\n|bull |fences|blockquote|heading|hr|html|table))+?)\n {0,3}(=+|-+) *(?:\n+|$)/, x = d(b).replace(/bull/g, y).replace(/blockCode/g, /(?: {4}| {0,3}\t)/).replace(/fences/g, / {0,3}(?:`{3,}|~{3,})/).replace(/blockquote/g, / {0,3}>/).replace(/heading/g, / {0,3}#{1,6}(?:\s|$)/).replace(/hr/g, / {0,3}(?:(?:-[\t ]*){3,}|(?:_[ \t]*){3,}|(?:\*[ \t]*){3,})(?:\n+|$)/).replace(/html/g, / {0,3}<[^\n>]+>\n/).replace(/\|table/g, "").getRegex(), ee = d(b).replace(/bull/g, y).replace(/blockCode/g, /(?: {4}| {0,3}\t)/).replace(/fences/g, / {0,3}(?:`{3,}|~{3,})/).replace(/blockquote/g, / {0,3}>/).replace(/heading/g, / {0,3}#{1,6}(?:\s|$)/).replace(/hr/g, / {0,3}(?:(?:-[\t ]*){3,}|(?:_[ \t]*){3,}|(?:\*[ \t]*){3,})(?:\n+|$)/).replace(/html/g, / {0,3}<[^\n>]+>\n/).replace(/table/g, / {0,3}\|?(?:[:\- ]*\|)+[\:\- ]*\n/).getRegex(), te = /^([^\n]+(?:\n(?!hr|heading|lheading|blockquote|fences|list|html|table|[ \t]+\n)[^\n]+)*)/, ne = /^[^\n]+/, re = /(?!\s*\])(?:\\[\s\S]|[^\[\]\\])+/, ie = d(/^ {0,3}\[(label)\]: *(?:\n[ \t]*)?([^<\s][^\s]*|<.*?>)(?:(?: +(?:\n[ \t]*)?| *\n[ \t]*)(title))? *(?:\n+|$)/).replace("label", re).replace("title", /(?:"(?:\\"?|[^"\\])*"|'[^'\n]*(?:\n[^'\n]+)*\n?'|\([^()]*\))/).getRegex(), ae = d(/^(bull)([ \t][^\n]*?)?(?:\n|$)/).replace(/bull/g, y).getRegex(), S = "address|article|aside|base|basefont|blockquote|body|caption|center|col|colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|frame|frameset|h[1-6]|head|header|hr|html|iframe|legend|li|link|main|menu|menuitem|meta|nav|noframes|ol|optgroup|option|p|param|search|section|summary|table|tbody|td|tfoot|th|thead|title|tr|track|ul", C = /<!--(?:-?>|[\s\S]*?(?:-->|$))/, oe = d("^ {0,3}(?:<(script|pre|style|textarea)[\\s>][\\s\\S]*?(?:</\\1>[^\\n]*\\n*|$)|comment[^\\n]*(\\n+|$)|<\\?[\\s\\S]*?(?:\\?>[^\\n]*\\n*|$)|<![A-Z][\\s\\S]*?(?:>[^\\n]*\\n*|$)|<!\\[CDATA\\[[\\s\\S]*?(?:\\]\\]>[^\\n]*\\n*|$)|</?(tag)(?: +|\\n|/?>)[\\s\\S]*?(?:(?:\\n[ 	]*)+\\n|$)|<(?!script|pre|style|textarea)([a-z][a-z0-9-]*)(?:attribute)*? */?>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:(?:\\n[ 	]*)+\\n|$)|</(?!script|pre|style|textarea)[a-z][a-z0-9-]*\\s*>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:(?:\\n[ 	]*)+\\n|$))", "i").replace("comment", C).replace("tag", S).replace("attribute", / +[a-zA-Z:_][\w.:-]*(?: *= *"[^"\n]*"| *= *'[^'\n]*'| *= *[^\s"'=<>`]+)?/).getRegex(), se = (e) => d(te).replace("hr", _).replace("heading", " {0,3}#{1,6}(?:\\s|$)").replace("|lheading", "").replace("|table", "").replace("blockquote", " {0,3}>").replace("fences", " {0,3}(?:`{3,}(?=[^`\\n]*(?:\\n|$))|~~~)[^\\n]*(?:\\n|$)").replace("list", e).replace("html", "</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)").replace("tag", S).getRegex(), ce = se(/ {0,3}(?:[*+-]|1[.)])[ \t]+[^ \t\n]/), le = se(/ {0,3}(?:[*+-]|\d{1,9}[.)])(?:[ \t]|\n|$)/), w = {
+	blockquote: d(/^( {0,3}> ?(paragraph|[^\n]*)(?:\n|$))+/).replace("paragraph", le).getRegex(),
 	code: h,
-	def: re,
+	def: ie,
 	fences: g,
 	heading: v,
 	hr: _,
-	html: ae,
+	html: oe,
 	lheading: x,
-	list: ie,
+	list: ae,
 	newline: m,
-	paragraph: se,
+	paragraph: ce,
 	table: l,
-	text: te
-}, le = d("^ *([^\\n ].*)\\n {0,3}((?:\\| *)?:?-+:? *(?:\\| *:?-+:? *)*(?:\\| *)?)(?:\\n((?:(?! *\\n|hr|heading|blockquote|code|fences|list|html).*(?:\\n|$))*)\\n*|$)").replace("hr", _).replace("heading", " {0,3}#{1,6}(?:\\s|$)").replace("blockquote", " {0,3}>").replace("code", "(?: {4}| {0,3}	)[^\\n]").replace("fences", " {0,3}(?:`{3,}(?=[^`\\n]*(?:\\n|$))|~~~)[^\\n]*(?:\\n|$)").replace("list", " {0,3}(?:[*+-]|1[.)])[ \\t]").replace("html", "</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)").replace("tag", C).getRegex(), ue = {
-	...T,
-	lheading: S,
-	table: le,
-	paragraph: d(ee).replace("hr", _).replace("heading", " {0,3}#{1,6}(?:\\s|$)").replace("|lheading", "").replace("table", le).replace("blockquote", " {0,3}>").replace("fences", " {0,3}(?:`{3,}(?=[^`\\n]*(?:\\n|$))|~~~)[^\\n]*(?:\\n|$)").replace("list", " {0,3}(?:[*+-]|1[.)])[ \\t]+[^ \\t\\n]").replace("html", "</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)").replace("tag", C).getRegex()
-}, de = {
-	...T,
-	html: d("^ *(?:comment *(?:\\n|\\s*$)|<(tag)[\\s\\S]+?</\\1> *(?:\\n{2,}|\\s*$)|<tag(?:\"[^\"]*\"|'[^']*'|\\s[^'\"/>\\s]*)*?/?> *(?:\\n{2,}|\\s*$))").replace("comment", w).replace(/tag/g, "(?!(?:a|em|strong|small|s|cite|q|dfn|abbr|data|time|code|var|samp|kbd|sub|sup|i|b|u|mark|ruby|rt|rp|bdi|bdo|span|br|wbr|ins|del|img)\\b)\\w+(?!:|[^\\w\\s@]*@)\\b").getRegex(),
+	text: ne
+}, ue = d("^ *([^\\n ].*)\\n {0,3}((?:\\| *)?:?-+:? *(?:\\| *:?-+:? *)*(?:\\| *)?)(?:\\n((?:(?! *\\n|hr|heading|blockquote|code|fences|list|html).*(?:\\n|$))*)\\n*|$)").replace("hr", _).replace("heading", " {0,3}#{1,6}(?:\\s|$)").replace("blockquote", " {0,3}>").replace("code", "(?: {4}| {0,3}	)[^\\n]").replace("fences", " {0,3}(?:`{3,}(?=[^`\\n]*(?:\\n|$))|~~~)[^\\n]*(?:\\n|$)").replace("list", " {0,3}(?:[*+-]|1[.)])[ \\t]").replace("html", "</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)").replace("tag", S).getRegex(), de = {
+	...w,
+	lheading: ee,
+	table: ue,
+	paragraph: d(te).replace("hr", _).replace("heading", " {0,3}#{1,6}(?:\\s|$)").replace("|lheading", "").replace("table", ue).replace("blockquote", " {0,3}>").replace("fences", " {0,3}(?:`{3,}(?=[^`\\n]*(?:\\n|$))|~~~)[^\\n]*(?:\\n|$)").replace("list", " {0,3}(?:[*+-]|1[.)])[ \\t]+[^ \\t\\n]").replace("html", "</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)").replace("tag", S).getRegex()
+}, fe = {
+	...w,
+	html: d("^ *(?:comment *(?:\\n|\\s*$)|<(tag)[\\s\\S]+?</\\1> *(?:\\n{2,}|\\s*$)|<tag(?:\"[^\"]*\"|'[^']*'|\\s[^'\"/>\\s]*)*?/?> *(?:\\n{2,}|\\s*$))").replace("comment", C).replace(/tag/g, "(?!(?:a|em|strong|small|s|cite|q|dfn|abbr|data|time|code|var|samp|kbd|sub|sup|i|b|u|mark|ruby|rt|rp|bdi|bdo|span|br|wbr|ins|del|img)\\b)\\w+(?!:|[^\\w\\s@]*@)\\b").getRegex(),
 	def: /^ *\[([^\]]+)\]: *<?([^\s>]+)>?(?: +(["(][^\n]+[")]))? *(?:\n+|$)/,
 	heading: /^(#{1,6})(.*)(?:\n+|$)/,
 	fences: l,
 	lheading: /^(.+?)\n {0,3}(=+|-+) *(?:\n+|$)/,
-	paragraph: d(ee).replace("hr", _).replace("heading", " *#{1,6} *[^\n]").replace("lheading", x).replace("|table", "").replace("blockquote", " {0,3}>").replace("|fences", "").replace("|list", "").replace("|html", "").replace("|tag", "").getRegex()
-}, fe = /^\\([!"#$%&'()*+,\-./:;<=>?@\[\]\\^_`{|}~])/, pe = /^(`+)([^`]|[^`][\s\S]*?[^`])\1(?!`)/, me = /^( {2,}|\\)\n(?!\s*$)[ \t]*/, he = /^(`+|[^`])(?:(?= {2,}\n)|[\s\S]*?(?:(?=[\\<!\[`*_]|\b_|$)|[^ ](?= {2,}\n)))/, E = /[\p{P}\p{S}]/u, D = /[\s\p{P}\p{S}]/u, O = /[^\s\p{P}\p{S}]/u, ge = d(/^((?![*_])punctSpace)/, "u").replace(/punctSpace/g, D).getRegex(), _e = /[\p{Pi}\p{Ps}"']/u, ve = /(?!~)[\p{P}\p{S}]/u, ye = /(?!~)[\s\p{P}\p{S}]/u, be = /(?:[^\s\p{P}\p{S}]|~)/u, xe = d(/link|precode-code|html/, "g").replace("link", /\[(?:[^\[\]`]|(?<a>`+)[^`]+\k<a>(?!`))*?\]\((?:\\[\s\S]|[^\\\(\)]|\((?:\\[\s\S]|[^\\\(\)])*\))*\)/).replace("precode-", f ? "(?<!`)()" : "(^^|[^`])").replace("code", /(?<b>`+)[^`]+\k<b>(?!`)/).replace("html", /<(?! )[^<>]*?>/).getRegex(), Se = /^(?:\*+(?:((?!\*)punct)|([^\s*]))?)|^_+(?:((?!_)punct)|([^\s_]))?/, Ce = d(Se, "u").replace(/punct/g, E).getRegex(), we = d(Se, "u").replace(/punct/g, ve).getRegex(), Te = d(/^(?:\*+(?:((?!\*)(?!openQuote)punct)|([^\s*]))?)|^_+(?:((?!_)(?!openQuote)punct)|([^\s_]))?/, "u").replace(/openQuote/g, _e).replace(/punct/g, E).getRegex(), Ee = "^[^_*]*?__[^_*]*?\\*[^_*]*?(?=__)|[^*]+(?=[^*])|(?!\\*)punct(\\*+)(?=[\\s]|$)|notPunctSpace(\\*+)(?!\\*)(?=punctSpace|$)|(?!\\*)punctSpace(\\*+)(?=notPunctSpace)|[\\s](\\*+)(?!\\*)(?=punct)|(?!\\*)punct(\\*+)(?!\\*)(?=punct)|notPunctSpace(\\*+)(?=notPunctSpace)", De = d(Ee, "gu").replace(/notPunctSpace/g, O).replace(/punctSpace/g, D).replace(/punct/g, E).getRegex(), Oe = d(Ee, "gu").replace(/notPunctSpace/g, be).replace(/punctSpace/g, ye).replace(/punct/g, ve).getRegex(), ke = d("^[^_*]*?__[^_*]*?\\*[^_*]*?(?=__)|[^*]+(?=[^*])|(?!\\*)punct(\\*+)(?=[\\s]|$)|notPunctSpace(\\*+)(?!\\*)(?=punctSpace|$)|(?!\\*)[\\s](\\*+)(?=notPunctSpace)|[\\s](\\*+)(?!\\*)(?=punct)|(?!\\*)punct(\\*+)(?!\\*)(?=punct)|(?:(?!\\*)punct|notPunctSpace)(\\*+)(?!\\*)(?=notPunctSpace)", "gu").replace(/notPunctSpace/g, O).replace(/punctSpace/g, D).replace(/punct/g, E).getRegex(), Ae = d("^[^_*]*?\\*\\*[^_*]*?_[^_*]*?(?=\\*\\*)|[^_]+(?=[^_])|(?!_)punct(_+)(?=[\\s]|$)|notPunctSpace(_+)(?!_)(?=punctSpace|$)|(?!_)punctSpace(_+)(?=notPunctSpace)|[\\s](_+)(?!_)(?=punct)|(?!_)punct(_+)(?!_)(?=punct)", "gu").replace(/notPunctSpace/g, O).replace(/punctSpace/g, D).replace(/punct/g, E).getRegex(), je = d("^[^_*]*?\\*\\*[^_*]*?_[^_*]*?(?=\\*\\*)|[^_]+(?=[^_])|(?!_)punct(_+)(?=[\\s]|$)|notPunctSpace(_+)(?!_)(?=punctSpace|$)|(?!_)[\\s](_+)(?=notPunctSpace)|[\\s](_+)(?!_)(?=punct)|(?!_)punct(_+)(?!_)(?=punct)|(?:(?!_)punct|notPunctSpace)(_+)(?!_)(?=notPunctSpace)", "gu").replace(/notPunctSpace/g, O).replace(/punctSpace/g, D).replace(/punct/g, E).getRegex(), Me = d(/^~~?(?:((?!~)punct)|[^\s~])/, "u").replace(/punct/g, E).getRegex(), Ne = d("^[^~]+(?=[^~])|(?!~)punct(~~?)(?=[\\s]|$)|notPunctSpace(~~?)(?!~)(?=punctSpace|$)|(?!~)punctSpace(~~?)(?=notPunctSpace)|[\\s](~~?)(?!~)(?=punct)|(?!~)punct(~~?)(?!~)(?=punct)|notPunctSpace(~~?)(?=notPunctSpace)", "gu").replace(/notPunctSpace/g, O).replace(/punctSpace/g, D).replace(/punct/g, E).getRegex(), Pe = d(/\\(punct)/, "gu").replace(/punct/g, E).getRegex(), Fe = d(/^<(scheme:[^\s\x00-\x1f<>]*|email)>/).replace("scheme", /[a-zA-Z][a-zA-Z0-9+.-]{1,31}/).replace("email", /[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(@)[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(?![-_])/).getRegex(), Ie = d(w).replace("(?:-->|$)", "-->").getRegex(), Le = d("^comment|^</[a-zA-Z][a-zA-Z0-9-]*\\s*>|^<[a-zA-Z][a-zA-Z0-9-]*(?:attribute)*?\\s*/?>|^<\\?[\\s\\S]*?\\?>|^<![a-zA-Z]+\\s[\\s\\S]*?>|^<!\\[CDATA\\[[\\s\\S]*?\\]\\]>").replace("comment", Ie).replace("attribute", /\s+[a-zA-Z:_][\w.:-]*(?:\s*=\s*"[^"]*"|\s*=\s*'[^']*'|\s*=\s*[^\s"'=<>`]+)?/).getRegex(), Re = /\[(?:\\[\s\S]|[^\[\]\\])*\]/, k = d(/(?:\[(?:brackets|\\[\s\S]|[^\[\]\\])*\]|\\[\s\S]|`+(?!`)[^`]*?`+(?!`)|``+(?=\])|[^\[\]\\`])*?/).replace("brackets", Re).getRegex(), ze = d(/^!?\[(label)\]\(\s*(href)(?:(?:[ \t]+(?:\n[ \t]*)?|\n[ \t]*)(title))?\s*\)/).replace("label", k).replace("href", /<(?:\\.|[^\n<>\\])+>|[^ \t\n\x00-\x1f]+|(?=\))/).replace("title", /"(?:\\"?|[^"\\])*"|'(?:\\'?|[^'\\])*'|\((?:\\\)?|[^)\\])*\)/).getRegex(), Be = d(/^!?\[(label)\]\[(ref)\]/).replace("label", k).replace("ref", ne).getRegex(), Ve = d(/^!?\[(ref)\](?:\[\])?/).replace("ref", ne).getRegex(), He = /(?!\s*\])(?:\\[\s\S]|[^\[\]\\]){1,999}/, Ue = d(/(?:[^\[\]\\`]*(?:\[(?:brackets|\\[\s\S]|[^\[\]\\])*\]|\\[\s\S]|`+(?!`)[^`]*?`+(?!`)|``+(?=\]))){0,999}?[^\[\]\\`]*?/).replace("brackets", Re).getRegex(), We = d("reflink|nolink(?!\\()", "g").replace("reflink", d(/^!?\[(label)\]\[(ref)\]/).replace("label", Ue).replace("ref", He).getRegex()).replace("nolink", d(/^!?\[(ref)\](?:\[\])?/).replace("ref", He).getRegex()).getRegex(), Ge = /[hH][tT][tT][pP][sS]?|[fF][tT][pP]/, Ke = d(/(?:mailto:email|xmpp:email(?:\/[A-Za-z0-9@.]+)?)/).replace(/email/g, /[A-Za-z0-9._+-]+@[a-zA-Z0-9-_]+(?:\.[a-zA-Z0-9-_]*[a-zA-Z0-9])+(?![\w-])/).getRegex(), qe = {
+	paragraph: d(te).replace("hr", _).replace("heading", " *#{1,6} *[^\n]").replace("lheading", x).replace("|table", "").replace("blockquote", " {0,3}>").replace("|fences", "").replace("|list", "").replace("|html", "").replace("|tag", "").getRegex()
+}, pe = /^\\([!"#$%&'()*+,\-./:;<=>?@\[\]\\^_`{|}~])/, me = /^(`+)([^`]|[^`][\s\S]*?[^`])\1(?!`)/, he = /^( {2,}|\\)\n(?!\s*$)[ \t]*/, ge = /^(`+|[^`])(?:(?= {2,}\n)|[\s\S]*?(?:(?=[\\<!\[`*_]|\b_|$)|[^ ](?= {2,}\n)))/, T = /[\p{P}\p{S}]/u, E = /[\s\p{P}\p{S}]/u, D = /[^\s\p{P}\p{S}]/u, _e = d(/^((?![*_])punctSpace)/, "u").replace(/punctSpace/g, E).getRegex(), ve = /[\p{Pi}\p{Ps}"']/u, ye = /(?!~)[\p{P}\p{S}]/u, be = /(?!~)[\s\p{P}\p{S}]/u, xe = /(?:[^\s\p{P}\p{S}]|~)/u, Se = d(/link|precode-code|html/, "g").replace("link", /\[(?:[^\[\]`]|(?<a>`+)[^`]+\k<a>(?!`))*?\]\((?:\\[\s\S]|[^\\\(\)]|\((?:\\[\s\S]|[^\\\(\)])*\))*\)/).replace("precode-", f ? "(?<!`)()" : "(^^|[^`])").replace("code", /(?<b>`+)[^`]+\k<b>(?!`)/).replace("html", /<(?! )[^<>]*?>/).getRegex(), Ce = /^(?:\*+(?:((?!\*)punct)|([^\s*]))?)|^_+(?:((?!_)punct)|([^\s_]))?/, we = d(Ce, "u").replace(/punct/g, T).getRegex(), Te = d(Ce, "u").replace(/punct/g, ye).getRegex(), Ee = d(/^(?:\*+(?:((?!\*)(?!openQuote)punct)|([^\s*]))?)|^_+(?:((?!_)(?!openQuote)punct)|([^\s_]))?/, "u").replace(/openQuote/g, ve).replace(/punct/g, T).getRegex(), De = "^[^_*]*?__[^_*]*?\\*[^_*]*?(?=__)|[^*]+(?=[^*])|(?!\\*)punct(\\*+)(?=[\\s]|$)|notPunctSpace(\\*+)(?!\\*)(?=punctSpace|$)|(?!\\*)punctSpace(\\*+)(?=notPunctSpace)|[\\s](\\*+)(?!\\*)(?=punct)|(?!\\*)punct(\\*+)(?!\\*)(?=punct)|notPunctSpace(\\*+)(?=notPunctSpace)", Oe = d(De, "gu").replace(/notPunctSpace/g, D).replace(/punctSpace/g, E).replace(/punct/g, T).getRegex(), ke = d(De, "gu").replace(/notPunctSpace/g, xe).replace(/punctSpace/g, be).replace(/punct/g, ye).getRegex(), Ae = d("^[^_*]*?__[^_*]*?\\*[^_*]*?(?=__)|[^*]+(?=[^*])|(?!\\*)punct(\\*+)(?=[\\s]|$)|notPunctSpace(\\*+)(?!\\*)(?=punctSpace|$)|(?!\\*)[\\s](\\*+)(?=notPunctSpace)|[\\s](\\*+)(?!\\*)(?=punct)|(?!\\*)punct(\\*+)(?!\\*)(?=punct)|(?:(?!\\*)punct|notPunctSpace)(\\*+)(?!\\*)(?=notPunctSpace)", "gu").replace(/notPunctSpace/g, D).replace(/punctSpace/g, E).replace(/punct/g, T).getRegex(), je = d("^[^_*]*?\\*\\*[^_*]*?_[^_*]*?(?=\\*\\*)|[^_]+(?=[^_])|(?!_)punct(_+)(?=[\\s]|$)|notPunctSpace(_+)(?!_)(?=punctSpace|$)|(?!_)punctSpace(_+)(?=notPunctSpace)|[\\s](_+)(?!_)(?=punct)|(?!_)punct(_+)(?!_)(?=punct)", "gu").replace(/notPunctSpace/g, D).replace(/punctSpace/g, E).replace(/punct/g, T).getRegex(), Me = d("^[^_*]*?\\*\\*[^_*]*?_[^_*]*?(?=\\*\\*)|[^_]+(?=[^_])|(?!_)punct(_+)(?=[\\s]|$)|notPunctSpace(_+)(?!_)(?=punctSpace|$)|(?!_)[\\s](_+)(?=notPunctSpace)|[\\s](_+)(?!_)(?=punct)|(?!_)punct(_+)(?!_)(?=punct)|(?:(?!_)punct|notPunctSpace)(_+)(?!_)(?=notPunctSpace)", "gu").replace(/notPunctSpace/g, D).replace(/punctSpace/g, E).replace(/punct/g, T).getRegex(), Ne = d(/^~~?(?:((?!~)punct)|[^\s~])/, "u").replace(/punct/g, T).getRegex(), Pe = d("^[^~]+(?=[^~])|(?!~)punct(~~?)(?=[\\s]|$)|notPunctSpace(~~?)(?!~)(?=punctSpace|$)|(?!~)punctSpace(~~?)(?=notPunctSpace)|[\\s](~~?)(?!~)(?=punct)|(?!~)punct(~~?)(?!~)(?=punct)|notPunctSpace(~~?)(?=notPunctSpace)", "gu").replace(/notPunctSpace/g, D).replace(/punctSpace/g, E).replace(/punct/g, T).getRegex(), Fe = d(/\\(punct)/, "gu").replace(/punct/g, T).getRegex(), Ie = d(/^<(scheme:[^\s\x00-\x1f<>]*|email)>/).replace("scheme", /[a-zA-Z][a-zA-Z0-9+.-]{1,31}/).replace("email", /[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(@)[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(?![-_])/).getRegex(), Le = d(C).replace("(?:-->|$)", "-->").getRegex(), Re = d("^comment|^</[a-zA-Z][a-zA-Z0-9-]*\\s*>|^<[a-zA-Z][a-zA-Z0-9-]*(?:attribute)*?\\s*/?>|^<\\?[\\s\\S]*?\\?>|^<![a-zA-Z]+\\s[\\s\\S]*?>|^<!\\[CDATA\\[[\\s\\S]*?\\]\\]>").replace("comment", Le).replace("attribute", /\s+[a-zA-Z:_][\w.:-]*(?:\s*=\s*"[^"]*"|\s*=\s*'[^']*'|\s*=\s*[^\s"'=<>`]+)?/).getRegex(), ze = /\[(?:\\[\s\S]|[^\[\]\\])*\]/, O = d(/(?:\[(?:brackets|\\[\s\S]|[^\[\]\\])*\]|\\[\s\S]|`+(?!`)[^`]*?`+(?!`)|``+(?=\])|[^\[\]\\`])*?/).replace("brackets", ze).getRegex(), Be = d(/^!?\[(label)\]\(\s*(href)(?:(?:[ \t]+(?:\n[ \t]*)?|\n[ \t]*)(title))?\s*\)/).replace("label", O).replace("href", /<(?:\\.|[^\n<>\\])+>|[^ \t\n\x00-\x1f]+|(?=\))/).replace("title", /"(?:\\"?|[^"\\])*"|'(?:\\'?|[^'\\])*'|\((?:\\\)?|[^)\\])*\)/).getRegex(), Ve = d(/^!?\[(label)\]\[(ref)\]/).replace("label", O).replace("ref", re).getRegex(), He = d(/^!?\[(ref)\](?:\[\])?/).replace("ref", re).getRegex(), Ue = /(?!\s*\])(?:\\[\s\S]|[^\[\]\\]){1,999}/, We = d(/(?:[^\[\]\\`]*(?:\[(?:brackets|\\[\s\S]|[^\[\]\\])*\]|\\[\s\S]|`+(?!`)[^`]*?`+(?!`)|``+(?=\]))){0,999}?[^\[\]\\`]*?/).replace("brackets", ze).getRegex(), Ge = d("reflink|nolink(?!\\()", "g").replace("reflink", d(/^!?\[(label)\]\[(ref)\]/).replace("label", We).replace("ref", Ue).getRegex()).replace("nolink", d(/^!?\[(ref)\](?:\[\])?/).replace("ref", Ue).getRegex()).getRegex(), Ke = /[hH][tT][tT][pP][sS]?|[fF][tT][pP]/, qe = d(/(?:mailto:email|xmpp:email(?:\/[A-Za-z0-9@.]+)?)/).replace(/email/g, /[A-Za-z0-9._+-]+@[a-zA-Z0-9-_]+(?:\.[a-zA-Z0-9-_]*[a-zA-Z0-9])+(?![\w-])/).getRegex(), Je = {
 	_backpedal: l,
-	anyPunctuation: Pe,
-	autolink: Fe,
-	blockSkip: xe,
-	br: me,
-	code: pe,
+	anyPunctuation: Fe,
+	autolink: Ie,
+	blockSkip: Se,
+	br: he,
+	code: me,
 	del: l,
 	delLDelim: l,
 	delRDelim: l,
-	emStrongLDelim: Ce,
-	emStrongRDelimAst: De,
-	emStrongRDelimUnd: Ae,
-	escape: fe,
-	link: ze,
-	nolink: Ve,
-	punctuation: ge,
-	reflink: Be,
-	reflinkSearch: We,
-	tag: Le,
-	text: he,
-	url: l
-}, Je = {
-	...qe,
-	emStrongLDelim: Te,
-	emStrongRDelimAst: ke,
-	emStrongRDelimUnd: je,
-	link: d(/^!?\[(label)\]\((.*?)\)/).replace("label", k).getRegex(),
-	reflink: d(/^!?\[(label)\]\s*\[([^\]]*)\]/).replace("label", k).getRegex()
-}, Ye = {
-	...qe,
-	emStrongRDelimAst: Oe,
 	emStrongLDelim: we,
-	delLDelim: Me,
-	delRDelim: Ne,
-	url: d(/^emailProtocol|^((?:protocol):\/\/|www\.)(?:[a-zA-Z0-9\-]+\.?)+[^\s<]*|^email/).replace("emailProtocol", Ke).replace("protocol", Ge).replace("email", /[A-Za-z0-9._+-]+(@)[a-zA-Z0-9-_]+(?:\.[a-zA-Z0-9-_]*[a-zA-Z0-9])+(?![\w-])/).getRegex(),
+	emStrongRDelimAst: Oe,
+	emStrongRDelimUnd: je,
+	escape: pe,
+	link: Be,
+	nolink: He,
+	punctuation: _e,
+	reflink: Ve,
+	reflinkSearch: Ge,
+	tag: Re,
+	text: ge,
+	url: l
+}, Ye = {
+	...Je,
+	emStrongLDelim: Ee,
+	emStrongRDelimAst: Ae,
+	emStrongRDelimUnd: Me,
+	link: d(/^!?\[(label)\]\((.*?)\)/).replace("label", O).getRegex(),
+	reflink: d(/^!?\[(label)\]\s*\[([^\]]*)\]/).replace("label", O).getRegex()
+}, Xe = {
+	...Je,
+	emStrongRDelimAst: ke,
+	emStrongLDelim: Te,
+	delLDelim: Ne,
+	delRDelim: Pe,
+	url: d(/^emailProtocol|^((?:protocol):\/\/|www\.)(?:[a-zA-Z0-9\-]+\.?)+[^\s<]*|^email/).replace("emailProtocol", qe).replace("protocol", Ke).replace("email", /[A-Za-z0-9._+-]+(@)[a-zA-Z0-9-_]+(?:\.[a-zA-Z0-9-_]*[a-zA-Z0-9])+(?![\w-])/).getRegex(),
 	_backpedal: /(?:[^?!.,:;*_'"~()&]+|\([^)]*\)|&(?![a-zA-Z0-9]+;$)|[?!.,:;*_'"~)]+(?!$))+/,
 	del: /^(~~?)(?=[^\s~])((?:\\[\s\S]|[^\\])*?(?:\\[\s\S]|[^\s~\\]))\1(?=[^~]|$)/,
-	text: d(/^(?:[^a-zA-Z0-9](?=emailProtocol)|(`+|~+|[^`~])(?:(?=[`~])|(?= {2,}\n)|(?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)|[\s\S]*?(?:(?=[\\<!\[`*~_]|\b_|protocol:\/\/|www\.|$)|[^ ](?= {2,}\n)|[^a-zA-Z0-9](?=emailProtocol)|[^a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-](?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@))))/).replace("protocol", Ge).replace(/emailProtocol/g, /(?:mailto|xmpp):/).getRegex()
-}, Xe = {
-	...Ye,
-	br: d(me).replace("{2,}", "*").getRegex(),
-	text: d(Ye.text).replace("\\b_", "\\b_| {2,}\\n").replace(/\{2,\}/g, "*").getRegex()
-}, A = {
-	normal: T,
-	gfm: ue,
-	pedantic: de
-}, j = {
-	normal: qe,
-	gfm: Ye,
-	breaks: Xe,
-	pedantic: Je
+	text: d(/^(?:[^a-zA-Z0-9](?=emailProtocol)|(`+|~+|[^`~])(?:(?=[`~])|(?= {2,}\n)|(?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)|[\s\S]*?(?:(?=[\\<!\[`*~_]|\b_|protocol:\/\/|www\.|$)|[^ ](?= {2,}\n)|[^a-zA-Z0-9](?=emailProtocol)|[^a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-](?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@))))/).replace("protocol", Ke).replace(/emailProtocol/g, /(?:mailto|xmpp):/).getRegex()
 }, Ze = {
+	...Xe,
+	br: d(he).replace("{2,}", "*").getRegex(),
+	text: d(Xe.text).replace("\\b_", "\\b_| {2,}\\n").replace(/\{2,\}/g, "*").getRegex()
+}, k = {
+	normal: w,
+	gfm: de,
+	pedantic: fe
+}, A = {
+	normal: Je,
+	gfm: Xe,
+	breaks: Ze,
+	pedantic: Ye
+}, Qe = {
 	"&": "&amp;",
 	"<": "&lt;",
 	">": "&gt;",
 	"\"": "&quot;",
 	"'": "&#39;"
-}, Qe = (e) => Ze[e];
-function M(e, t) {
+}, $e = (e) => Qe[e];
+function j(e, t) {
 	if (t) {
-		if (p.escapeTest.test(e)) return e.replace(p.escapeReplace, Qe);
-	} else if (p.escapeTestNoEncode.test(e)) return e.replace(p.escapeReplaceNoEncode, Qe);
+		if (p.escapeTest.test(e)) return e.replace(p.escapeReplace, $e);
+	} else if (p.escapeTestNoEncode.test(e)) return e.replace(p.escapeReplaceNoEncode, $e);
 	return e;
 }
-function $e(e) {
+function et(e) {
 	return e.replace(p.numericCharacterReference, (e, t, n) => {
 		let r = t === void 0 ? Number.parseInt(n, 16) : Number.parseInt(t, 10);
 		return r === 0 || r > 1114111 || r >= 55296 && r <= 57343 ? "�" : String.fromCodePoint(r);
 	});
 }
-function et(e) {
+function tt(e) {
 	try {
 		e = encodeURI(e).replace(p.percentDecode, "%");
 	} catch {
@@ -362,7 +362,7 @@ function et(e) {
 	}
 	return e;
 }
-function tt(e, t) {
+function nt(e, t) {
 	let n = e.replace(p.findPipe, (e, t, n) => {
 		let r = !1, i = t;
 		for (; --i >= 0 && n[i] === "\\";) r = !r;
@@ -375,7 +375,7 @@ function tt(e, t) {
 	for (; r < n.length; r++) n[r] = n[r].trim().replace(p.slashPipe, "|");
 	return n;
 }
-function N(e, t, n) {
+function M(e, t, n) {
 	let r = e.length;
 	if (r === 0) return "";
 	let i = 0;
@@ -387,15 +387,15 @@ function N(e, t, n) {
 	}
 	return e.slice(0, r - i);
 }
-function nt(e) {
+function rt(e) {
 	let t = e.split("\n"), n = t.length - 1;
 	for (; n >= 0 && p.blankLine.test(t[n]);) n--;
 	return t.length - n <= 2 ? e : t.slice(0, n + 1).join("\n");
 }
-function P(e) {
+function N(e) {
 	return e.trim().toLowerCase().toUpperCase().toLowerCase();
 }
-function rt(e, t) {
+function it(e, t) {
 	if (e.indexOf(t[1]) === -1) return -1;
 	let n = 0;
 	for (let r = 0; r < e.length; r++) if (e[r] === "\\") r++;
@@ -403,7 +403,7 @@ function rt(e, t) {
 	else if (e[r] === t[1] && (n--, n < 0)) return r;
 	return n > 0 ? -2 : -1;
 }
-function it(e, t = 0) {
+function at(e, t = 0) {
 	let n = t, r = "";
 	for (let t of e) if (t === "	") {
 		let e = 4 - n % 4;
@@ -411,7 +411,7 @@ function it(e, t = 0) {
 	} else r += t, n++;
 	return r;
 }
-function at(e, t, n, r, i) {
+function ot(e, t, n, r, i) {
 	let a = t.href, o = t.title || null, s = e[1].replace(i.other.outputLinkReplace, "$1"), c = e[0].charAt(0) === "!";
 	r.state.inLink = !0;
 	let l = r.state.linkEmitted, u = r.state.inRawBlock;
@@ -433,7 +433,7 @@ function at(e, t, n, r, i) {
 		tokens: d
 	};
 }
-function ot(e, t, n) {
+function st(e, t, n) {
 	let r = e.match(n.other.indentCodeCompensation);
 	if (r === null) return t;
 	let i = r[1];
@@ -444,7 +444,7 @@ function ot(e, t, n) {
 		return e.slice(Math.min(r.length, i.length));
 	}).join("\n");
 }
-function st(e, t, n, r) {
+function ct(e, t, n, r) {
 	if (!t.includes("<")) return !1;
 	for (let i = 0; i < t.length; i++) {
 		if (t[i] === "\\") {
@@ -467,7 +467,7 @@ function st(e, t, n, r) {
 	}
 	return !1;
 }
-var F = class {
+var P = class {
 	options;
 	rules;
 	lexer;
@@ -484,7 +484,7 @@ var F = class {
 	code(e) {
 		let t = this.rules.block.code.exec(e);
 		if (t) {
-			let e = this.options.pedantic ? t[0] : nt(t[0]);
+			let e = this.options.pedantic ? t[0] : rt(t[0]);
 			return {
 				type: "code",
 				raw: e,
@@ -496,7 +496,7 @@ var F = class {
 	fences(e) {
 		let t = this.rules.block.fences.exec(e);
 		if (t) {
-			let e = t[0], n = ot(e, t[3] || "", this.rules);
+			let e = t[0], n = st(e, t[3] || "", this.rules);
 			return {
 				type: "code",
 				raw: e,
@@ -510,12 +510,12 @@ var F = class {
 		if (t) {
 			let e = t[2].trim();
 			if (this.rules.other.endingHash.test(e)) {
-				let t = N(e, "#");
+				let t = M(e, "#");
 				(this.options.pedantic || !t || this.rules.other.endingSpaceTabChar.test(t)) && (e = t.trim());
 			}
 			return {
 				type: "heading",
-				raw: N(t[0], "\n"),
+				raw: M(t[0], "\n"),
 				depth: t[1].length,
 				text: e,
 				tokens: this.lexer.inline(e)
@@ -526,13 +526,13 @@ var F = class {
 		let t = this.rules.block.hr.exec(e);
 		if (t) return {
 			type: "hr",
-			raw: N(t[0], "\n")
+			raw: M(t[0], "\n")
 		};
 	}
 	blockquote(e) {
 		let t = this.rules.block.blockquote.exec(e);
 		if (t) {
-			let e = N(t[0], "\n").split("\n"), n = "", r = "", i = [];
+			let e = M(t[0], "\n").split("\n"), n = "", r = "", i = [];
 			for (; e.length > 0;) {
 				let t = !1, a = [], o = 0;
 				for (; o < e.length; o++) if (this.rules.other.blockquoteStart.test(e[o])) a.push(e[o]), t = !0;
@@ -586,7 +586,7 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 				let n = !1, r = "", s = "";
 				if (!(t = a.exec(e)) || this.rules.block.hr.test(e)) break;
 				r = t[0], e = e.substring(r.length);
-				let c = t[2].split("\n", 1)[0], l = t[1].length, u = this.options.pedantic ? it(c, l) : c.replace(this.rules.other.leadingSpaceTab, (e) => it(e, l)), d = e.split("\n", 1)[0], f = !u.trim(), p = 0;
+				let c = t[2].split("\n", 1)[0], l = t[1].length, u = this.options.pedantic ? at(c, l) : c.replace(this.rules.other.leadingSpaceTab, (e) => at(e, l)), d = e.split("\n", 1)[0], f = !u.trim(), p = 0;
 				if (this.options.pedantic ? (p = 2, s = u.trimStart()) : f ? p = l + 1 : (p = u.search(this.rules.other.nonSpaceChar), p = p > 4 ? 1 : p, s = u.slice(p), p += l), f && this.rules.other.blankLine.test(d) && (r += d + "\n", e = e.substring(d.length + 1), n = !0), !n) {
 					let t = this.rules.other.nextBulletRegex(p), n = this.rules.other.hrRegex(p), i = this.rules.other.fencesBeginRegex(p), a = this.rules.other.headingBeginRegex(p), o = this.rules.other.htmlBeginRegex(p), c = this.rules.other.blockquoteBeginRegex(p);
 					for (; e;) {
@@ -651,7 +651,7 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 	html(e) {
 		let t = this.rules.block.html.exec(e);
 		if (t) {
-			let e = nt(t[0]);
+			let e = rt(t[0]);
 			return {
 				type: "html",
 				block: !0,
@@ -664,11 +664,11 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 	def(e) {
 		let t = this.rules.block.def.exec(e);
 		if (t) {
-			let e = P(t[1]).replace(this.rules.other.multipleSpaceGlobal, " "), n = t[2] ? t[2].replace(this.rules.other.hrefBrackets, "$1").replace(this.rules.inline.anyPunctuation, "$1") : "", r = t[3] ? t[3].substring(1, t[3].length - 1).replace(this.rules.inline.anyPunctuation, "$1") : t[3];
+			let e = N(t[1]).replace(this.rules.other.multipleSpaceGlobal, " "), n = t[2] ? t[2].replace(this.rules.other.hrefBrackets, "$1").replace(this.rules.inline.anyPunctuation, "$1") : "", r = t[3] ? t[3].substring(1, t[3].length - 1).replace(this.rules.inline.anyPunctuation, "$1") : t[3];
 			return {
 				type: "def",
 				tag: e,
-				raw: N(t[0], "\n"),
+				raw: M(t[0], "\n"),
 				href: n,
 				title: r
 			};
@@ -677,9 +677,9 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 	table(e) {
 		let t = this.rules.block.table.exec(e);
 		if (!t || !this.rules.other.tableDelimiter.test(t[2])) return;
-		let n = tt(t[1]), r = t[2].replace(this.rules.other.tableAlignChars, "").split("|"), i = t[3]?.trim() ? t[3].replace(this.rules.other.tableRowBlankLine, "").split("\n") : [], a = {
+		let n = nt(t[1]), r = t[2].replace(this.rules.other.tableAlignChars, "").split("|"), i = t[3]?.trim() ? t[3].replace(this.rules.other.tableRowBlankLine, "").split("\n") : [], a = {
 			type: "table",
-			raw: N(t[0], "\n"),
+			raw: M(t[0], "\n"),
 			header: [],
 			align: [],
 			rows: []
@@ -692,7 +692,7 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 				header: !0,
 				align: a.align[e]
 			});
-			for (let e of i) a.rows.push(tt(e, a.header.length).map((e, t) => ({
+			for (let e of i) a.rows.push(nt(e, a.header.length).map((e, t) => ({
 				text: e,
 				tokens: this.lexer.inline(e),
 				header: !1,
@@ -707,7 +707,7 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 			let e = t[1].trim();
 			return {
 				type: "heading",
-				raw: N(t[0], "\n"),
+				raw: M(t[0], "\n"),
 				depth: t[2].charAt(0) === "=" ? 1 : 2,
 				text: e,
 				tokens: this.lexer.inline(e)
@@ -758,14 +758,14 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 		let t = this.rules.inline.link.exec(e);
 		if (t) {
 			let n = t[0].charAt(0) === "!" ? 2 : 1;
-			if (!this.options.pedantic && st(e, t[1], n, this.rules)) return;
+			if (!this.options.pedantic && ct(e, t[1], n, this.rules)) return;
 			let r = t[2].trim();
 			if (!this.options.pedantic && this.rules.other.startAngleBracket.test(r)) {
 				if (!this.rules.other.endAngleBracket.test(r)) return;
-				let e = N(r.slice(0, -1), "\\");
+				let e = M(r.slice(0, -1), "\\");
 				if ((r.length - e.length) % 2 == 0) return;
 			} else {
-				let e = rt(t[2], "()");
+				let e = it(t[2], "()");
 				if (e === -2) return;
 				if (e > -1) {
 					let n = (t[0].indexOf("!") === 0 ? 5 : 4) + t[1].length + e;
@@ -777,7 +777,7 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 				let e = this.rules.other.pedanticHrefTitle.exec(i);
 				e && (i = e[1], a = e[3]);
 			} else a = t[3] ? t[3].slice(1, -1) : "";
-			return i = i.trim(), this.rules.other.startAngleBracket.test(i) && (i = this.options.pedantic && !this.rules.other.endAngleBracket.test(r) ? i.slice(1) : i.slice(1, -1)), at(t, {
+			return i = i.trim(), this.rules.other.startAngleBracket.test(i) && (i = this.options.pedantic && !this.rules.other.endAngleBracket.test(r) ? i.slice(1) : i.slice(1, -1)), ot(t, {
 				href: i && i.replace(this.rules.inline.anyPunctuation, "$1"),
 				title: a && a.replace(this.rules.inline.anyPunctuation, "$1")
 			}, t[0], this.lexer, this.rules);
@@ -787,8 +787,8 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 		let n;
 		if ((n = this.rules.inline.reflink.exec(e)) || (n = this.rules.inline.nolink.exec(e))) {
 			let r = n[0].charAt(0) === "!" ? 2 : 1;
-			if (!this.options.pedantic && st(e, n[1], r, this.rules)) return;
-			let i = t[P((n[2] || n[1]).replace(this.rules.other.multipleSpaceGlobal, " "))];
+			if (!this.options.pedantic && ct(e, n[1], r, this.rules)) return;
+			let i = t[N((n[2] || n[1]).replace(this.rules.other.multipleSpaceGlobal, " "))];
 			if (!i) {
 				let e = n[0].charAt(0);
 				return {
@@ -797,7 +797,7 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 					text: e
 				};
 			}
-			return at(n, i, n[0], this.lexer, this.rules);
+			return ot(n, i, n[0], this.lexer, this.rules);
 		}
 	}
 	emStrong(e, t, n = "") {
@@ -930,19 +930,19 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 			return {
 				type: "text",
 				raw: t[0],
-				text: e ? t[0] : $e(t[0]),
+				text: e ? t[0] : et(t[0]),
 				escaped: e
 			};
 		}
 	}
-}, I = class e {
+}, F = class e {
 	tokens;
 	options;
 	state;
 	inlineQueue;
 	tokenizer;
 	constructor(e) {
-		this.tokens = [], this.tokens.links = Object.create(null), this.options = e || s, this.options.tokenizer = this.options.tokenizer || new F(), this.tokenizer = this.options.tokenizer, this.tokenizer.options = this.options, this.tokenizer.lexer = this, this.inlineQueue = [], this.state = {
+		this.tokens = [], this.tokens.links = Object.create(null), this.options = e || s, this.options.tokenizer = this.options.tokenizer || new P(), this.tokenizer = this.options.tokenizer, this.tokenizer.options = this.options, this.tokenizer.lexer = this, this.inlineQueue = [], this.state = {
 			inLink: !1,
 			inRawBlock: !1,
 			linkEmitted: !1,
@@ -950,15 +950,15 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 		};
 		let t = {
 			other: p,
-			block: A.normal,
-			inline: j.normal
+			block: k.normal,
+			inline: A.normal
 		};
-		this.options.pedantic ? (t.block = A.pedantic, t.inline = j.pedantic) : this.options.gfm && (t.block = A.gfm, t.inline = this.options.breaks ? j.breaks : j.gfm), this.tokenizer.rules = t;
+		this.options.pedantic ? (t.block = k.pedantic, t.inline = A.pedantic) : this.options.gfm && (t.block = k.gfm, t.inline = this.options.breaks ? A.breaks : A.gfm), this.tokenizer.rules = t;
 	}
 	static get rules() {
 		return {
-			block: A,
-			inline: j
+			block: k,
+			inline: A
 		};
 	}
 	static lex(t, n) {
@@ -1076,7 +1076,7 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 		for (let n of e.matchAll(this.tokenizer.rules.inline.blockSkip)) if (t.test(n[0]) && e.charAt(n.index - 1) !== "!") return !0;
 		for (let t of e.matchAll(this.tokenizer.rules.inline.reflinkSearch)) {
 			let e = t[0], n = e.lastIndexOf("[");
-			if (e.charAt(0) !== "!" && Object.hasOwn(this.tokens.links, P(e.slice(n + 1, -1))) && !(n > 1 && this.linkInText(e.slice(1, n - 1)))) return !0;
+			if (e.charAt(0) !== "!" && Object.hasOwn(this.tokens.links, N(e.slice(n + 1, -1))) && !(n > 1 && this.linkInText(e.slice(1, n - 1)))) return !0;
 		}
 		return !1;
 	}
@@ -1086,7 +1086,7 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 		if (this.tokens.links && e.includes("[")) {
 			let e = this.tokenizer.rules.inline.reflinkSearch, t = (n) => {
 				let r = n.lastIndexOf("[");
-				if (!Object.hasOwn(this.tokens.links, P(n.slice(r + 1, -1)))) return n;
+				if (!Object.hasOwn(this.tokens.links, N(n.slice(r + 1, -1)))) return n;
 				if (r > 1 && n.charAt(0) !== "!") {
 					let i = n.slice(1, r - 1);
 					if (this.linkInText(i)) return "[" + i.replace(e, t) + "][" + "a".repeat(n.length - r - 2) + "]";
@@ -1176,7 +1176,7 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 		if (this.options.silent) console.error(t);
 		else throw Error(t);
 	}
-}, L = class {
+}, I = class {
 	options;
 	parser;
 	constructor(e) {
@@ -1187,7 +1187,7 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 	}
 	code({ text: e, lang: t, escaped: n }) {
 		let r = (t || "").match(p.notSpaceStart)?.[0], i = e ? e.replace(p.endingNewline, "") + "\n" : "";
-		return r ? "<pre><code class=\"language-" + M(r) + "\">" + (n ? i : M(i, !0)) + "</code></pre>\n" : "<pre><code>" + (n ? i : M(i, !0)) + "</code></pre>\n";
+		return r ? "<pre><code class=\"language-" + j(r) + "\">" + (n ? i : j(i, !0)) + "</code></pre>\n" : "<pre><code>" + (n ? i : j(i, !0)) + "</code></pre>\n";
 	}
 	blockquote({ tokens: e }) {
 		return `<blockquote>
@@ -1257,7 +1257,7 @@ ${e}</tr>
 		return `<em>${this.parser.parseInline(e)}</em>`;
 	}
 	codespan({ text: e }) {
-		return `<code>${M(e, !0)}</code>`;
+		return `<code>${j(e, !0)}</code>`;
 	}
 	br(e) {
 		return "<br>";
@@ -1266,24 +1266,24 @@ ${e}</tr>
 		return `<del>${this.parser.parseInline(e)}</del>`;
 	}
 	link({ href: e, title: t, text: n, tokens: r, autolink: i }) {
-		let a = i ? M(n, !0) : this.parser.parseInline(r), o = et(e);
+		let a = i ? j(n, !0) : this.parser.parseInline(r), o = tt(e);
 		if (o === null) return a;
-		e = M(o, i);
+		e = j(o, i);
 		let s = "<a href=\"" + e + "\"";
-		return t && (s += " title=\"" + M(t) + "\""), s += ">" + a + "</a>", s;
+		return t && (s += " title=\"" + j(t) + "\""), s += ">" + a + "</a>", s;
 	}
 	image({ href: e, title: t, text: n, tokens: r }) {
 		r && (n = this.parser.parseInline(r, this.parser.textRenderer));
-		let i = et(e);
-		if (i === null) return M(n);
+		let i = tt(e);
+		if (i === null) return j(n);
 		e = i;
-		let a = `<img src="${M(e)}" alt="${M(n)}"`;
-		return t && (a += ` title="${M(t)}"`), a += ">", a;
+		let a = `<img src="${j(e)}" alt="${j(n)}"`;
+		return t && (a += ` title="${j(t)}"`), a += ">", a;
 	}
 	text(e) {
-		return "tokens" in e && e.tokens ? this.parser.parseInline(e.tokens) : "escaped" in e && e.escaped ? e.text : M(e.text);
+		return "tokens" in e && e.tokens ? this.parser.parseInline(e.tokens) : "escaped" in e && e.escaped ? e.text : j(e.text);
 	}
-}, R = class {
+}, L = class {
 	strong({ text: e }) {
 		return e;
 	}
@@ -1314,12 +1314,12 @@ ${e}</tr>
 	checkbox({ raw: e }) {
 		return e;
 	}
-}, z = class e {
+}, R = class e {
 	options;
 	renderer;
 	textRenderer;
 	constructor(e) {
-		this.options = e || s, this.options.renderer = this.options.renderer || new L(), this.renderer = this.options.renderer, this.renderer.options = this.options, this.renderer.parser = this, this.textRenderer = new R();
+		this.options = e || s, this.options.renderer = this.options.renderer || new I(), this.renderer = this.options.renderer, this.renderer.options = this.options, this.renderer.parser = this, this.textRenderer = new L();
 	}
 	static parse(t, n) {
 		return new e(n).parse(t);
@@ -1467,7 +1467,7 @@ ${e}</tr>
 		}
 		return n;
 	}
-}, B = class {
+}, z = class {
 	options;
 	block;
 	constructor(e) {
@@ -1497,22 +1497,22 @@ ${e}</tr>
 		return e;
 	}
 	provideLexer(e = this.block) {
-		return e ? I.lex : I.lexInline;
+		return e ? F.lex : F.lexInline;
 	}
 	provideParser(e = this.block) {
-		return e ? z.parse : z.parseInline;
+		return e ? R.parse : R.parseInline;
 	}
-}, ct = class {
+}, lt = class {
 	defaults = o();
 	options = this.setOptions;
 	parse = this.parseMarkdown(!0);
 	parseInline = this.parseMarkdown(!1);
-	Parser = z;
-	Renderer = L;
-	TextRenderer = R;
-	Lexer = I;
-	Tokenizer = F;
-	Hooks = B;
+	Parser = R;
+	Renderer = I;
+	TextRenderer = L;
+	Lexer = F;
+	Tokenizer = P;
+	Hooks = z;
 	constructor(...e) {
 		this.use(...e);
 	}
@@ -1563,7 +1563,7 @@ ${e}</tr>
 				}
 				"childTokens" in e && e.childTokens && (t.childTokens[e.name] = e.childTokens);
 			}), n.extensions = t), e.renderer) {
-				let t = this.defaults.renderer || new L(this.defaults);
+				let t = this.defaults.renderer || new I(this.defaults);
 				for (let n in e.renderer) {
 					if (!(n in t)) throw Error(`renderer '${n}' does not exist`);
 					if (["options", "parser"].includes(n)) continue;
@@ -1576,7 +1576,7 @@ ${e}</tr>
 				n.renderer = t;
 			}
 			if (e.tokenizer) {
-				let t = this.defaults.tokenizer || new F(this.defaults);
+				let t = this.defaults.tokenizer || new P(this.defaults);
 				for (let n in e.tokenizer) {
 					if (!(n in t)) throw Error(`tokenizer '${n}' does not exist`);
 					if ([
@@ -1593,13 +1593,13 @@ ${e}</tr>
 				n.tokenizer = t;
 			}
 			if (e.hooks) {
-				let t = this.defaults.hooks || new B();
+				let t = this.defaults.hooks || new z();
 				for (let n in e.hooks) {
 					if (!(n in t)) throw Error(`hook '${n}' does not exist`);
 					if (["options", "block"].includes(n)) continue;
 					let r = n, i = e.hooks[r], a = t[r];
-					t[r] = B.passThroughHooks.has(n) ? (e) => {
-						if (this.defaults.async && B.passThroughHooksRespectAsync.has(n)) return (async () => {
+					t[r] = z.passThroughHooks.has(n) ? (e) => {
+						if (this.defaults.async && z.passThroughHooksRespectAsync.has(n)) return (async () => {
 							let n = await i.call(t, e);
 							return a.call(t, n);
 						})();
@@ -1636,10 +1636,10 @@ ${e}</tr>
 		}, this;
 	}
 	lexer(e, t) {
-		return I.lex(e, t ?? this.defaults);
+		return F.lex(e, t ?? this.defaults);
 	}
 	parser(e, t) {
-		return z.parse(e, t ?? this.defaults);
+		return R.parse(e, t ?? this.defaults);
 	}
 	parseMarkdown(e) {
 		return (t, n) => {
@@ -1651,16 +1651,16 @@ ${e}</tr>
 			if (typeof t > "u" || t === null) return a(/* @__PURE__ */ Error("marked(): input parameter is undefined or null"));
 			if (typeof t != "string") return a(/* @__PURE__ */ Error("marked(): input parameter is of type " + Object.prototype.toString.call(t) + ", string expected"));
 			if (i.hooks && (i.hooks.options = i, i.hooks.block = e), i.async) return (async () => {
-				let n = i.hooks ? await i.hooks.preprocess(t) : t, r = await (i.hooks ? await i.hooks.provideLexer(e) : e ? I.lex : I.lexInline)(n, i), a = i.hooks ? await i.hooks.processAllTokens(r) : r;
+				let n = i.hooks ? await i.hooks.preprocess(t) : t, r = await (i.hooks ? await i.hooks.provideLexer(e) : e ? F.lex : F.lexInline)(n, i), a = i.hooks ? await i.hooks.processAllTokens(r) : r;
 				i.walkTokens && await Promise.all(this.walkTokens(a, i.walkTokens));
-				let o = await (i.hooks ? await i.hooks.provideParser(e) : e ? z.parse : z.parseInline)(a, i);
+				let o = await (i.hooks ? await i.hooks.provideParser(e) : e ? R.parse : R.parseInline)(a, i);
 				return i.hooks ? await i.hooks.postprocess(o) : o;
 			})().catch(a);
 			try {
 				i.hooks && (t = i.hooks.preprocess(t));
-				let n = (i.hooks ? i.hooks.provideLexer(e) : e ? I.lex : I.lexInline)(t, i);
+				let n = (i.hooks ? i.hooks.provideLexer(e) : e ? F.lex : F.lexInline)(t, i);
 				i.hooks && (n = i.hooks.processAllTokens(n)), i.walkTokens && this.walkTokens(n, i.walkTokens);
-				let r = (i.hooks ? i.hooks.provideParser(e) : e ? z.parse : z.parseInline)(n, i);
+				let r = (i.hooks ? i.hooks.provideParser(e) : e ? R.parse : R.parseInline)(n, i);
 				return i.hooks && (r = i.hooks.postprocess(r)), r;
 			} catch (e) {
 				return a(e);
@@ -1670,48 +1670,48 @@ ${e}</tr>
 	onError(e, t) {
 		return (n) => {
 			if (n.message += "\nPlease report this to https://github.com/markedjs/marked.", e) {
-				let e = "<p>An error occurred:</p><pre>" + M(n.message + "", !0) + "</pre>";
+				let e = "<p>An error occurred:</p><pre>" + j(n.message + "", !0) + "</pre>";
 				return t ? Promise.resolve(e) : e;
 			}
 			if (t) return Promise.reject(n);
 			throw n;
 		};
 	}
-}, V = new ct();
-function H(e, t) {
-	return V.parse(e, t);
+}, B = new lt();
+function V(e, t) {
+	return B.parse(e, t);
 }
-H.options = H.setOptions = function(e) {
-	return V.setOptions(e), H.defaults = V.defaults, c(H.defaults), H;
-}, H.getDefaults = o, H.defaults = s;
-function lt(...e) {
-	return V.use(...e), H.defaults = V.defaults, c(H.defaults), H;
+V.options = V.setOptions = function(e) {
+	return B.setOptions(e), V.defaults = B.defaults, c(V.defaults), V;
+}, V.getDefaults = o, V.defaults = s;
+function ut(...e) {
+	return B.use(...e), V.defaults = B.defaults, c(V.defaults), V;
 }
-H.use = lt, H.walkTokens = function(e, t) {
-	return V.walkTokens(e, t);
-}, H.parseInline = V.parseInline, H.Parser = z, H.parser = z.parse, H.Renderer = L, H.TextRenderer = R, H.Lexer = I, H.lexer = I.lex, H.Tokenizer = F, H.Hooks = B, H.parse = H, H.options, H.setOptions, H.walkTokens, H.parseInline, z.parse, I.lex;
+V.use = ut, V.walkTokens = function(e, t) {
+	return B.walkTokens(e, t);
+}, V.parseInline = B.parseInline, V.Parser = R, V.parser = R.parse, V.Renderer = I, V.TextRenderer = L, V.Lexer = F, V.lexer = F.lex, V.Tokenizer = P, V.Hooks = z, V.parse = V, V.options, V.setOptions, V.walkTokens, V.parseInline, R.parse, F.lex;
 //#endregion
 //#region resources/js/markdown.js
-var U = (e) => String(e).replace(/[&<>"']/g, (e) => ({
+var H = (e) => String(e).replace(/[&<>"']/g, (e) => ({
 	"&": "&amp;",
 	"<": "&lt;",
 	">": "&gt;",
 	"\"": "&quot;",
 	"'": "&#39;"
-})[e]), ut = {}, dt = 0, ft = /* @__PURE__ */ new Set([
+})[e]), dt = {}, ft = 0, pt = /* @__PURE__ */ new Set([
 	"image/png",
 	"image/jpeg",
 	"image/webp",
 	"image/gif",
 	"image/avif"
-]), W = (e, t = "", n = "") => {
+]), U = (e, t = "", n = "") => {
 	let r = document.createElement(e);
 	return r.textContent = t, r.className = n, r;
 };
-function pt(e = {}) {
-	ut = { ...e };
+function mt(e = {}) {
+	dt = { ...e };
 }
-function G(e) {
+function W(e) {
 	if (typeof e != "string" || /[\u0000-\u0020\u007f]|&(?:#(?:x[0-9a-f]+|[0-9]+)|[a-z]+);/i.test(e)) return null;
 	try {
 		let t = new URL(e, window.location.href);
@@ -1720,23 +1720,23 @@ function G(e) {
 		return null;
 	}
 }
-function mt(e, t) {
+function ht(e, t) {
 	if (!e) return null;
 	try {
 		if (/\.svg(?:z)?$/i.test(decodeURIComponent(e.pathname))) return null;
 	} catch {
 		return null;
 	}
-	let n = e.origin === window.location.origin, r = (t.attachmentUrls || []).some((t) => G(t)?.href === e.href), i = (t.attachmentUrlPrefixes || []).some((t) => {
-		let n = G(t);
+	let n = e.origin === window.location.origin, r = (t.attachmentUrls || []).some((t) => W(t)?.href === e.href), i = (t.attachmentUrlPrefixes || []).some((t) => {
+		let n = W(t);
 		return n && n.origin === window.location.origin && !n.search && !n.hash && n.pathname.endsWith("/") && e.pathname.startsWith(n.pathname);
-	}), a = n && (r || i), o = (t.allowedImageOrigins || []).some((t) => G(t)?.origin === e.origin);
+	}), a = n && (r || i), o = (t.allowedImageOrigins || []).some((t) => W(t)?.origin === e.origin);
 	return {
 		attachment: a,
 		auto: a || o
 	};
 }
-function ht(e, t) {
+function gt(e, t) {
 	let n = /* @__PURE__ */ new Uint8Array(64), r = 0;
 	for (let t of e) {
 		let e = t.subarray(0, n.length - r);
@@ -1758,7 +1758,7 @@ function ht(e, t) {
 		255
 	]) : t === "image/gif" ? ["GIF87a", "GIF89a"].includes(a(0, 6)) : t === "image/webp" ? a(0, 4) === "RIFF" && a(8, 12) === "WEBP" : t === "image/avif" && a(4, 8) === "ftyp" && /(?:avif|avis)/.test(a(8, r));
 }
-async function gt(e, t, n, r, i, a) {
+async function _t(e, t, n, r, i, a) {
 	r.textContent = "画像を読み込んでいます…";
 	let o = await fetch(e.href, {
 		credentials: t.attachment ? "same-origin" : "omit",
@@ -1766,7 +1766,7 @@ async function gt(e, t, n, r, i, a) {
 		referrerPolicy: "no-referrer",
 		signal: i
 	}), s = o.headers.get("content-type")?.split(";")[0].trim().toLowerCase();
-	if (!o.ok || !ft.has(s)) throw Error("対応する形式の画像を取得できませんでした。");
+	if (!o.ok || !pt.has(s)) throw Error("対応する形式の画像を取得できませんでした。");
 	let c = 8388608;
 	if (Number(o.headers.get("content-length")) > c) throw Error("画像が大きすぎます（上限8MB）。");
 	let l = o.body?.getReader();
@@ -1782,7 +1782,7 @@ async function gt(e, t, n, r, i, a) {
 	} finally {
 		l.releaseLock();
 	}
-	if (i.throwIfAborted(), !ht(u, s)) throw Error("画像の形式を確認できませんでした。");
+	if (i.throwIfAborted(), !gt(u, s)) throw Error("画像の形式を確認できませんでした。");
 	let f = URL.createObjectURL(new Blob(u, { type: s }));
 	n.onload = () => {
 		URL.revokeObjectURL(f), r.textContent = "";
@@ -1792,8 +1792,8 @@ async function gt(e, t, n, r, i, a) {
 		URL.revokeObjectURL(f), n.removeAttribute("src");
 	}, { once: !0 }), n.src = f;
 }
-function _t(t, n, r, i) {
-	let a = t.parentElement, o = W("div", "", "fi-code-toolbar fi:flex fi:items-center fi:justify-between fi:gap-3"), s = W("span", n || "テキスト"), c = W("button", "コピー", "fi-button fi-button-ghost fi:whitespace-nowrap");
+function vt(t, n, r, i) {
+	let a = t.parentElement, o = U("div", "", "fi-code-toolbar fi:flex fi:items-center fi:justify-between fi:gap-3"), s = U("span", n || "テキスト"), c = U("button", "コピー", "fi-button fi-button-ghost fi:whitespace-nowrap");
 	c.type = "button", c.setAttribute("aria-live", "polite");
 	let l = t.textContent;
 	c.onclick = async () => {
@@ -1817,18 +1817,18 @@ function _t(t, n, r, i) {
 		t.replaceChildren(a);
 	}).catch(() => {}));
 }
-function K(t, n = {}) {
+function G(t, n = {}) {
 	let r = {
-		...ut,
+		...dt,
 		...n
 	}, i = new AbortController(), a = [], o = [], s = document.createElement("div");
 	s.className = "fi-markdown fi:min-w-0 fi:space-y-3 fi:break-words", s.dispose = () => i.abort();
-	let c = `fi-embed-${++dt}-`, l = new ct({
+	let c = `fi-embed-${++ft}-`, l = new lt({
 		gfm: !0,
 		breaks: !0,
 		async: !1,
 		renderer: {
-			html: ({ text: e }) => U(e),
+			html: ({ text: e }) => H(e),
 			image: (e) => {
 				let t = c + o.length;
 				return o.push({
@@ -1844,14 +1844,14 @@ function K(t, n = {}) {
 				}), `<div id="${t}"></div>`;
 			},
 			link: function(e) {
-				let t = G(e.href), n = this.parser.parseInline(e.tokens);
-				return t ? `<a href="${U(t.href)}"${e.title ? ` title="${U(e.title)}"` : ""}>${n}</a>` : n;
+				let t = W(e.href), n = this.parser.parseInline(e.tokens);
+				return t ? `<a href="${H(t.href)}"${e.title ? ` title="${H(e.title)}"` : ""}>${n}</a>` : n;
 			}
 		}
 	});
 	if (!e.isSupported) return s.textContent = String(t), s.ready = Promise.resolve(), s;
 	let u = String(t);
-	s.append(e.sanitize(u.length <= 2e5 ? l.parse(u) : `<p>${U(u)}</p>`, {
+	s.append(e.sanitize(u.length <= 2e5 ? l.parse(u) : `<p>${H(u)}</p>`, {
 		RETURN_DOM_FRAGMENT: !0,
 		ALLOWED_TAGS: /* @__PURE__ */ "div.span.p.br.strong.em.del.blockquote.ul.ol.li.code.pre.table.thead.tbody.tr.th.td.a.h1.h2.h3.h4.h5.h6.hr".split("."),
 		ALLOWED_ATTR: [
@@ -1877,39 +1877,39 @@ function K(t, n = {}) {
 		let t = s.querySelector(`#${e.id}`);
 		if (t) {
 			if (t.removeAttribute("id"), e.code) {
-				let n = (e.code.lang || "").split(/\s+/)[0].toLowerCase(), o = /^[a-z0-9_.+#-]{1,40}$/.test(n) ? n : "", s = W("div", "", "fi-code-block fi:min-w-0 fi:overflow-hidden"), c = W("pre"), l = W("code", e.code.text);
-				if (c.append(l), s.append(c), t.replaceWith(s), r.streaming || _t(l, o, a, i.signal), !r.streaming && o === "mermaid" && ++d <= 6) {
-					let t = W("figure", "", "fi-diagram fi:max-w-full fi:overflow-x-auto"), n = W("p", "図を作成しています…", "fi:my-2 fi:text-sm");
+				let n = (e.code.lang || "").split(/\s+/)[0].toLowerCase(), o = /^[a-z0-9_.+#-]{1,40}$/.test(n) ? n : "", s = U("div", "", "fi-code-block fi:min-w-0 fi:overflow-hidden"), c = U("pre"), l = U("code", e.code.text);
+				if (c.append(l), s.append(c), t.replaceWith(s), r.streaming || vt(l, o, a, i.signal), !r.streaming && o === "mermaid" && ++d <= 6) {
+					let t = U("figure", "", "fi-diagram fi:max-w-full fi:overflow-x-auto"), n = U("p", "図を作成しています…", "fi:my-2 fi:text-sm");
 					n.setAttribute("role", "status"), t.append(n), s.before(t), a.push(import("./mermaid-D3tOjArB.js").then(({ renderDiagram: t }) => t(e.code.text, { signal: i.signal })).then((e) => {
 						if (i.signal.aborted) return;
 						t.replaceChildren(e);
-						let n = W("details");
-						n.append(W("summary", "図のコードを確認"), s), t.append(n);
+						let n = U("details");
+						n.append(U("summary", "図のコードを確認"), s), t.append(n);
 					}).catch(() => {
 						i.signal.aborted || (n.textContent = "図を表示できませんでした。以下のコードを確認してください。");
 					}));
-				} else !r.streaming && o === "mermaid" && s.before(W("p", "1つの回答で表示できる図は6つまでです。以下のコードを確認してください。", "fi:text-sm"));
+				} else !r.streaming && o === "mermaid" && s.before(U("p", "1つの回答で表示できる図は6つまでです。以下のコードを確認してください。", "fi:text-sm"));
 			} else {
 				if (r.streaming) {
-					t.replaceWith(W("span", `${e.token.text || "画像"}（回答後に表示）`));
+					t.replaceWith(U("span", `${e.token.text || "画像"}（回答後に表示）`));
 					continue;
 				}
-				let n = G(e.token.href), o = mt(n, r);
+				let n = W(e.token.href), o = ht(n, r);
 				if (!o) {
-					t.replaceWith(W("span", `${e.token.text || "画像"}（この画像形式・URLは表示できません）`));
+					t.replaceWith(U("span", `${e.token.text || "画像"}（この画像形式・URLは表示できません）`));
 					continue;
 				}
-				let s = W("span", "", "fi-image-placeholder fi:inline-flex fi:max-w-full fi:flex-col fi:gap-2"), c = W("span", o.auto ? "画像を読み込んでいます…" : "外部画像です。読み込むと画像の提供元にアクセスします。", "fi:text-sm");
+				let s = U("span", "", "fi-image-placeholder fi:inline-flex fi:max-w-full fi:flex-col fi:gap-2"), c = U("span", o.auto ? "画像を読み込んでいます…" : "外部画像です。読み込むと画像の提供元にアクセスします。", "fi:text-sm");
 				c.setAttribute("role", "status");
-				let l = W("img");
+				let l = U("img");
 				l.alt = e.token.text || "AI回答の画像", l.className = "fi:max-w-full fi:h-auto fi:rounded-lg", l.referrerPolicy = "no-referrer";
-				let u = W("button", o.auto ? "再読み込み" : "画像を読み込む", "fi-button fi-button-secondary fi:whitespace-nowrap");
+				let u = U("button", o.auto ? "再読み込み" : "画像を読み込む", "fi-button fi-button-secondary fi:whitespace-nowrap");
 				u.type = "button";
 				let d = async () => {
 					if (!i.signal.aborted) {
 						u.disabled = !0;
 						try {
-							await gt(n, o, l, c, i.signal, () => {
+							await _t(n, o, l, c, i.signal, () => {
 								u.hidden = !1;
 							}), i.signal.aborted || (s.append(l), u.hidden = !0);
 						} catch (e) {
@@ -1936,7 +1936,7 @@ function K(t, n = {}) {
 }
 //#endregion
 //#region resources/js/chat.js
-var vt = class {
+var yt = class {
 	constructor(e = "/fourmix-intelligence", t, n = "page") {
 		this.base = e.replace(/\/$/, ""), this.csrfToken = t, this.surfaceName = n;
 	}
@@ -2045,17 +2045,17 @@ var vt = class {
 	}
 };
 window.FourmixIntelligenceSDK = {
-	Client: vt,
+	Client: yt,
 	request: $,
 	Rendering: {
-		configure: pt,
-		render: K
+		configure: mt,
+		render: G
 	}
 };
-var q = (e, t = "", n = "") => {
+var K = (e, t = "", n = "") => {
 	let r = document.createElement(e);
 	return r.textContent = t, r.className = n, r;
-}, yt = {
+}, q = {
 	confirmation_required: "確認待ち",
 	succeeded: "完了",
 	rejected: "実行せず終了",
@@ -2102,8 +2102,8 @@ function J(e) {
 	return r.setAttribute("d", t[e] || t.chat), n.append(r), n;
 }
 var Y = (e, t, n = "primary", r) => {
-	let i = q("button", "", `fi-button ${n === "primary" ? "" : `fi-button-${n}`} fi:gap-2 fi:whitespace-nowrap`);
-	return i.type = "button", i.onclick = t, r && i.append(J(r)), e && i.append(q("span", e)), i;
+	let i = K("button", "", `fi-button ${n === "primary" ? "" : `fi-button-${n}`} fi:gap-2 fi:whitespace-nowrap`);
+	return i.type = "button", i.onclick = t, r && i.append(J(r)), e && i.append(K("span", e)), i;
 }, xt = 0, St = 0;
 function Ct(e) {
 	if (typeof e != "string" || !e.trim()) return null;
@@ -2119,31 +2119,31 @@ function wt(e, t) {
 	let n = e.data;
 	if (e.state === "succeeded") {
 		if (n && typeof n == "object" && !Array.isArray(n)) {
-			typeof n.message == "string" && n.message.trim() && t.append(q("p", n.message, "fi:leading-relaxed fi:whitespace-pre-wrap fi:break-words"));
+			typeof n.message == "string" && n.message.trim() && t.append(K("p", n.message, "fi:leading-relaxed fi:whitespace-pre-wrap fi:break-words"));
 			let e = Ct(n.url);
 			if (e) {
-				let n = q("a", "業務画面で結果を見る", "fi-button");
+				let n = K("a", "業務画面で結果を見る", "fi-button");
 				n.href = e, t.append(n);
 			}
-		} else typeof n == "string" && t.append(q("p", n, "fi:whitespace-pre-wrap fi:break-words"));
-	} else typeof e.message == "string" && t.append(q("p", e.message, "fi:leading-relaxed fi:whitespace-pre-wrap fi:break-words"));
+		} else typeof n == "string" && t.append(K("p", n, "fi:whitespace-pre-wrap fi:break-words"));
+	} else typeof e.message == "string" && t.append(K("p", e.message, "fi:leading-relaxed fi:whitespace-pre-wrap fi:break-words"));
 	if (n !== void 0 || e.preview !== void 0) {
-		let r = q("details", "", "fi:rounded-xl fi:bg-raised fi:p-3");
-		r.append(q("summary", "結果の詳細", "fi:cursor-pointer fi:text-sm fi:text-secondary"), q("pre", JSON.stringify(n ?? e.preview, null, 2), "fi:mt-3 fi:whitespace-pre-wrap fi:break-words fi:text-xs")), t.append(r);
+		let r = K("details", "", "fi:rounded-xl fi:bg-raised fi:p-3");
+		r.append(K("summary", "結果の詳細", "fi:cursor-pointer fi:text-sm fi:text-secondary"), K("pre", JSON.stringify(n ?? e.preview, null, 2), "fi:mt-3 fi:whitespace-pre-wrap fi:break-words fi:text-xs")), t.append(r);
 	}
 }
 async function Tt(e, t, n, r) {
-	let i = q("dialog", "", "fi-dialog fi:open:flex fi:open:flex-col fi:w-full fi:max-w-xl fi:max-h-[85dvh] fi:overflow-hidden fi:rounded-2xl fi:border fi:border-line fi:bg-surface fi:p-0 fi:text-ink"), a = q("header", "", "fi-dialog-header fi:flex fi:shrink-0 fi:items-start fi:gap-3 fi:border-b fi:border-line fi:px-6 fi:py-5"), o = q("span", "", "fi:flex fi:size-10 fi:shrink-0 fi:items-center fi:justify-center fi:rounded-xl fi:bg-raised fi:text-secondary");
+	let i = K("dialog", "", "fi-dialog fi:open:flex fi:open:flex-col fi:w-full fi:max-w-xl fi:max-h-[85dvh] fi:overflow-hidden fi:rounded-2xl fi:border fi:border-line fi:bg-surface fi:p-0 fi:text-ink"), a = K("header", "", "fi-dialog-header fi:flex fi:shrink-0 fi:items-start fi:gap-3 fi:border-b fi:border-line fi:px-6 fi:py-5"), o = K("span", "", "fi:flex fi:size-10 fi:shrink-0 fi:items-center fi:justify-center fi:rounded-xl fi:bg-raised fi:text-secondary");
 	o.append(J("shield"));
-	let s = q("div", "", "fi:min-w-0 fi:space-y-1"), c = q("h2", "業務操作の確認", "fi:text-lg fi:font-semibold");
+	let s = K("div", "", "fi:min-w-0 fi:space-y-1"), c = K("h2", "業務操作の確認", "fi:text-lg fi:font-semibold");
 	c.id = `fi-action-title-${++xt}`;
-	let l = q("p", "操作の内容を読み込んでいます…", "fi:text-sm fi:text-secondary fi:break-words");
+	let l = K("p", "操作の内容を読み込んでいます…", "fi:text-sm fi:text-secondary fi:break-words");
 	l.setAttribute("role", "status"), l.setAttribute("aria-live", "polite"), s.append(c, l), a.append(o, s), i.setAttribute("aria-labelledby", c.id), i.setAttribute("aria-busy", "true");
-	let u = q("div", "", "fi-dialog-body fi:min-h-0 fi:flex-1 fi:overflow-y-auto fi:space-y-5 fi:px-6 fi:py-5"), d = q("footer", "", "fi-dialog-footer fi:flex fi:shrink-0 fi:flex-wrap fi:items-center fi:justify-end fi:gap-2 fi:border-t fi:border-line fi:px-6 fi:py-4");
+	let u = K("div", "", "fi-dialog-body fi:min-h-0 fi:flex-1 fi:overflow-y-auto fi:space-y-5 fi:px-6 fi:py-5"), d = K("footer", "", "fi-dialog-footer fi:flex fi:shrink-0 fi:flex-wrap fi:items-center fi:justify-end fi:gap-2 fi:border-t fi:border-line fi:px-6 fi:py-4");
 	d.append(Y("閉じる", () => i.close(), "secondary")), i.append(a, u, d), n.append(i), i.showModal(), i.addEventListener("close", () => i.remove(), { once: !0 });
 	try {
 		let i = await e.call(`actions/${encodeURIComponent(t)}`);
-		l.textContent = `${i.operation} · ${yt[i.state] || "状態を確認できません"}`, i.state !== "confirmation_required" && (c.textContent = "業務操作の結果");
+		l.textContent = `${i.operation} · ${q[i.state] || "状態を確認できません"}`, i.state !== "confirmation_required" && (c.textContent = "業務操作の結果");
 		let a = new CustomEvent("fourmix:review", {
 			detail: {
 				action: i,
@@ -2156,14 +2156,14 @@ async function Tt(e, t, n, r) {
 		n.dispatchEvent(a);
 		let o = !1, s = Ct(i.url);
 		if (s) {
-			let e = q("a", "このアプリケーションの確認画面で確認", "fi-button");
+			let e = K("a", "このアプリケーションの確認画面で確認", "fi-button");
 			e.href = s, u.append(e), o = !0;
 		}
-		let f = q("div", "", "fi:space-y-3");
-		if (u.append(f), a.defaultPrevented || (i.state === "confirmation_required" ? o || f.append(q("pre", JSON.stringify(i.preview ?? {}, null, 2), "fi:whitespace-pre-wrap fi:break-words fi:rounded-lg fi:bg-raised fi:p-4 fi:text-sm")) : wt(i, f)), i.expires_at && u.append(q("p", `確認期限：${bt(i.expires_at, e.timezone)}`, "fi:text-sm fi:text-secondary")), i.state === "confirmation_required" && !o) {
-			let n = q("label", "", "fi:flex fi:items-start fi:gap-3 fi:rounded-xl fi:bg-raised fi:p-4 fi:text-sm fi:leading-relaxed"), i = q("input", "", "fi:mt-1 fi:shrink-0");
-			i.type = "checkbox", n.append(i, q("span", "対象と変更内容を確認しました。"));
-			let o = q("div", "", "fi:flex fi:flex-wrap fi:items-center fi:gap-2"), s = Y("確認して実行", () => m("confirm")), p = Y("実行しない", () => m("reject"), "danger");
+		let f = K("div", "", "fi:space-y-3");
+		if (u.append(f), a.defaultPrevented || (i.state === "confirmation_required" ? o || f.append(K("pre", JSON.stringify(i.preview ?? {}, null, 2), "fi:whitespace-pre-wrap fi:break-words fi:rounded-lg fi:bg-raised fi:p-4 fi:text-sm")) : wt(i, f)), i.expires_at && u.append(K("p", `確認期限：${bt(i.expires_at, e.timezone)}`, "fi:text-sm fi:text-secondary")), i.state === "confirmation_required" && !o) {
+			let n = K("label", "", "fi:flex fi:items-start fi:gap-3 fi:rounded-xl fi:bg-raised fi:p-4 fi:text-sm fi:leading-relaxed"), i = K("input", "", "fi:mt-1 fi:shrink-0");
+			i.type = "checkbox", n.append(i, K("span", "対象と変更内容を確認しました。"));
+			let o = K("div", "", "fi:flex fi:flex-wrap fi:items-center fi:gap-2"), s = Y("確認して実行", () => m("confirm")), p = Y("実行しない", () => m("reject"), "danger");
 			s.disabled = !0, i.onchange = () => {
 				s.disabled = !i.checked;
 			};
@@ -2179,11 +2179,11 @@ async function Tt(e, t, n, r) {
 					l.textContent = `${e.message} 再実行の前に操作履歴を確認してください。`;
 					return;
 				}
-				l.textContent = yt[d.state] || "状態を確認できません", c.textContent = "業務操作の結果", n.remove(), o.remove(), a.defaultPrevented || wt(d, f);
+				l.textContent = q[d.state] || "状態を確認できません", c.textContent = "業務操作の結果", n.remove(), o.remove(), a.defaultPrevented || wt(d, f);
 				try {
 					await r(d);
 				} catch {
-					l.textContent = `${yt[d.state] || "結果を受信しました"}。操作一覧を更新できませんでした。再読み込みして確認してください。`;
+					l.textContent = `${q[d.state] || "結果を受信しました"}。操作一覧を更新できませんでした。再読み込みして確認してください。`;
 				}
 				document.defaultView?.dispatchEvent(new CustomEvent("fourmix:action-changed", { detail: {
 					id: t,
@@ -2203,47 +2203,47 @@ var Et = class extends HTMLElement {
 		if (this.surfaceHandler ||= (e) => {
 			let t = Array.isArray(e.detail) && e.detail.find((e) => e.name === this.getAttribute("surface"));
 			t && (!t.enabled || t.connection_id !== this.api?.expectedSelection?.connection_id || t.grant_id !== this.api?.expectedSelection?.grant_id || t.connection_revision != null && String(t.connection_revision) !== String(this.api?.expectedSelection?.connection_revision)) && this.invalidateSelection();
-		}, document.defaultView?.addEventListener("fourmix:surfaces", this.surfaceHandler), this.actionHandler ||= () => this.refreshActionResults(), document.defaultView?.addEventListener("fourmix:action-changed", this.actionHandler), document.defaultView?.addEventListener("focus", this.actionHandler), this.initialized) {
+		}, document.defaultView?.addEventListener("fourmix:surfaces", this.surfaceHandler), this.actionHandler ||= (e) => this.refreshActionResults(e?.detail?.state), document.defaultView?.addEventListener("fourmix:action-changed", this.actionHandler), document.defaultView?.addEventListener("focus", this.actionHandler), this.initialized) {
 			this.mergePageHeader();
 			return;
 		}
-		this.initialized = !0, this.api = new vt(this.getAttribute("api-base") || "/fourmix-intelligence", this.getAttribute("csrf-token"), this.getAttribute("surface") || "page"), this.conversationId = this.getAttribute("conversation-id") || null, this.attachments = [], this.attachmentMetadata = /* @__PURE__ */ new Map(), this.attachmentPolicy = null, this.panel = q("section", "", "fi-chat"), this.append(this.panel);
-		let e = this.toolbar = q("header", "", "fi-chat-toolbar"), t = q("label", "", "fi-chat-agent");
-		t.append(J("chat"), q("span", "使用するAI", "fi:sr-only")), this.agentTitle = q("span", this.getAttribute("assistant-name") || "AIアシスタント", "fi-chat-agent-title"), t.append(this.agentTitle), this.activeAlias = "", this.fresh = Y("新しい会話", () => {
+		this.initialized = !0, this.api = new yt(this.getAttribute("api-base") || "/fourmix-intelligence", this.getAttribute("csrf-token"), this.getAttribute("surface") || "page"), this.conversationId = this.getAttribute("conversation-id") || null, this.attachments = [], this.attachmentMetadata = /* @__PURE__ */ new Map(), this.attachmentPolicy = null, this.panel = K("section", "", "fi-chat"), this.append(this.panel);
+		let e = this.toolbar = K("header", "", "fi-chat-toolbar"), t = K("label", "", "fi-chat-agent");
+		t.append(J("chat"), K("span", "使用するAI", "fi:sr-only")), this.agentTitle = K("span", this.getAttribute("assistant-name") || "AIアシスタント", "fi-chat-agent-title"), t.append(this.agentTitle), this.activeAlias = "", this.fresh = Y("新しい会話", () => {
 			this.isBusy() || (this.resetConversation(), this.recover());
 		}, "ghost", "plus"), this.fresh.classList.add("fi-chat-header-button"), this.fresh.setAttribute("aria-label", "新しい会話"), this.fresh.title = "新しい会話", this.retry = Y("", () => this.recover(), "ghost", "refresh"), this.retry.classList.add("fi-chat-icon-button"), this.retry.setAttribute("aria-label", "AIと履歴を再読み込み"), this.retry.title = "AIと履歴を再読み込み", this.history = Y("会話履歴", () => {
 			this.isBusy() || this.toggleHistory();
-		}, "ghost", "history"), this.history.classList.add("fi-chat-header-button"), this.history.setAttribute("aria-label", "会話履歴"), this.history.title = "会話履歴", this.history.setAttribute("aria-expanded", "false"), this.businessStatus = q("a", "", "fi-chat-business-status"), this.businessStatus.hidden = !0, e.append(t, this.businessStatus, this.history, this.fresh, this.retry), this.panel.append(e), this.mergePageHeader();
+		}, "ghost", "history"), this.history.classList.add("fi-chat-header-button"), this.history.setAttribute("aria-label", "会話履歴"), this.history.title = "会話履歴", this.history.setAttribute("aria-expanded", "false"), this.businessStatus = K("a", "", "fi-chat-business-status"), this.businessStatus.hidden = !0, e.append(t, this.businessStatus, this.history, this.fresh, this.retry), this.panel.append(e), this.mergePageHeader();
 		let n = this.getAttribute("history-layout");
-		if (this.historyLayout = ["drawer", "dropdown"].includes(n) ? n : this.closest?.("fourmix-intelligence-floating-chat") ? "dropdown" : "drawer", this.historyPanel = q("div", "", `fi-chat-history-panel fi-chat-history-${this.historyLayout}`), this.historyPanel.hidden = !0, this.historyPanel.id = `fi-chat-history-${++St}`, this.history.setAttribute("aria-controls", this.historyPanel.id), this.historyLayout === "drawer") {
+		if (this.historyLayout = ["drawer", "dropdown"].includes(n) ? n : this.closest?.("fourmix-intelligence-floating-chat") ? "dropdown" : "drawer", this.historyPanel = K("div", "", `fi-chat-history-panel fi-chat-history-${this.historyLayout}`), this.historyPanel.hidden = !0, this.historyPanel.id = `fi-chat-history-${++St}`, this.history.setAttribute("aria-controls", this.historyPanel.id), this.historyLayout === "drawer") {
 			let e = Y("", () => this.toggleHistory(!1), "ghost");
 			e.className = "fi-chat-history-backdrop", e.setAttribute("aria-label", "会話履歴を閉じる"), e.tabIndex = -1, this.historyPanel.append(e);
 		}
-		let r = q("aside", "", "fi-chat-history-content");
+		let r = K("aside", "", "fi-chat-history-content");
 		r.setAttribute("role", "region");
-		let i = q("header", "", "fi-chat-history-header"), a = q("h2", "会話履歴");
-		a.id = `${this.historyPanel.id}-title`, r.setAttribute("aria-labelledby", a.id), this.historyClose = Y("", () => this.toggleHistory(!1), "ghost", "close"), this.historyClose.classList.add("fi-chat-icon-button"), this.historyClose.setAttribute("aria-label", "会話履歴を閉じる"), i.append(a, this.historyClose), r.append(i), this.historyStatus = q("p", "会話履歴はまだありません", "fi-chat-history-status"), this.historyStatus.setAttribute("role", "status"), this.historyStatus.setAttribute("aria-live", "polite"), this.historyList = q("div", "", "fi-chat-history-list"), this.historyList.setAttribute("aria-label", "これまでの会話"), r.append(this.historyStatus, this.historyList), this.historyPanel.append(r), this.panel.append(this.historyPanel), this.panel.onkeydown = (e) => {
+		let i = K("header", "", "fi-chat-history-header"), a = K("h2", "会話履歴");
+		a.id = `${this.historyPanel.id}-title`, r.setAttribute("aria-labelledby", a.id), this.historyClose = Y("", () => this.toggleHistory(!1), "ghost", "close"), this.historyClose.classList.add("fi-chat-icon-button"), this.historyClose.setAttribute("aria-label", "会話履歴を閉じる"), i.append(a, this.historyClose), r.append(i), this.historyStatus = K("p", "会話履歴はまだありません", "fi-chat-history-status"), this.historyStatus.setAttribute("role", "status"), this.historyStatus.setAttribute("aria-live", "polite"), this.historyList = K("div", "", "fi-chat-history-list"), this.historyList.setAttribute("aria-label", "これまでの会話"), r.append(this.historyStatus, this.historyList), this.historyPanel.append(r), this.panel.append(this.historyPanel), this.panel.onkeydown = (e) => {
 			e.key === "Escape" && !this.historyPanel.hidden && (e.preventDefault(), e.stopPropagation(), this.toggleHistory(!1));
-		}, this.notice = q("p", "", "fi-chat-notice fi:shrink-0 fi:px-5 fi:py-3 fi:text-sm fi:leading-relaxed fi:text-secondary"), this.notice.hidden = !0, this.notice.setAttribute("role", "status"), this.notice.setAttribute("aria-live", "polite"), this.notice.setAttribute("aria-atomic", "true"), this.panel.append(this.notice), this.setupLink = q("a", "接続とチャットを設定", "fi:shrink-0 fi:px-5 fi:py-2 fi:text-sm fi:underline fi:underline-offset-4"), this.setupLink.href = `${this.api.base}#fi-surfaces`, this.setupLink.hidden = !0, this.panel.append(this.setupLink), this.viewport = q("div", "", "fi-chat-viewport fi:min-h-0 fi:flex-1 fi:overflow-y-auto fi:overscroll-contain fi:px-5 fi:py-6 fi:sm:px-7"), this.empty = q("div", "", "fi-chat-empty fi:flex fi:min-h-52 fi:h-full fi:flex-col fi:items-center fi:justify-center fi:gap-4 fi:py-6 fi:text-center");
-		let o = q("div", "", "fi:flex fi:size-14 fi:shrink-0 fi:items-center fi:justify-center fi:rounded-2xl fi:bg-raised fi:text-secondary");
-		o.append(J("chat")), this.empty.append(o, q("h2", "どのようなお手伝いをしましょうか？", "fi:text-lg fi:font-semibold fi:tracking-tight"), q("p", "質問や相談したいことを入力してください。", "fi:max-w-sm fi:text-sm fi:leading-relaxed fi:text-secondary"));
-		let s = q("div", "", "fi:flex fi:flex-wrap fi:justify-center fi:gap-2 fi:pt-1");
+		}, this.notice = K("p", "", "fi-chat-notice fi:shrink-0 fi:px-5 fi:py-3 fi:text-sm fi:leading-relaxed fi:text-secondary"), this.notice.hidden = !0, this.notice.setAttribute("role", "status"), this.notice.setAttribute("aria-live", "polite"), this.notice.setAttribute("aria-atomic", "true"), this.panel.append(this.notice), this.setupLink = K("a", "接続とチャットを設定", "fi:shrink-0 fi:px-5 fi:py-2 fi:text-sm fi:underline fi:underline-offset-4"), this.setupLink.href = `${this.api.base}#fi-surfaces`, this.setupLink.hidden = !0, this.panel.append(this.setupLink), this.viewport = K("div", "", "fi-chat-viewport fi:min-h-0 fi:flex-1 fi:overflow-y-auto fi:overscroll-contain fi:px-5 fi:py-6 fi:sm:px-7"), this.empty = K("div", "", "fi-chat-empty fi:flex fi:min-h-52 fi:h-full fi:flex-col fi:items-center fi:justify-center fi:gap-4 fi:py-6 fi:text-center");
+		let o = K("div", "", "fi:flex fi:size-14 fi:shrink-0 fi:items-center fi:justify-center fi:rounded-2xl fi:bg-raised fi:text-secondary");
+		o.append(J("chat")), this.empty.append(o, K("h2", "どのようなお手伝いをしましょうか？", "fi:text-lg fi:font-semibold fi:tracking-tight"), K("p", "質問や相談したいことを入力してください。", "fi:max-w-sm fi:text-sm fi:leading-relaxed fi:text-secondary"));
+		let s = K("div", "", "fi:flex fi:flex-wrap fi:justify-center fi:gap-2 fi:pt-1");
 		for (let e of [
 			"情報を整理する",
 			"内容を確認する",
 			"アイデアを相談する"
-		]) s.append(q("span", e, "fi:rounded-full fi:bg-raised fi:px-3 fi:py-1.5 fi:text-xs fi:text-secondary"));
-		this.empty.append(s), this.messages = q("div", "", "fi:space-y-6"), this.messages.setAttribute("role", "log"), this.messages.setAttribute("aria-label", "AIとの会話"), this.messages.setAttribute("aria-live", "polite"), this.messages.setAttribute("aria-relevant", "additions"), this.more = Y("以前のメッセージを表示", async () => {
+		]) s.append(K("span", e, "fi:rounded-full fi:bg-raised fi:px-3 fi:py-1.5 fi:text-xs fi:text-secondary"));
+		this.empty.append(s), this.messages = K("div", "", "fi:space-y-6"), this.messages.setAttribute("role", "log"), this.messages.setAttribute("aria-label", "AIとの会話"), this.messages.setAttribute("aria-live", "polite"), this.messages.setAttribute("aria-relevant", "additions"), this.more = Y("以前のメッセージを表示", async () => {
 			if (!this.isBusy() && this.ready) try {
 				await this.loadHistory(this.conversationId, this.beforeId);
 			} catch (e) {
 				this.setNotice(e.message, "error");
 			}
-		}, "ghost", "history"), this.more.hidden = !0, this.viewport.append(this.empty, this.more, this.messages), this.panel.append(this.viewport), this.progress = q("div", "", "fi-chat-progress"), this.progress.hidden = !0;
-		let c = this.progressActivity = q("span", "", "fi:size-1.5 fi:shrink-0 fi:rounded-full fi:bg-emerald-500");
-		c.setAttribute("aria-hidden", "true"), this.progressLabel = q("span", "", "fi:min-w-0 fi:truncate"), this.progressLabel.setAttribute("role", "status"), this.progressLabel.setAttribute("aria-live", "polite"), this.progressTime = q("span", "", "fi:shrink-0 fi:tabular-nums"), this.progressTime.setAttribute("aria-live", "off"), this.progress.append(c, this.progressLabel, this.progressTime), this.panel.append(this.progress), this.approvals = q("div", "", "fi-chat-approvals fi:flex fi:shrink-0 fi:flex-wrap fi:gap-2 fi:border-t fi:border-line fi:px-5 fi:py-3"), this.approvals.hidden = !0, this.panel.append(this.approvals);
-		let l = q("form", "", "fi-chat-composer"), u = q("label", "", "fi:block");
-		u.append(q("span", "AIへの依頼", "fi:sr-only")), this.input = q("textarea", "", "fi-chat-input"), this.input.rows = 1, this.input.maxLength = 1e4, this.input.placeholder = this.getAttribute("input-placeholder") || "質問や依頼を入力…", this.input.value = this.getAttribute("initial-prompt") || "", this.input.oninput = () => this.resizeInput(), u.append(this.input), this.attachmentCards = q("div", "", "fi-chat-attachments"), this.attachmentCards.hidden = !0, this.attachmentCards.setAttribute("aria-label", "送信する添付ファイル"), l.append(this.attachmentCards), this.fileInput = q("input"), this.fileInput.type = "file", this.fileInput.multiple = !0, this.fileInput.hidden = !0, this.fileInput.setAttribute("aria-label", "添付するファイル"), this.fileInput.onchange = () => {
+		}, "ghost", "history"), this.more.hidden = !0, this.viewport.append(this.empty, this.more, this.messages), this.panel.append(this.viewport), this.progress = K("div", "", "fi-chat-progress"), this.progress.hidden = !0;
+		let c = this.progressActivity = K("span", "", "fi:size-1.5 fi:shrink-0 fi:rounded-full fi:bg-emerald-500");
+		c.setAttribute("aria-hidden", "true"), this.progressLabel = K("span", "", "fi:min-w-0 fi:truncate"), this.progressLabel.setAttribute("role", "status"), this.progressLabel.setAttribute("aria-live", "polite"), this.progressTime = K("span", "", "fi:shrink-0 fi:tabular-nums"), this.progressTime.setAttribute("aria-live", "off"), this.progress.append(c, this.progressLabel, this.progressTime), this.panel.append(this.progress), this.approvals = K("div", "", "fi-chat-approvals fi:flex fi:shrink-0 fi:flex-wrap fi:gap-2 fi:border-t fi:border-line fi:px-5 fi:py-3"), this.approvals.hidden = !0, this.panel.append(this.approvals);
+		let l = K("form", "", "fi-chat-composer"), u = K("label", "", "fi:block");
+		u.append(K("span", "AIへの依頼", "fi:sr-only")), this.input = K("textarea", "", "fi-chat-input"), this.input.rows = 1, this.input.maxLength = 1e4, this.input.placeholder = this.getAttribute("input-placeholder") || "質問や依頼を入力…", this.input.value = this.getAttribute("initial-prompt") || "", this.input.oninput = () => this.resizeInput(), u.append(this.input), this.attachmentCards = K("div", "", "fi-chat-attachments"), this.attachmentCards.hidden = !0, this.attachmentCards.setAttribute("aria-label", "送信する添付ファイル"), l.append(this.attachmentCards), this.fileInput = K("input"), this.fileInput.type = "file", this.fileInput.multiple = !0, this.fileInput.hidden = !0, this.fileInput.setAttribute("aria-label", "添付するファイル"), this.fileInput.onchange = () => {
 			let e = [...this.fileInput.files || []];
 			this.fileInput.value = "", this.addFiles(e);
 		}, this.attachButton = Y("ファイルを添付", () => {
@@ -2251,8 +2251,8 @@ var Et = class extends HTMLElement {
 		}, "ghost", "attach"), this.attachButton.setAttribute("aria-label", "ファイルを添付"), l.append(this.fileInput), this.storedButton = Y("保存済みファイル", () => {
 			this.additions.open = !1, this.checkAttachments();
 		}, "ghost", "files"), this.storedButton.setAttribute("aria-label", "保存済みファイル");
-		let d = q("details", "", "fi-chat-help"), f = q("summary", "", "fi-button fi-button-ghost");
-		f.append(J("help"), q("span", "添付形式と利用条件")), f.setAttribute("aria-label", "添付形式と利用条件"), this.attachmentHelp = q("p", "添付の利用条件を確認しています…", "fi-attachment-help"), d.append(f, this.attachmentHelp), this.storedAttachments = q("details", "", "fi-attachment-stored"), this.storedAttachments.hidden = !0, l.append(this.storedAttachments), l.ondragover = (e) => {
+		let d = K("details", "", "fi-chat-help"), f = K("summary", "", "fi-button fi-button-ghost");
+		f.append(J("help"), K("span", "添付形式と利用条件")), f.setAttribute("aria-label", "添付形式と利用条件"), this.attachmentHelp = K("p", "添付の利用条件を確認しています…", "fi-attachment-help"), d.append(f, this.attachmentHelp), this.storedAttachments = K("details", "", "fi-attachment-stored"), this.storedAttachments.hidden = !0, l.append(this.storedAttachments), l.ondragover = (e) => {
 			e.dataTransfer?.types?.includes("Files") && (e.preventDefault(), e.dataTransfer && (e.dataTransfer.dropEffect = this.isBusy() ? "none" : "copy"));
 		}, l.ondrop = (e) => {
 			e.dataTransfer?.files?.length && (e.preventDefault(), this.addFiles([...e.dataTransfer.files]));
@@ -2260,11 +2260,11 @@ var Et = class extends HTMLElement {
 			let t = [...e.clipboardData?.files || []];
 			t.length && (e.preventDefault(), this.addFiles(t));
 		};
-		let p = q("div", "", "fi-chat-composer-row");
-		this.additions = q("details", "", "fi-chat-additions");
-		let m = q("summary", "", "fi-chat-additions-toggle"), h = J("plus");
+		let p = K("div", "", "fi-chat-composer-row");
+		this.additions = K("details", "", "fi-chat-additions");
+		let m = K("summary", "", "fi-chat-additions-toggle"), h = J("plus");
 		h.setAttribute("width", "20"), h.setAttribute("height", "20"), m.append(h), m.setAttribute("aria-label", "添付と利用条件"), m.title = "ファイルを添付・保存済みファイル・利用条件";
-		let g = q("div", "", "fi-chat-additions-menu");
+		let g = K("div", "", "fi-chat-additions-menu");
 		g.append(this.attachButton, this.storedButton, d), this.additions.append(m, g), this.submit = Y("", null, "primary", "send"), this.submit.classList.add("fi-chat-send"), this.submit.type = "submit", this.submit.setAttribute("aria-label", "送信"), this.submit.title = "送信", this.cancel = Y("", () => this.abort?.abort(), "secondary", "close"), this.cancel.classList.add("fi-chat-send"), this.cancel.setAttribute("aria-label", "応答の待機をやめる"), this.cancel.title = "応答の待機をやめる", this.cancel.hidden = !0, p.append(this.additions, u, this.cancel, this.submit), l.append(p), this.panel.append(l), this.resizeInput(), l.onsubmit = (e) => {
 			e.preventDefault(), this.send();
 		}, this.recover();
@@ -2321,7 +2321,7 @@ var Et = class extends HTMLElement {
 			return;
 		}
 		this.clearStreamRender();
-		let n = K(this.liveAnswer.text, {
+		let n = G(this.liveAnswer.text, {
 			...this.rendering,
 			streaming: !0
 		});
@@ -2335,7 +2335,7 @@ var Et = class extends HTMLElement {
 			this.message("assistant", e);
 			return;
 		}
-		let t = this.viewport.scrollHeight - this.viewport.scrollTop - this.viewport.clientHeight < 160, n = K(e, this.rendering);
+		let t = this.viewport.scrollHeight - this.viewport.scrollTop - this.viewport.clientHeight < 160, n = G(e, this.rendering);
 		this.liveAnswer.content?.replaceWith(n), t && this.liveAnswer.scrollIntoView({ block: "nearest" }), this.liveAnswer = null;
 	}
 	invalidateSelection() {
@@ -2412,7 +2412,7 @@ var Et = class extends HTMLElement {
 			attachmentUrlPrefixes: [],
 			allowedImageOrigins: [],
 			...e.rendering || {}
-		}, pt(this.rendering), this.api.timezone = e.timezone;
+		}, mt(this.rendering), this.api.timezone = e.timezone;
 		let t = this.getAttribute("surface"), n = (e.surfaces || []).find((e) => e.name === t), r = t ? n?.enabled ? n.alias : "" : this.getAttribute("alias"), i = (e.agents || []).find((e) => e.alias === r), a = (e.connections || []).find((e) => e.id === i?.connection_id), o = i?.connection_revision ?? a?.revision, s = i ? `${i.alias}:${i.connection_id || ""}:${i.grant_id || ""}:${o || ""}` : "";
 		this.bindingIdentity !== void 0 && this.bindingIdentity !== s && this.resetConversation(), this.bindingIdentity = s, this.activeAlias = i ? r : "", this.api.expectation(i?.connection_id && i?.grant_id && o != null ? {
 			connection_id: i.connection_id,
@@ -2438,7 +2438,7 @@ var Et = class extends HTMLElement {
 					}
 				}
 			}, "ghost");
-			t.className = "fi-chat-history-item", t.setAttribute("aria-current", String(e.identify === this.conversationId)), t.append(q("span", e.title || "会話", "fi-chat-history-item-title")), e.updated_at && t.append(q("span", bt(e.updated_at, this.api.timezone), "fi-chat-history-item-date")), this.historyList.append(t);
+			t.className = "fi-chat-history-item", t.setAttribute("aria-current", String(e.identify === this.conversationId)), t.append(K("span", e.title || "会話", "fi-chat-history-item-title")), e.updated_at && t.append(K("span", bt(e.updated_at, this.api.timezone), "fi-chat-history-item-date")), this.historyList.append(t);
 		}
 		this.updateControls();
 	}
@@ -2472,8 +2472,8 @@ var Et = class extends HTMLElement {
 		return Number.isFinite(e?.expires_at) && e.expires_at * 1e3 <= Date.now();
 	}
 	attachmentLink(e, t = this.conversationId) {
-		if (this.attachmentExpired(e)) return q("p", `${e.name || "添付ファイル"}（利用期限切れ）`, "fi:text-xs fi:text-secondary");
-		let n = q("a", e.name || "添付ファイル", "fi-attachment-link");
+		if (this.attachmentExpired(e)) return K("p", `${e.name || "添付ファイル"}（利用期限切れ）`, "fi:text-xs fi:text-secondary");
+		let n = K("a", e.name || "添付ファイル", "fi-attachment-link");
 		if (n.href = this.api.attachmentUrl(this.activeAlias, t, e.id), n.target = "_blank", n.rel = "noopener noreferrer", [
 			"image/png",
 			"image/jpeg",
@@ -2481,7 +2481,7 @@ var Et = class extends HTMLElement {
 			"image/webp",
 			"image/avif"
 		].includes(e.mime)) {
-			let t = q("img", "", "fi-attachment-preview");
+			let t = K("img", "", "fi-attachment-preview");
 			t.src = n.href, t.alt = e.name || "添付画像", t.loading = "lazy", t.onerror = () => t.remove(), n.prepend(t);
 		}
 		return n;
@@ -2490,19 +2490,19 @@ var Et = class extends HTMLElement {
 		if (this.attachmentCards) {
 			this.attachmentCards.replaceChildren(), this.attachmentCards.hidden = !this.attachments.length;
 			for (let e of this.attachments) {
-				let t = q("div", "", "fi-attachment-card");
+				let t = K("div", "", "fi-attachment-card");
 				if (t.dataset.state = e.state, e.previewUrl) {
-					let n = q("img", "", "fi-attachment-preview");
+					let n = K("img", "", "fi-attachment-preview");
 					n.src = e.previewUrl, n.alt = e.file.name, t.append(n);
 				}
-				let n = q("div", "", "fi-attachment-caption");
-				if (n.append(q("p", e.attachment?.name || e.file?.name || "添付ファイル", "fi:font-medium"), q("p", `${this.fileSize(e.attachment?.size ?? e.file?.size)} · ${{
+				let n = K("div", "", "fi-attachment-caption");
+				if (n.append(K("p", e.attachment?.name || e.file?.name || "添付ファイル", "fi:font-medium"), K("p", `${this.fileSize(e.attachment?.size ?? e.file?.size)} · ${{
 					queued: "アップロード待ち",
 					uploading: "アップロード中",
 					uploaded: "送信するファイル",
 					unknown: "結果の確認が必要",
 					failed: "アップロードできませんでした"
-				}[e.state]}`, "fi:text-xs fi:text-secondary")), t.append(n), e.error && t.append(q("p", e.error, "fi:text-xs fi:text-secondary")), [
+				}[e.state]}`, "fi:text-xs fi:text-secondary")), t.append(n), e.error && t.append(K("p", e.error, "fi:text-xs fi:text-secondary")), [
 					"unknown",
 					"failed",
 					"queued"
@@ -2530,9 +2530,9 @@ var Et = class extends HTMLElement {
 		}
 	}
 	renderStoredAttachments() {
-		this.storedAttachments.hidden = !1, this.storedAttachments.replaceChildren(q("summary", `保存済みファイル ${this.attachmentMetadata.size}件`));
+		this.storedAttachments.hidden = !1, this.storedAttachments.replaceChildren(K("summary", `保存済みファイル ${this.attachmentMetadata.size}件`));
 		for (let e of this.attachmentMetadata.values()) {
-			let t = q("div", "", "fi-attachment-card");
+			let t = K("div", "", "fi-attachment-card");
 			t.append(this.attachmentLink(e));
 			let n = Y("送信対象に追加", () => {
 				if (!(this.isBusy() || !this.attachmentPolicy || this.attachments.some((t) => t.attachment?.id === e.id))) {
@@ -2616,24 +2616,24 @@ var Et = class extends HTMLElement {
 		}
 	}
 	message(e, t, n = [], r = this.conversationId, i = null) {
-		let a = e === "user", o = q("article", "", `fi-chat-message fi:min-w-0 fi:flex ${a ? "fi:justify-end" : "fi:justify-start"}`), s = q("div", "", a ? "fi-chat-user fi:max-w-[88%] fi:space-y-1 fi:rounded-2xl fi:rounded-tr-md fi:bg-raised fi:px-4 fi:py-3" : "fi-chat-assistant fi:w-full fi:min-w-0 fi:space-y-3"), c = !a && i && [
+		let a = e === "user", o = K("article", "", `fi-chat-message fi:min-w-0 fi:flex ${a ? "fi:justify-end" : "fi:justify-start"}`), s = K("div", "", a ? "fi-chat-user fi:max-w-[88%] fi:space-y-1 fi:rounded-2xl fi:rounded-tr-md fi:bg-raised fi:px-4 fi:py-3" : "fi-chat-assistant fi:w-full fi:min-w-0 fi:space-y-3"), c = !a && i && [
 			"succeeded",
 			"rejected",
 			"expired"
-		].includes(i.state) ? i : null, l = q("p", "", "fi:flex fi:items-center fi:gap-2 fi:text-xs fi:font-semibold fi:text-secondary");
-		if (a || l.append(J(c ? "shield" : "chat")), l.append(q("span", a ? "あなた" : c ? "このアプリケーション" : this.agentName || "AI アシスタント")), c) {
-			let e = q("div", "", "fi:space-y-3");
-			wt(c, e), s.append(l, q("p", {
+		].includes(i.state) ? i : null, l = K("p", "", "fi:flex fi:items-center fi:gap-2 fi:text-xs fi:font-semibold fi:text-secondary");
+		if (a || l.append(J(c ? "shield" : "chat")), l.append(K("span", a ? "あなた" : c ? "このアプリケーション" : this.agentName || "AI アシスタント")), c) {
+			let e = K("div", "", "fi:space-y-3");
+			wt(c, e), s.append(l, K("p", {
 				succeeded: "業務操作が完了しました。",
 				rejected: "業務操作は実行せず終了しました。",
 				expired: "確認期限が切れました。業務操作は実行されていません。"
 			}[c.state]), e);
-		} else s.append(l, a ? q("p", t, "fi:text-sm fi:leading-relaxed fi:whitespace-pre-wrap fi:break-words") : K(t, this.rendering));
+		} else s.append(l, a ? K("p", t, "fi:text-sm fi:leading-relaxed fi:whitespace-pre-wrap fi:break-words") : G(t, this.rendering));
 		if (n.length) {
-			let e = q("div", "", "fi-message-attachments");
+			let e = K("div", "", "fi-message-attachments");
 			for (let t of n) {
 				let n = this.attachmentMetadata.get(t);
-				e.append(n ? this.attachmentLink(n, r) : q("p", "添付ファイル（利用期限や権限を確認してください）", "fi:text-xs fi:text-secondary"));
+				e.append(n ? this.attachmentLink(n, r) : K("p", "添付ファイル（利用期限や権限を確認してください）", "fi:text-xs fi:text-secondary"));
 			}
 			s.append(e);
 		}
@@ -2656,9 +2656,9 @@ var Et = class extends HTMLElement {
 			n && (this.loading = !1), this.updateControls();
 		}
 	}
-	async refreshActionResults() {
+	async refreshActionResults(e) {
 		if (this.ready && !this.isBusy() && !this.selectionStale && this.conversationId) try {
-			await this.loadHistory(this.conversationId), await this.pending(await this.api.state());
+			await this.loadHistory(this.conversationId), await this.pending(await this.api.state()), this.approvals.hidden && q[e] && (this.progressLabel.textContent = q[e]);
 		} catch {
 			this.setNotice("操作の実行結果を会話へ反映できませんでした。再読み込みして結果を確認してください。同じ操作を再実行する必要はありません。", "error");
 		}
@@ -2706,7 +2706,7 @@ var Et = class extends HTMLElement {
 			}
 			this.event("response", e);
 		} catch (t) {
-			this.stopProgress(), this.progressLabel.textContent = t.name === "AbortError" ? "待機を終了しました" : "応答が中断されました", this.liveAnswer &&= (this.renderStreamAnswer(!0), this.liveAnswer.append(q("p", "途中まで受信した回答です。完了結果は会話履歴で確認してください。", "fi:text-xs fi:text-secondary")), null), this.input.value || (this.input.value = e, this.resizeInput()), this.sendUncertain = !0, t.status === 409 ? this.invalidateSelection() : this.setNotice(t.name === "AbortError" ? "応答の待機をやめました。サーバー側の処理は続く場合があります。草稿と添付は保持しています。履歴と操作結果を確認してください。" : `${t.message} 草稿と添付は保持しています。履歴と操作結果を確認してから、次の依頼を送ってください。`, "error"), this.event("error", { message: this.notice.textContent });
+			this.stopProgress(), this.progressLabel.textContent = t.name === "AbortError" ? "待機を終了しました" : "応答が中断されました", this.liveAnswer &&= (this.renderStreamAnswer(!0), this.liveAnswer.append(K("p", "途中まで受信した回答です。完了結果は会話履歴で確認してください。", "fi:text-xs fi:text-secondary")), null), this.input.value || (this.input.value = e, this.resizeInput()), this.sendUncertain = !0, t.status === 409 ? this.invalidateSelection() : this.setNotice(t.name === "AbortError" ? "応答の待機をやめました。サーバー側の処理は続く場合があります。草稿と添付は保持しています。履歴と操作結果を確認してください。" : `${t.message} 草稿と添付は保持しています。履歴と操作結果を確認してから、次の依頼を送ってください。`, "error"), this.event("error", { message: this.notice.textContent });
 		} finally {
 			this.stopProgress(), this.abort = null, this.updateControls(), this.cancel.hidden = !0;
 			try {
@@ -2940,7 +2940,7 @@ function Pt(e, { request: t, Client: n, showAction: r, datetime: i, renderToolGr
 			}, x = () => {
 				let e = _.find((e) => e.grant_id === d.value);
 				f.textContent = e ? `Fourmix Intelligenceの利用範囲：${Ot[e.scope] || "未確認"} · 資料庫 ${(e.dataset_ids || []).length}件 · 外部サービス ${(e.capability_ids || []).length}件。能力はFourmix Intelligenceで管理します。` : "この接続に利用を許可したAIがありません。Fourmix IntelligenceでAIの利用許可を確認してください。", b();
-			}, S = async () => {
+			}, ee = async () => {
 				let t = ++v, n = c.value;
 				_ = [], d.replaceChildren(), d.disabled = !0, g.disabled = !0;
 				let i = Z("option", n ? "AIを読み込んでいます…" : "接続を選択してください");
@@ -2967,9 +2967,9 @@ function Pt(e, { request: t, Client: n, showAction: r, datetime: i, renderToolGr
 					i.value = "", d.append(i), d.disabled = !0, f.textContent = e.message, b();
 				}
 			};
-			c.onchange = () => (y = !0, S()), d.onchange = () => {
+			c.onchange = () => (y = !0, ee()), d.onchange = () => {
 				y = !0, x();
-			}, i.onchange = b, r.append(a, jt("接続", c), jt("使用するAI", d), f, g), t.append(r), m.append(t), S(), r.onsubmit = async (t) => {
+			}, i.onchange = b, r.append(a, jt("接続", c), jt("使用するAI", d), f, g), t.append(r), m.append(t), ee(), r.onsubmit = async (t) => {
 				t.preventDefault();
 				let n = Q(g, "保存しています…");
 				try {
@@ -3131,7 +3131,7 @@ async function $(e, { method: t = "GET", body: n, signal: r, csrfToken: i, onEve
 }
 for (let e of document.querySelectorAll("[data-fourmix-management]")) Pt(e, {
 	request: $,
-	Client: vt,
+	Client: yt,
 	showAction: Tt,
 	datetime: bt,
 	renderToolGroups: Dt

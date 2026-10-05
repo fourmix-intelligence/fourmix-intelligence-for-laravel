@@ -105,7 +105,7 @@ export class FourmixIntelligenceChat extends HTMLElement {
     connectedCallback() {
         this.surfaceHandler ||= event => { const surface = Array.isArray(event.detail) && event.detail.find(item => item.name === this.getAttribute('surface')); if (surface && (!surface.enabled || surface.connection_id !== this.api?.expectedSelection?.connection_id || surface.grant_id !== this.api?.expectedSelection?.grant_id || (surface.connection_revision != null && String(surface.connection_revision) !== String(this.api?.expectedSelection?.connection_revision)))) this.invalidateSelection(); };
         document.defaultView?.addEventListener('fourmix:surfaces', this.surfaceHandler);
-        this.actionHandler ||= () => this.refreshActionResults();
+        this.actionHandler ||= event => this.refreshActionResults(event?.detail?.state);
         document.defaultView?.addEventListener('fourmix:action-changed', this.actionHandler);
         document.defaultView?.addEventListener('focus', this.actionHandler);
         if (this.initialized) { this.mergePageHeader(); return; } this.initialized = true; this.api = new FourmixIntelligenceUI(this.getAttribute('api-base') || '/fourmix-intelligence', this.getAttribute('csrf-token'), this.getAttribute('surface') || 'page'); this.conversationId = this.getAttribute('conversation-id') || null;
@@ -418,9 +418,12 @@ export class FourmixIntelligenceChat extends HTMLElement {
             for (const message of result.messages || []) this.message(message.role, String(message.content || ''), message.attachment_ids || [], id, message.application_receipt); this.messages.append(...previous); this.refreshEmpty(); this.beforeId = result.has_more ? result.before_id : null; this.more.hidden = !this.beforeId; this.renderConversations(); this.sendUncertain = false; this.event('history', result); if (ownsLoading) this.setNotice('');
         } catch (error) { if (error.status === 409) this.invalidateSelection(); throw error; } finally { if (ownsLoading) this.loading = false; this.updateControls(); }
     }
-    async refreshActionResults() {
+    async refreshActionResults(actionState) {
         if (!this.ready || this.isBusy() || this.selectionStale || !this.conversationId) return;
-        try { await this.loadHistory(this.conversationId); await this.pending(await this.api.state()); }
+        try {
+            await this.loadHistory(this.conversationId); await this.pending(await this.api.state());
+            if (this.approvals.hidden && states[actionState]) this.progressLabel.textContent = states[actionState];
+        }
         catch { this.setNotice('操作の実行結果を会話へ反映できませんでした。再読み込みして結果を確認してください。同じ操作を再実行する必要はありません。', 'error'); }
     }
     async pending(state) { this.approvals.replaceChildren(); for (const action of state.actions || []) if (action.state === 'confirmation_required') { const description = (state.tools || []).find(tool => tool.name === action.operation)?.description; const review = button(`操作を確認：${description || action.operation}`, () => showAction(this.api, action.id, this, async () => this.pending(await this.api.state())), 'secondary', 'shield'); review.title = description || action.operation; this.approvals.append(review); } this.approvals.hidden = this.approvals.childNodes.length === 0; }

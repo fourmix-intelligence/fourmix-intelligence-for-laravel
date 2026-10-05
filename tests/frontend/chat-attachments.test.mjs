@@ -33,6 +33,19 @@ async function fixture(handler, attributes = {}) {
     return { chat, dom, calls, rendering, revoked, disposed, module, context, dependency, file: (name = '確認資料.png', contents = 'png', type = 'image/png') => new dom.window.File([contents], name, { type }) };
 }
 
+test('業務操作を拒否した後に承認待ち表示を残さず、草稿と会話を保持する', async () => {
+    const { chat, dom, calls } = await fixture();
+    chat.conversationId = conversation;
+    chat.progressLabel.textContent = '内容を確認して承認してください';
+    chat.input.value = 'まだ送らない依頼';
+    dom.window.dispatchEvent(new dom.window.CustomEvent('fourmix:action-changed', { detail: { id: 'review-1', state: 'rejected' } }));
+    await tick(); await tick();
+    assert.equal(chat.progressLabel.textContent, '実行せず終了');
+    assert.equal(chat.input.value, 'まだ送らない依頼');
+    assert.equal(chat.conversationId, conversation);
+    assert.equal(calls.some(call => call.url.endsWith('/chat')), false);
+});
+
 test('助手の表示名と履歴を一つのヘッダーにまとめ、技術的な呼び出し名を表示しない', async () => {
     const { chat, calls } = await fixture(url => url.endsWith('/state') ? { agents: [{ alias: 'assistant', name: '確認アシスタント' }], actions: [] } : undefined);
     assert.equal(chat.activeAlias, 'assistant');
