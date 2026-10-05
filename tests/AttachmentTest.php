@@ -3,6 +3,8 @@
 namespace FourmixIntelligence\Laravel\Tests;
 
 use FourmixIntelligence\Laravel\Attachments\AttachmentPolicy;
+use FourmixIntelligence\Laravel\Tools\ToolContext;
+use FourmixIntelligence\Laravel\UiSurfaces;
 use Illuminate\Auth\GenericUser;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Crypt;
@@ -40,6 +42,7 @@ final class AttachmentTest extends TestCase
     {
         parent::setUp();
         (require __DIR__.'/../database/migrations/0001_01_01_000000_create_fourmix_intelligence_tables.php')->up();
+        app(UiSurfaces::class)->save(new ToolContext('user:1'), 'page', true);
         $this->local = (string) Str::uuid();
         $this->remote = (string) Str::uuid();
         $this->grant = (string) Str::uuid();

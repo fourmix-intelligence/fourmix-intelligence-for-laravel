@@ -35,6 +35,32 @@ async function fixture(state = baseState, { agents, handle } = {}) {
 }
 const submit = form => form.onsubmit({ preventDefault() {}, target: form });
 
+test('接続選択を空に戻しても非表示設定だけを保存できる', async () => {
+    const { root, calls } = await fixture();
+    const form = root.querySelector('[data-surface="floating"]');
+    const connection = form.querySelector('select'); connection.value = 'connection-a'; await connection.onchange();
+    connection.value = ''; await connection.onchange();
+    assert.equal(form.querySelector('button').disabled, true);
+    const enabled = form.querySelector('input[type=checkbox]'); enabled.checked = false; enabled.onchange();
+    assert.equal(form.querySelector('button').disabled, false);
+    await submit(form);
+    assert.deepEqual(Object.keys(calls.find(call => call.url.endsWith('/surfaces/floating')).body), ['enabled']);
+    assert.equal(calls.find(call => call.url.endsWith('/surfaces/floating')).body.enabled, false);
+});
+
+test('AI一覧の取得中や未許可でも非表示保存はAI設定を要求しない', async () => {
+    const slow = deferred();
+    const { root, calls } = await fixture(baseState, { agents: () => slow.promise });
+    const form = root.querySelector('[data-surface="floating"]');
+    const enabled = form.querySelector('input[type=checkbox]'); enabled.checked = false; enabled.onchange();
+    form.querySelector('select').value = 'connection-a'; form.querySelector('select').onchange();
+    assert.equal(form.querySelector('button').disabled, false);
+    slow.resolve({ agents: [] }); await tick(); await tick();
+    assert.equal(form.querySelector('button').disabled, false);
+    await submit(form);
+    assert.deepEqual(Object.keys(calls.find(call => call.url.endsWith('/surfaces/floating')).body), ['enabled']);
+});
+
 test('接続と操作名は安全に表示し、内部aliasや旧全体権限の編集を出さない', async () => {
     const state = { ...baseState, connections: [{ ...baseState.connections[0], name: '<img src=x>' }], tools: [{ ...baseState.tools[0], description: '<script>対象を確認</script>' }] };
     const { root } = await fixture(state);

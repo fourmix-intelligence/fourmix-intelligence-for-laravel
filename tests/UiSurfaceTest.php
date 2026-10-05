@@ -51,7 +51,7 @@ final class UiSurfaceTest extends TestCase
         self::assertSame($before, DB::table('fourmix_intelligence_connections')->pluck('permissions')->all());
         self::assertSame(2, DB::table('fourmix_intelligence_agent_bindings')->count());
         $this->actingAs(new GenericUser(['id' => 2]));
-        $this->getJson(route('fourmix-intelligence.state'))->assertOk()->assertJsonPath('surfaces.0.enabled', true)->assertJsonPath('surfaces.0.configured', false);
+        $this->getJson(route('fourmix-intelligence.state'))->assertOk()->assertJsonPath('surfaces.0.enabled', false)->assertJsonPath('surfaces.0.configured', false);
         $this->putJson(route('fourmix-intelligence.surfaces.update', 'floating'), ['enabled' => true, 'connection_id' => $floating, 'grant_id' => $floatingGrant])->assertNotFound();
     }
 
@@ -64,6 +64,24 @@ final class UiSurfaceTest extends TestCase
         config(['fourmix-intelligence.ui.surfaces.page.enabled' => false]);
         $this->putJson(route('fourmix-intelligence.surfaces.update', 'page'), ['enabled' => true])->assertForbidden();
         self::assertSame('', Blade::render('<x-fourmix-intelligence::surface name="page" />'));
+        Http::assertNothingSent();
+    }
+
+    public function test_chat_surfaces_default_to_hidden_and_can_be_disabled_without_an_ai_connection(): void
+    {
+        $this->actingAs(new GenericUser(['id' => 1]));
+        $this->getJson(route('fourmix-intelligence.state'))->assertOk()
+            ->assertJsonPath('surfaces.0.enabled', false)->assertJsonPath('surfaces.1.enabled', false);
+        $this->get(route('fourmix-intelligence.chat'))->assertNotFound();
+        self::assertSame('', Blade::render('<x-fourmix-intelligence::surface name="floating" />'));
+        $this->putJson(route('fourmix-intelligence.surfaces.update', 'floating'), ['enabled' => false])->assertOk();
+        self::assertFalse(app(UiSurfaces::class)->enabled(new ToolContext('user:1'), 'floating'));
+        $this->putJson(route('fourmix-intelligence.surfaces.update', 'floating'), ['enabled' => true])->assertOk();
+        self::assertTrue(app(UiSurfaces::class)->enabled(new ToolContext('user:1'), 'floating'));
+        self::assertFalse(app(UiSurfaces::class)->enabled(new ToolContext('user:1'), 'page'));
+        self::assertFalse(app(UiSurfaces::class)->enabled(new ToolContext('user:2'), 'floating'));
+        $this->putJson(route('fourmix-intelligence.surfaces.update', 'floating'), ['enabled' => false])->assertOk();
+        self::assertSame('', Blade::render('<x-fourmix-intelligence::surface name="floating" />'));
         Http::assertNothingSent();
     }
 
@@ -93,6 +111,8 @@ final class UiSurfaceTest extends TestCase
         $surfaces = app(UiSurfaces::class);
         $one = new ToolContext('user:1');
         $two = new ToolContext('user:2');
+        $surfaces->save($one, 'floating', true);
+        $surfaces->save($two, 'page', true);
         $surfaces->save($one, 'page', false);
         self::assertSame('ui-floating', $surfaces->resolve($one, 'floating'));
         self::assertSame('ui-page', $surfaces->resolve($two, 'page'));
@@ -130,6 +150,7 @@ final class UiSurfaceTest extends TestCase
             $this->artisan('fi:make-ui', ['name' => 'support', '--type' => $type])->assertExitCode(1);
             self::assertSame($original, file_get_contents($path.'/config/fi-ui/support.php'));
             config(['fi-ui.support' => $definition]);
+            app(UiSurfaces::class)->save(new ToolContext('user:1'), 'support', true);
             self::assertSame('ui-support', app(UiSurfaces::class)->resolve(new ToolContext('user:1'), 'support'));
             Http::assertNothingSent();
         } finally {
