@@ -256,105 +256,105 @@ var f = ((e = "") => {
 	headingBeginRegex: u((e) => RegExp(`^ {0,${e}}#`)),
 	htmlBeginRegex: u((e) => RegExp(`^ {0,${e}}(?:</?(?:${S})(?: +|$|/?>)|<(?:script|pre|style|textarea|!--))`, "i")),
 	blockquoteBeginRegex: u((e) => RegExp(`^ {0,${e}}>`))
-}, m = /^(?:[ \t]*(?:\n|$))+/, h = /^((?: {4}| {0,3}\t)[^\n]+(?:\n(?:[ \t]*(?:\n|$))*)?)+/, g = /^ {0,3}(`{3,}(?=[^`\n]*(?:\n|$))|~{3,})([^\n]*)(?:\n|$)(?:|([\s\S]*?)(?:\n|$))(?: {0,3}\1[~`]* *(?=\n|$)|$)/, _ = /^ {0,3}((?:-[\t ]*){3,}|(?:_[ \t]*){3,}|(?:\*[ \t]*){3,})(?:\n+|$)/, v = /^ {0,3}(#{1,6})(?=\s|$)(.*)(?:\n+|$)/, y = / {0,3}(?:[*+-]|\d{1,9}[.)])/, b = /^(?!bull |blockCode|fences|blockquote|heading|html|table)((?:.|\n(?!\s*?\n|bull |fences|blockquote|heading|hr|html|table))+?)\n {0,3}(=+|-+) *(?:\n+|$)/, x = d(b).replace(/bull/g, y).replace(/blockCode/g, /(?: {4}| {0,3}\t)/).replace(/fences/g, / {0,3}(?:`{3,}|~{3,})/).replace(/blockquote/g, / {0,3}>/).replace(/heading/g, / {0,3}#{1,6}(?:\s|$)/).replace(/hr/g, / {0,3}(?:(?:-[\t ]*){3,}|(?:_[ \t]*){3,}|(?:\*[ \t]*){3,})(?:\n+|$)/).replace(/html/g, / {0,3}<[^\n>]+>\n/).replace(/\|table/g, "").getRegex(), ee = d(b).replace(/bull/g, y).replace(/blockCode/g, /(?: {4}| {0,3}\t)/).replace(/fences/g, / {0,3}(?:`{3,}|~{3,})/).replace(/blockquote/g, / {0,3}>/).replace(/heading/g, / {0,3}#{1,6}(?:\s|$)/).replace(/hr/g, / {0,3}(?:(?:-[\t ]*){3,}|(?:_[ \t]*){3,}|(?:\*[ \t]*){3,})(?:\n+|$)/).replace(/html/g, / {0,3}<[^\n>]+>\n/).replace(/table/g, / {0,3}\|?(?:[:\- ]*\|)+[\:\- ]*\n/).getRegex(), te = /^([^\n]+(?:\n(?!hr|heading|lheading|blockquote|fences|list|html|table|[ \t]+\n)[^\n]+)*)/, ne = /^[^\n]+/, re = /(?!\s*\])(?:\\[\s\S]|[^\[\]\\])+/, ie = d(/^ {0,3}\[(label)\]: *(?:\n[ \t]*)?([^<\s][^\s]*|<.*?>)(?:(?: +(?:\n[ \t]*)?| *\n[ \t]*)(title))? *(?:\n+|$)/).replace("label", re).replace("title", /(?:"(?:\\"?|[^"\\])*"|'[^'\n]*(?:\n[^'\n]+)*\n?'|\([^()]*\))/).getRegex(), ae = d(/^(bull)([ \t][^\n]*?)?(?:\n|$)/).replace(/bull/g, y).getRegex(), S = "address|article|aside|base|basefont|blockquote|body|caption|center|col|colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|frame|frameset|h[1-6]|head|header|hr|html|iframe|legend|li|link|main|menu|menuitem|meta|nav|noframes|ol|optgroup|option|p|param|search|section|summary|table|tbody|td|tfoot|th|thead|title|tr|track|ul", C = /<!--(?:-?>|[\s\S]*?(?:-->|$))/, oe = d("^ {0,3}(?:<(script|pre|style|textarea)[\\s>][\\s\\S]*?(?:</\\1>[^\\n]*\\n*|$)|comment[^\\n]*(\\n+|$)|<\\?[\\s\\S]*?(?:\\?>[^\\n]*\\n*|$)|<![A-Z][\\s\\S]*?(?:>[^\\n]*\\n*|$)|<!\\[CDATA\\[[\\s\\S]*?(?:\\]\\]>[^\\n]*\\n*|$)|</?(tag)(?: +|\\n|/?>)[\\s\\S]*?(?:(?:\\n[ 	]*)+\\n|$)|<(?!script|pre|style|textarea)([a-z][a-z0-9-]*)(?:attribute)*? */?>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:(?:\\n[ 	]*)+\\n|$)|</(?!script|pre|style|textarea)[a-z][a-z0-9-]*\\s*>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:(?:\\n[ 	]*)+\\n|$))", "i").replace("comment", C).replace("tag", S).replace("attribute", / +[a-zA-Z:_][\w.:-]*(?: *= *"[^"\n]*"| *= *'[^'\n]*'| *= *[^\s"'=<>`]+)?/).getRegex(), se = (e) => d(te).replace("hr", _).replace("heading", " {0,3}#{1,6}(?:\\s|$)").replace("|lheading", "").replace("|table", "").replace("blockquote", " {0,3}>").replace("fences", " {0,3}(?:`{3,}(?=[^`\\n]*(?:\\n|$))|~~~)[^\\n]*(?:\\n|$)").replace("list", e).replace("html", "</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)").replace("tag", S).getRegex(), ce = se(/ {0,3}(?:[*+-]|1[.)])[ \t]+[^ \t\n]/), le = se(/ {0,3}(?:[*+-]|\d{1,9}[.)])(?:[ \t]|\n|$)/), w = {
-	blockquote: d(/^( {0,3}> ?(paragraph|[^\n]*)(?:\n|$))+/).replace("paragraph", le).getRegex(),
+}, m = /^(?:[ \t]*(?:\n|$))+/, h = /^((?: {4}| {0,3}\t)[^\n]+(?:\n(?:[ \t]*(?:\n|$))*)?)+/, g = /^ {0,3}(`{3,}(?=[^`\n]*(?:\n|$))|~{3,})([^\n]*)(?:\n|$)(?:|([\s\S]*?)(?:\n|$))(?: {0,3}\1[~`]* *(?=\n|$)|$)/, _ = /^ {0,3}((?:-[\t ]*){3,}|(?:_[ \t]*){3,}|(?:\*[ \t]*){3,})(?:\n+|$)/, v = /^ {0,3}(#{1,6})(?=\s|$)(.*)(?:\n+|$)/, y = / {0,3}(?:[*+-]|\d{1,9}[.)])/, b = /^(?!bull |blockCode|fences|blockquote|heading|html|table)((?:.|\n(?!\s*?\n|bull |fences|blockquote|heading|hr|html|table))+?)\n {0,3}(=+|-+) *(?:\n+|$)/, x = d(b).replace(/bull/g, y).replace(/blockCode/g, /(?: {4}| {0,3}\t)/).replace(/fences/g, / {0,3}(?:`{3,}|~{3,})/).replace(/blockquote/g, / {0,3}>/).replace(/heading/g, / {0,3}#{1,6}(?:\s|$)/).replace(/hr/g, / {0,3}(?:(?:-[\t ]*){3,}|(?:_[ \t]*){3,}|(?:\*[ \t]*){3,})(?:\n+|$)/).replace(/html/g, / {0,3}<[^\n>]+>\n/).replace(/\|table/g, "").getRegex(), ee = d(b).replace(/bull/g, y).replace(/blockCode/g, /(?: {4}| {0,3}\t)/).replace(/fences/g, / {0,3}(?:`{3,}|~{3,})/).replace(/blockquote/g, / {0,3}>/).replace(/heading/g, / {0,3}#{1,6}(?:\s|$)/).replace(/hr/g, / {0,3}(?:(?:-[\t ]*){3,}|(?:_[ \t]*){3,}|(?:\*[ \t]*){3,})(?:\n+|$)/).replace(/html/g, / {0,3}<[^\n>]+>\n/).replace(/table/g, / {0,3}\|?(?:[:\- ]*\|)+[\:\- ]*\n/).getRegex(), te = /^([^\n]+(?:\n(?!hr|heading|lheading|blockquote|fences|list|html|table|[ \t]+\n)[^\n]+)*)/, ne = /^[^\n]+/, re = /(?!\s*\])(?:\\[\s\S]|[^\[\]\\])+/, ie = d(/^ {0,3}\[(label)\]: *(?:\n[ \t]*)?([^<\s][^\s]*|<.*?>)(?:(?: +(?:\n[ \t]*)?| *\n[ \t]*)(title))? *(?:\n+|$)/).replace("label", re).replace("title", /(?:"(?:\\"?|[^"\\])*"|'[^'\n]*(?:\n[^'\n]+)*\n?'|\([^()]*\))/).getRegex(), ae = d(/^(bull)([ \t][^\n]*?)?(?:\n|$)/).replace(/bull/g, y).getRegex(), S = "address|article|aside|base|basefont|blockquote|body|caption|center|col|colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|frame|frameset|h[1-6]|head|header|hr|html|iframe|legend|li|link|main|menu|menuitem|meta|nav|noframes|ol|optgroup|option|p|param|search|section|summary|table|tbody|td|tfoot|th|thead|title|tr|track|ul", oe = /<!--(?:-?>|[\s\S]*?(?:-->|$))/, se = d("^ {0,3}(?:<(script|pre|style|textarea)[\\s>][\\s\\S]*?(?:</\\1>[^\\n]*\\n*|$)|comment[^\\n]*(\\n+|$)|<\\?[\\s\\S]*?(?:\\?>[^\\n]*\\n*|$)|<![A-Z][\\s\\S]*?(?:>[^\\n]*\\n*|$)|<!\\[CDATA\\[[\\s\\S]*?(?:\\]\\]>[^\\n]*\\n*|$)|</?(tag)(?: +|\\n|/?>)[\\s\\S]*?(?:(?:\\n[ 	]*)+\\n|$)|<(?!script|pre|style|textarea)([a-z][a-z0-9-]*)(?:attribute)*? */?>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:(?:\\n[ 	]*)+\\n|$)|</(?!script|pre|style|textarea)[a-z][a-z0-9-]*\\s*>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:(?:\\n[ 	]*)+\\n|$))", "i").replace("comment", oe).replace("tag", S).replace("attribute", / +[a-zA-Z:_][\w.:-]*(?: *= *"[^"\n]*"| *= *'[^'\n]*'| *= *[^\s"'=<>`]+)?/).getRegex(), ce = (e) => d(te).replace("hr", _).replace("heading", " {0,3}#{1,6}(?:\\s|$)").replace("|lheading", "").replace("|table", "").replace("blockquote", " {0,3}>").replace("fences", " {0,3}(?:`{3,}(?=[^`\\n]*(?:\\n|$))|~~~)[^\\n]*(?:\\n|$)").replace("list", e).replace("html", "</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)").replace("tag", S).getRegex(), le = ce(/ {0,3}(?:[*+-]|1[.)])[ \t]+[^ \t\n]/), ue = ce(/ {0,3}(?:[*+-]|\d{1,9}[.)])(?:[ \t]|\n|$)/), de = {
+	blockquote: d(/^( {0,3}> ?(paragraph|[^\n]*)(?:\n|$))+/).replace("paragraph", ue).getRegex(),
 	code: h,
 	def: ie,
 	fences: g,
 	heading: v,
 	hr: _,
-	html: oe,
+	html: se,
 	lheading: x,
 	list: ae,
 	newline: m,
-	paragraph: ce,
+	paragraph: le,
 	table: l,
 	text: ne
-}, ue = d("^ *([^\\n ].*)\\n {0,3}((?:\\| *)?:?-+:? *(?:\\| *:?-+:? *)*(?:\\| *)?)(?:\\n((?:(?! *\\n|hr|heading|blockquote|code|fences|list|html).*(?:\\n|$))*)\\n*|$)").replace("hr", _).replace("heading", " {0,3}#{1,6}(?:\\s|$)").replace("blockquote", " {0,3}>").replace("code", "(?: {4}| {0,3}	)[^\\n]").replace("fences", " {0,3}(?:`{3,}(?=[^`\\n]*(?:\\n|$))|~~~)[^\\n]*(?:\\n|$)").replace("list", " {0,3}(?:[*+-]|1[.)])[ \\t]").replace("html", "</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)").replace("tag", S).getRegex(), de = {
-	...w,
+}, fe = d("^ *([^\\n ].*)\\n {0,3}((?:\\| *)?:?-+:? *(?:\\| *:?-+:? *)*(?:\\| *)?)(?:\\n((?:(?! *\\n|hr|heading|blockquote|code|fences|list|html).*(?:\\n|$))*)\\n*|$)").replace("hr", _).replace("heading", " {0,3}#{1,6}(?:\\s|$)").replace("blockquote", " {0,3}>").replace("code", "(?: {4}| {0,3}	)[^\\n]").replace("fences", " {0,3}(?:`{3,}(?=[^`\\n]*(?:\\n|$))|~~~)[^\\n]*(?:\\n|$)").replace("list", " {0,3}(?:[*+-]|1[.)])[ \\t]").replace("html", "</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)").replace("tag", S).getRegex(), pe = {
+	...de,
 	lheading: ee,
-	table: ue,
-	paragraph: d(te).replace("hr", _).replace("heading", " {0,3}#{1,6}(?:\\s|$)").replace("|lheading", "").replace("table", ue).replace("blockquote", " {0,3}>").replace("fences", " {0,3}(?:`{3,}(?=[^`\\n]*(?:\\n|$))|~~~)[^\\n]*(?:\\n|$)").replace("list", " {0,3}(?:[*+-]|1[.)])[ \\t]+[^ \\t\\n]").replace("html", "</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)").replace("tag", S).getRegex()
-}, fe = {
-	...w,
-	html: d("^ *(?:comment *(?:\\n|\\s*$)|<(tag)[\\s\\S]+?</\\1> *(?:\\n{2,}|\\s*$)|<tag(?:\"[^\"]*\"|'[^']*'|\\s[^'\"/>\\s]*)*?/?> *(?:\\n{2,}|\\s*$))").replace("comment", C).replace(/tag/g, "(?!(?:a|em|strong|small|s|cite|q|dfn|abbr|data|time|code|var|samp|kbd|sub|sup|i|b|u|mark|ruby|rt|rp|bdi|bdo|span|br|wbr|ins|del|img)\\b)\\w+(?!:|[^\\w\\s@]*@)\\b").getRegex(),
+	table: fe,
+	paragraph: d(te).replace("hr", _).replace("heading", " {0,3}#{1,6}(?:\\s|$)").replace("|lheading", "").replace("table", fe).replace("blockquote", " {0,3}>").replace("fences", " {0,3}(?:`{3,}(?=[^`\\n]*(?:\\n|$))|~~~)[^\\n]*(?:\\n|$)").replace("list", " {0,3}(?:[*+-]|1[.)])[ \\t]+[^ \\t\\n]").replace("html", "</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)").replace("tag", S).getRegex()
+}, me = {
+	...de,
+	html: d("^ *(?:comment *(?:\\n|\\s*$)|<(tag)[\\s\\S]+?</\\1> *(?:\\n{2,}|\\s*$)|<tag(?:\"[^\"]*\"|'[^']*'|\\s[^'\"/>\\s]*)*?/?> *(?:\\n{2,}|\\s*$))").replace("comment", oe).replace(/tag/g, "(?!(?:a|em|strong|small|s|cite|q|dfn|abbr|data|time|code|var|samp|kbd|sub|sup|i|b|u|mark|ruby|rt|rp|bdi|bdo|span|br|wbr|ins|del|img)\\b)\\w+(?!:|[^\\w\\s@]*@)\\b").getRegex(),
 	def: /^ *\[([^\]]+)\]: *<?([^\s>]+)>?(?: +(["(][^\n]+[")]))? *(?:\n+|$)/,
 	heading: /^(#{1,6})(.*)(?:\n+|$)/,
 	fences: l,
 	lheading: /^(.+?)\n {0,3}(=+|-+) *(?:\n+|$)/,
 	paragraph: d(te).replace("hr", _).replace("heading", " *#{1,6} *[^\n]").replace("lheading", x).replace("|table", "").replace("blockquote", " {0,3}>").replace("|fences", "").replace("|list", "").replace("|html", "").replace("|tag", "").getRegex()
-}, pe = /^\\([!"#$%&'()*+,\-./:;<=>?@\[\]\\^_`{|}~])/, me = /^(`+)([^`]|[^`][\s\S]*?[^`])\1(?!`)/, he = /^( {2,}|\\)\n(?!\s*$)[ \t]*/, ge = /^(`+|[^`])(?:(?= {2,}\n)|[\s\S]*?(?:(?=[\\<!\[`*_]|\b_|$)|[^ ](?= {2,}\n)))/, T = /[\p{P}\p{S}]/u, E = /[\s\p{P}\p{S}]/u, D = /[^\s\p{P}\p{S}]/u, _e = d(/^((?![*_])punctSpace)/, "u").replace(/punctSpace/g, E).getRegex(), ve = /[\p{Pi}\p{Ps}"']/u, ye = /(?!~)[\p{P}\p{S}]/u, be = /(?!~)[\s\p{P}\p{S}]/u, xe = /(?:[^\s\p{P}\p{S}]|~)/u, Se = d(/link|precode-code|html/, "g").replace("link", /\[(?:[^\[\]`]|(?<a>`+)[^`]+\k<a>(?!`))*?\]\((?:\\[\s\S]|[^\\\(\)]|\((?:\\[\s\S]|[^\\\(\)])*\))*\)/).replace("precode-", f ? "(?<!`)()" : "(^^|[^`])").replace("code", /(?<b>`+)[^`]+\k<b>(?!`)/).replace("html", /<(?! )[^<>]*?>/).getRegex(), Ce = /^(?:\*+(?:((?!\*)punct)|([^\s*]))?)|^_+(?:((?!_)punct)|([^\s_]))?/, we = d(Ce, "u").replace(/punct/g, T).getRegex(), Te = d(Ce, "u").replace(/punct/g, ye).getRegex(), Ee = d(/^(?:\*+(?:((?!\*)(?!openQuote)punct)|([^\s*]))?)|^_+(?:((?!_)(?!openQuote)punct)|([^\s_]))?/, "u").replace(/openQuote/g, ve).replace(/punct/g, T).getRegex(), De = "^[^_*]*?__[^_*]*?\\*[^_*]*?(?=__)|[^*]+(?=[^*])|(?!\\*)punct(\\*+)(?=[\\s]|$)|notPunctSpace(\\*+)(?!\\*)(?=punctSpace|$)|(?!\\*)punctSpace(\\*+)(?=notPunctSpace)|[\\s](\\*+)(?!\\*)(?=punct)|(?!\\*)punct(\\*+)(?!\\*)(?=punct)|notPunctSpace(\\*+)(?=notPunctSpace)", Oe = d(De, "gu").replace(/notPunctSpace/g, D).replace(/punctSpace/g, E).replace(/punct/g, T).getRegex(), ke = d(De, "gu").replace(/notPunctSpace/g, xe).replace(/punctSpace/g, be).replace(/punct/g, ye).getRegex(), Ae = d("^[^_*]*?__[^_*]*?\\*[^_*]*?(?=__)|[^*]+(?=[^*])|(?!\\*)punct(\\*+)(?=[\\s]|$)|notPunctSpace(\\*+)(?!\\*)(?=punctSpace|$)|(?!\\*)[\\s](\\*+)(?=notPunctSpace)|[\\s](\\*+)(?!\\*)(?=punct)|(?!\\*)punct(\\*+)(?!\\*)(?=punct)|(?:(?!\\*)punct|notPunctSpace)(\\*+)(?!\\*)(?=notPunctSpace)", "gu").replace(/notPunctSpace/g, D).replace(/punctSpace/g, E).replace(/punct/g, T).getRegex(), je = d("^[^_*]*?\\*\\*[^_*]*?_[^_*]*?(?=\\*\\*)|[^_]+(?=[^_])|(?!_)punct(_+)(?=[\\s]|$)|notPunctSpace(_+)(?!_)(?=punctSpace|$)|(?!_)punctSpace(_+)(?=notPunctSpace)|[\\s](_+)(?!_)(?=punct)|(?!_)punct(_+)(?!_)(?=punct)", "gu").replace(/notPunctSpace/g, D).replace(/punctSpace/g, E).replace(/punct/g, T).getRegex(), Me = d("^[^_*]*?\\*\\*[^_*]*?_[^_*]*?(?=\\*\\*)|[^_]+(?=[^_])|(?!_)punct(_+)(?=[\\s]|$)|notPunctSpace(_+)(?!_)(?=punctSpace|$)|(?!_)[\\s](_+)(?=notPunctSpace)|[\\s](_+)(?!_)(?=punct)|(?!_)punct(_+)(?!_)(?=punct)|(?:(?!_)punct|notPunctSpace)(_+)(?!_)(?=notPunctSpace)", "gu").replace(/notPunctSpace/g, D).replace(/punctSpace/g, E).replace(/punct/g, T).getRegex(), Ne = d(/^~~?(?:((?!~)punct)|[^\s~])/, "u").replace(/punct/g, T).getRegex(), Pe = d("^[^~]+(?=[^~])|(?!~)punct(~~?)(?=[\\s]|$)|notPunctSpace(~~?)(?!~)(?=punctSpace|$)|(?!~)punctSpace(~~?)(?=notPunctSpace)|[\\s](~~?)(?!~)(?=punct)|(?!~)punct(~~?)(?!~)(?=punct)|notPunctSpace(~~?)(?=notPunctSpace)", "gu").replace(/notPunctSpace/g, D).replace(/punctSpace/g, E).replace(/punct/g, T).getRegex(), Fe = d(/\\(punct)/, "gu").replace(/punct/g, T).getRegex(), Ie = d(/^<(scheme:[^\s\x00-\x1f<>]*|email)>/).replace("scheme", /[a-zA-Z][a-zA-Z0-9+.-]{1,31}/).replace("email", /[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(@)[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(?![-_])/).getRegex(), Le = d(C).replace("(?:-->|$)", "-->").getRegex(), Re = d("^comment|^</[a-zA-Z][a-zA-Z0-9-]*\\s*>|^<[a-zA-Z][a-zA-Z0-9-]*(?:attribute)*?\\s*/?>|^<\\?[\\s\\S]*?\\?>|^<![a-zA-Z]+\\s[\\s\\S]*?>|^<!\\[CDATA\\[[\\s\\S]*?\\]\\]>").replace("comment", Le).replace("attribute", /\s+[a-zA-Z:_][\w.:-]*(?:\s*=\s*"[^"]*"|\s*=\s*'[^']*'|\s*=\s*[^\s"'=<>`]+)?/).getRegex(), ze = /\[(?:\\[\s\S]|[^\[\]\\])*\]/, O = d(/(?:\[(?:brackets|\\[\s\S]|[^\[\]\\])*\]|\\[\s\S]|`+(?!`)[^`]*?`+(?!`)|``+(?=\])|[^\[\]\\`])*?/).replace("brackets", ze).getRegex(), Be = d(/^!?\[(label)\]\(\s*(href)(?:(?:[ \t]+(?:\n[ \t]*)?|\n[ \t]*)(title))?\s*\)/).replace("label", O).replace("href", /<(?:\\.|[^\n<>\\])+>|[^ \t\n\x00-\x1f]+|(?=\))/).replace("title", /"(?:\\"?|[^"\\])*"|'(?:\\'?|[^'\\])*'|\((?:\\\)?|[^)\\])*\)/).getRegex(), Ve = d(/^!?\[(label)\]\[(ref)\]/).replace("label", O).replace("ref", re).getRegex(), He = d(/^!?\[(ref)\](?:\[\])?/).replace("ref", re).getRegex(), Ue = /(?!\s*\])(?:\\[\s\S]|[^\[\]\\]){1,999}/, We = d(/(?:[^\[\]\\`]*(?:\[(?:brackets|\\[\s\S]|[^\[\]\\])*\]|\\[\s\S]|`+(?!`)[^`]*?`+(?!`)|``+(?=\]))){0,999}?[^\[\]\\`]*?/).replace("brackets", ze).getRegex(), Ge = d("reflink|nolink(?!\\()", "g").replace("reflink", d(/^!?\[(label)\]\[(ref)\]/).replace("label", We).replace("ref", Ue).getRegex()).replace("nolink", d(/^!?\[(ref)\](?:\[\])?/).replace("ref", Ue).getRegex()).getRegex(), Ke = /[hH][tT][tT][pP][sS]?|[fF][tT][pP]/, qe = d(/(?:mailto:email|xmpp:email(?:\/[A-Za-z0-9@.]+)?)/).replace(/email/g, /[A-Za-z0-9._+-]+@[a-zA-Z0-9-_]+(?:\.[a-zA-Z0-9-_]*[a-zA-Z0-9])+(?![\w-])/).getRegex(), Je = {
+}, he = /^\\([!"#$%&'()*+,\-./:;<=>?@\[\]\\^_`{|}~])/, ge = /^(`+)([^`]|[^`][\s\S]*?[^`])\1(?!`)/, _e = /^( {2,}|\\)\n(?!\s*$)[ \t]*/, ve = /^(`+|[^`])(?:(?= {2,}\n)|[\s\S]*?(?:(?=[\\<!\[`*_]|\b_|$)|[^ ](?= {2,}\n)))/, C = /[\p{P}\p{S}]/u, w = /[\s\p{P}\p{S}]/u, T = /[^\s\p{P}\p{S}]/u, ye = d(/^((?![*_])punctSpace)/, "u").replace(/punctSpace/g, w).getRegex(), be = /[\p{Pi}\p{Ps}"']/u, xe = /(?!~)[\p{P}\p{S}]/u, Se = /(?!~)[\s\p{P}\p{S}]/u, Ce = /(?:[^\s\p{P}\p{S}]|~)/u, we = d(/link|precode-code|html/, "g").replace("link", /\[(?:[^\[\]`]|(?<a>`+)[^`]+\k<a>(?!`))*?\]\((?:\\[\s\S]|[^\\\(\)]|\((?:\\[\s\S]|[^\\\(\)])*\))*\)/).replace("precode-", f ? "(?<!`)()" : "(^^|[^`])").replace("code", /(?<b>`+)[^`]+\k<b>(?!`)/).replace("html", /<(?! )[^<>]*?>/).getRegex(), Te = /^(?:\*+(?:((?!\*)punct)|([^\s*]))?)|^_+(?:((?!_)punct)|([^\s_]))?/, Ee = d(Te, "u").replace(/punct/g, C).getRegex(), De = d(Te, "u").replace(/punct/g, xe).getRegex(), Oe = d(/^(?:\*+(?:((?!\*)(?!openQuote)punct)|([^\s*]))?)|^_+(?:((?!_)(?!openQuote)punct)|([^\s_]))?/, "u").replace(/openQuote/g, be).replace(/punct/g, C).getRegex(), ke = "^[^_*]*?__[^_*]*?\\*[^_*]*?(?=__)|[^*]+(?=[^*])|(?!\\*)punct(\\*+)(?=[\\s]|$)|notPunctSpace(\\*+)(?!\\*)(?=punctSpace|$)|(?!\\*)punctSpace(\\*+)(?=notPunctSpace)|[\\s](\\*+)(?!\\*)(?=punct)|(?!\\*)punct(\\*+)(?!\\*)(?=punct)|notPunctSpace(\\*+)(?=notPunctSpace)", Ae = d(ke, "gu").replace(/notPunctSpace/g, T).replace(/punctSpace/g, w).replace(/punct/g, C).getRegex(), je = d(ke, "gu").replace(/notPunctSpace/g, Ce).replace(/punctSpace/g, Se).replace(/punct/g, xe).getRegex(), Me = d("^[^_*]*?__[^_*]*?\\*[^_*]*?(?=__)|[^*]+(?=[^*])|(?!\\*)punct(\\*+)(?=[\\s]|$)|notPunctSpace(\\*+)(?!\\*)(?=punctSpace|$)|(?!\\*)[\\s](\\*+)(?=notPunctSpace)|[\\s](\\*+)(?!\\*)(?=punct)|(?!\\*)punct(\\*+)(?!\\*)(?=punct)|(?:(?!\\*)punct|notPunctSpace)(\\*+)(?!\\*)(?=notPunctSpace)", "gu").replace(/notPunctSpace/g, T).replace(/punctSpace/g, w).replace(/punct/g, C).getRegex(), Ne = d("^[^_*]*?\\*\\*[^_*]*?_[^_*]*?(?=\\*\\*)|[^_]+(?=[^_])|(?!_)punct(_+)(?=[\\s]|$)|notPunctSpace(_+)(?!_)(?=punctSpace|$)|(?!_)punctSpace(_+)(?=notPunctSpace)|[\\s](_+)(?!_)(?=punct)|(?!_)punct(_+)(?!_)(?=punct)", "gu").replace(/notPunctSpace/g, T).replace(/punctSpace/g, w).replace(/punct/g, C).getRegex(), Pe = d("^[^_*]*?\\*\\*[^_*]*?_[^_*]*?(?=\\*\\*)|[^_]+(?=[^_])|(?!_)punct(_+)(?=[\\s]|$)|notPunctSpace(_+)(?!_)(?=punctSpace|$)|(?!_)[\\s](_+)(?=notPunctSpace)|[\\s](_+)(?!_)(?=punct)|(?!_)punct(_+)(?!_)(?=punct)|(?:(?!_)punct|notPunctSpace)(_+)(?!_)(?=notPunctSpace)", "gu").replace(/notPunctSpace/g, T).replace(/punctSpace/g, w).replace(/punct/g, C).getRegex(), Fe = d(/^~~?(?:((?!~)punct)|[^\s~])/, "u").replace(/punct/g, C).getRegex(), Ie = d("^[^~]+(?=[^~])|(?!~)punct(~~?)(?=[\\s]|$)|notPunctSpace(~~?)(?!~)(?=punctSpace|$)|(?!~)punctSpace(~~?)(?=notPunctSpace)|[\\s](~~?)(?!~)(?=punct)|(?!~)punct(~~?)(?!~)(?=punct)|notPunctSpace(~~?)(?=notPunctSpace)", "gu").replace(/notPunctSpace/g, T).replace(/punctSpace/g, w).replace(/punct/g, C).getRegex(), Le = d(/\\(punct)/, "gu").replace(/punct/g, C).getRegex(), Re = d(/^<(scheme:[^\s\x00-\x1f<>]*|email)>/).replace("scheme", /[a-zA-Z][a-zA-Z0-9+.-]{1,31}/).replace("email", /[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(@)[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(?![-_])/).getRegex(), ze = d(oe).replace("(?:-->|$)", "-->").getRegex(), Be = d("^comment|^</[a-zA-Z][a-zA-Z0-9-]*\\s*>|^<[a-zA-Z][a-zA-Z0-9-]*(?:attribute)*?\\s*/?>|^<\\?[\\s\\S]*?\\?>|^<![a-zA-Z]+\\s[\\s\\S]*?>|^<!\\[CDATA\\[[\\s\\S]*?\\]\\]>").replace("comment", ze).replace("attribute", /\s+[a-zA-Z:_][\w.:-]*(?:\s*=\s*"[^"]*"|\s*=\s*'[^']*'|\s*=\s*[^\s"'=<>`]+)?/).getRegex(), Ve = /\[(?:\\[\s\S]|[^\[\]\\])*\]/, E = d(/(?:\[(?:brackets|\\[\s\S]|[^\[\]\\])*\]|\\[\s\S]|`+(?!`)[^`]*?`+(?!`)|``+(?=\])|[^\[\]\\`])*?/).replace("brackets", Ve).getRegex(), He = d(/^!?\[(label)\]\(\s*(href)(?:(?:[ \t]+(?:\n[ \t]*)?|\n[ \t]*)(title))?\s*\)/).replace("label", E).replace("href", /<(?:\\.|[^\n<>\\])+>|[^ \t\n\x00-\x1f]+|(?=\))/).replace("title", /"(?:\\"?|[^"\\])*"|'(?:\\'?|[^'\\])*'|\((?:\\\)?|[^)\\])*\)/).getRegex(), Ue = d(/^!?\[(label)\]\[(ref)\]/).replace("label", E).replace("ref", re).getRegex(), We = d(/^!?\[(ref)\](?:\[\])?/).replace("ref", re).getRegex(), Ge = /(?!\s*\])(?:\\[\s\S]|[^\[\]\\]){1,999}/, Ke = d(/(?:[^\[\]\\`]*(?:\[(?:brackets|\\[\s\S]|[^\[\]\\])*\]|\\[\s\S]|`+(?!`)[^`]*?`+(?!`)|``+(?=\]))){0,999}?[^\[\]\\`]*?/).replace("brackets", Ve).getRegex(), qe = d("reflink|nolink(?!\\()", "g").replace("reflink", d(/^!?\[(label)\]\[(ref)\]/).replace("label", Ke).replace("ref", Ge).getRegex()).replace("nolink", d(/^!?\[(ref)\](?:\[\])?/).replace("ref", Ge).getRegex()).getRegex(), Je = /[hH][tT][tT][pP][sS]?|[fF][tT][pP]/, Ye = d(/(?:mailto:email|xmpp:email(?:\/[A-Za-z0-9@.]+)?)/).replace(/email/g, /[A-Za-z0-9._+-]+@[a-zA-Z0-9-_]+(?:\.[a-zA-Z0-9-_]*[a-zA-Z0-9])+(?![\w-])/).getRegex(), D = {
 	_backpedal: l,
-	anyPunctuation: Fe,
-	autolink: Ie,
-	blockSkip: Se,
-	br: he,
-	code: me,
+	anyPunctuation: Le,
+	autolink: Re,
+	blockSkip: we,
+	br: _e,
+	code: ge,
 	del: l,
 	delLDelim: l,
 	delRDelim: l,
-	emStrongLDelim: we,
-	emStrongRDelimAst: Oe,
-	emStrongRDelimUnd: je,
-	escape: pe,
-	link: Be,
-	nolink: He,
-	punctuation: _e,
-	reflink: Ve,
-	reflinkSearch: Ge,
-	tag: Re,
-	text: ge,
-	url: l
-}, Ye = {
-	...Je,
 	emStrongLDelim: Ee,
 	emStrongRDelimAst: Ae,
-	emStrongRDelimUnd: Me,
-	link: d(/^!?\[(label)\]\((.*?)\)/).replace("label", O).getRegex(),
-	reflink: d(/^!?\[(label)\]\s*\[([^\]]*)\]/).replace("label", O).getRegex()
+	emStrongRDelimUnd: Ne,
+	escape: he,
+	link: He,
+	nolink: We,
+	punctuation: ye,
+	reflink: Ue,
+	reflinkSearch: qe,
+	tag: Be,
+	text: ve,
+	url: l
 }, Xe = {
-	...Je,
-	emStrongRDelimAst: ke,
-	emStrongLDelim: Te,
-	delLDelim: Ne,
-	delRDelim: Pe,
-	url: d(/^emailProtocol|^((?:protocol):\/\/|www\.)(?:[a-zA-Z0-9\-]+\.?)+[^\s<]*|^email/).replace("emailProtocol", qe).replace("protocol", Ke).replace("email", /[A-Za-z0-9._+-]+(@)[a-zA-Z0-9-_]+(?:\.[a-zA-Z0-9-_]*[a-zA-Z0-9])+(?![\w-])/).getRegex(),
+	...D,
+	emStrongLDelim: Oe,
+	emStrongRDelimAst: Me,
+	emStrongRDelimUnd: Pe,
+	link: d(/^!?\[(label)\]\((.*?)\)/).replace("label", E).getRegex(),
+	reflink: d(/^!?\[(label)\]\s*\[([^\]]*)\]/).replace("label", E).getRegex()
+}, Ze = {
+	...D,
+	emStrongRDelimAst: je,
+	emStrongLDelim: De,
+	delLDelim: Fe,
+	delRDelim: Ie,
+	url: d(/^emailProtocol|^((?:protocol):\/\/|www\.)(?:[a-zA-Z0-9\-]+\.?)+[^\s<]*|^email/).replace("emailProtocol", Ye).replace("protocol", Je).replace("email", /[A-Za-z0-9._+-]+(@)[a-zA-Z0-9-_]+(?:\.[a-zA-Z0-9-_]*[a-zA-Z0-9])+(?![\w-])/).getRegex(),
 	_backpedal: /(?:[^?!.,:;*_'"~()&]+|\([^)]*\)|&(?![a-zA-Z0-9]+;$)|[?!.,:;*_'"~)]+(?!$))+/,
 	del: /^(~~?)(?=[^\s~])((?:\\[\s\S]|[^\\])*?(?:\\[\s\S]|[^\s~\\]))\1(?=[^~]|$)/,
-	text: d(/^(?:[^a-zA-Z0-9](?=emailProtocol)|(`+|~+|[^`~])(?:(?=[`~])|(?= {2,}\n)|(?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)|[\s\S]*?(?:(?=[\\<!\[`*~_]|\b_|protocol:\/\/|www\.|$)|[^ ](?= {2,}\n)|[^a-zA-Z0-9](?=emailProtocol)|[^a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-](?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@))))/).replace("protocol", Ke).replace(/emailProtocol/g, /(?:mailto|xmpp):/).getRegex()
-}, Ze = {
-	...Xe,
-	br: d(he).replace("{2,}", "*").getRegex(),
-	text: d(Xe.text).replace("\\b_", "\\b_| {2,}\\n").replace(/\{2,\}/g, "*").getRegex()
-}, k = {
-	normal: w,
-	gfm: de,
-	pedantic: fe
-}, A = {
-	normal: Je,
-	gfm: Xe,
-	breaks: Ze,
-	pedantic: Ye
+	text: d(/^(?:[^a-zA-Z0-9](?=emailProtocol)|(`+|~+|[^`~])(?:(?=[`~])|(?= {2,}\n)|(?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)|[\s\S]*?(?:(?=[\\<!\[`*~_]|\b_|protocol:\/\/|www\.|$)|[^ ](?= {2,}\n)|[^a-zA-Z0-9](?=emailProtocol)|[^a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-](?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@))))/).replace("protocol", Je).replace(/emailProtocol/g, /(?:mailto|xmpp):/).getRegex()
 }, Qe = {
+	...Ze,
+	br: d(_e).replace("{2,}", "*").getRegex(),
+	text: d(Ze.text).replace("\\b_", "\\b_| {2,}\\n").replace(/\{2,\}/g, "*").getRegex()
+}, O = {
+	normal: de,
+	gfm: pe,
+	pedantic: me
+}, k = {
+	normal: D,
+	gfm: Ze,
+	breaks: Qe,
+	pedantic: Xe
+}, $e = {
 	"&": "&amp;",
 	"<": "&lt;",
 	">": "&gt;",
 	"\"": "&quot;",
 	"'": "&#39;"
-}, $e = (e) => Qe[e];
-function j(e, t) {
+}, et = (e) => $e[e];
+function A(e, t) {
 	if (t) {
-		if (p.escapeTest.test(e)) return e.replace(p.escapeReplace, $e);
-	} else if (p.escapeTestNoEncode.test(e)) return e.replace(p.escapeReplaceNoEncode, $e);
+		if (p.escapeTest.test(e)) return e.replace(p.escapeReplace, et);
+	} else if (p.escapeTestNoEncode.test(e)) return e.replace(p.escapeReplaceNoEncode, et);
 	return e;
 }
-function et(e) {
+function tt(e) {
 	return e.replace(p.numericCharacterReference, (e, t, n) => {
 		let r = t === void 0 ? Number.parseInt(n, 16) : Number.parseInt(t, 10);
 		return r === 0 || r > 1114111 || r >= 55296 && r <= 57343 ? "�" : String.fromCodePoint(r);
 	});
 }
-function tt(e) {
+function nt(e) {
 	try {
 		e = encodeURI(e).replace(p.percentDecode, "%");
 	} catch {
@@ -362,7 +362,7 @@ function tt(e) {
 	}
 	return e;
 }
-function nt(e, t) {
+function rt(e, t) {
 	let n = e.replace(p.findPipe, (e, t, n) => {
 		let r = !1, i = t;
 		for (; --i >= 0 && n[i] === "\\";) r = !r;
@@ -375,7 +375,7 @@ function nt(e, t) {
 	for (; r < n.length; r++) n[r] = n[r].trim().replace(p.slashPipe, "|");
 	return n;
 }
-function M(e, t, n) {
+function j(e, t, n) {
 	let r = e.length;
 	if (r === 0) return "";
 	let i = 0;
@@ -387,15 +387,15 @@ function M(e, t, n) {
 	}
 	return e.slice(0, r - i);
 }
-function rt(e) {
+function it(e) {
 	let t = e.split("\n"), n = t.length - 1;
 	for (; n >= 0 && p.blankLine.test(t[n]);) n--;
 	return t.length - n <= 2 ? e : t.slice(0, n + 1).join("\n");
 }
-function N(e) {
+function M(e) {
 	return e.trim().toLowerCase().toUpperCase().toLowerCase();
 }
-function it(e, t) {
+function at(e, t) {
 	if (e.indexOf(t[1]) === -1) return -1;
 	let n = 0;
 	for (let r = 0; r < e.length; r++) if (e[r] === "\\") r++;
@@ -403,7 +403,7 @@ function it(e, t) {
 	else if (e[r] === t[1] && (n--, n < 0)) return r;
 	return n > 0 ? -2 : -1;
 }
-function at(e, t = 0) {
+function ot(e, t = 0) {
 	let n = t, r = "";
 	for (let t of e) if (t === "	") {
 		let e = 4 - n % 4;
@@ -411,7 +411,7 @@ function at(e, t = 0) {
 	} else r += t, n++;
 	return r;
 }
-function ot(e, t, n, r, i) {
+function st(e, t, n, r, i) {
 	let a = t.href, o = t.title || null, s = e[1].replace(i.other.outputLinkReplace, "$1"), c = e[0].charAt(0) === "!";
 	r.state.inLink = !0;
 	let l = r.state.linkEmitted, u = r.state.inRawBlock;
@@ -433,7 +433,7 @@ function ot(e, t, n, r, i) {
 		tokens: d
 	};
 }
-function st(e, t, n) {
+function ct(e, t, n) {
 	let r = e.match(n.other.indentCodeCompensation);
 	if (r === null) return t;
 	let i = r[1];
@@ -444,7 +444,7 @@ function st(e, t, n) {
 		return e.slice(Math.min(r.length, i.length));
 	}).join("\n");
 }
-function ct(e, t, n, r) {
+function lt(e, t, n, r) {
 	if (!t.includes("<")) return !1;
 	for (let i = 0; i < t.length; i++) {
 		if (t[i] === "\\") {
@@ -467,7 +467,7 @@ function ct(e, t, n, r) {
 	}
 	return !1;
 }
-var P = class {
+var N = class {
 	options;
 	rules;
 	lexer;
@@ -484,7 +484,7 @@ var P = class {
 	code(e) {
 		let t = this.rules.block.code.exec(e);
 		if (t) {
-			let e = this.options.pedantic ? t[0] : rt(t[0]);
+			let e = this.options.pedantic ? t[0] : it(t[0]);
 			return {
 				type: "code",
 				raw: e,
@@ -496,7 +496,7 @@ var P = class {
 	fences(e) {
 		let t = this.rules.block.fences.exec(e);
 		if (t) {
-			let e = t[0], n = st(e, t[3] || "", this.rules);
+			let e = t[0], n = ct(e, t[3] || "", this.rules);
 			return {
 				type: "code",
 				raw: e,
@@ -510,12 +510,12 @@ var P = class {
 		if (t) {
 			let e = t[2].trim();
 			if (this.rules.other.endingHash.test(e)) {
-				let t = M(e, "#");
+				let t = j(e, "#");
 				(this.options.pedantic || !t || this.rules.other.endingSpaceTabChar.test(t)) && (e = t.trim());
 			}
 			return {
 				type: "heading",
-				raw: M(t[0], "\n"),
+				raw: j(t[0], "\n"),
 				depth: t[1].length,
 				text: e,
 				tokens: this.lexer.inline(e)
@@ -526,13 +526,13 @@ var P = class {
 		let t = this.rules.block.hr.exec(e);
 		if (t) return {
 			type: "hr",
-			raw: M(t[0], "\n")
+			raw: j(t[0], "\n")
 		};
 	}
 	blockquote(e) {
 		let t = this.rules.block.blockquote.exec(e);
 		if (t) {
-			let e = M(t[0], "\n").split("\n"), n = "", r = "", i = [];
+			let e = j(t[0], "\n").split("\n"), n = "", r = "", i = [];
 			for (; e.length > 0;) {
 				let t = !1, a = [], o = 0;
 				for (; o < e.length; o++) if (this.rules.other.blockquoteStart.test(e[o])) a.push(e[o]), t = !0;
@@ -586,7 +586,7 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 				let n = !1, r = "", s = "";
 				if (!(t = a.exec(e)) || this.rules.block.hr.test(e)) break;
 				r = t[0], e = e.substring(r.length);
-				let c = t[2].split("\n", 1)[0], l = t[1].length, u = this.options.pedantic ? at(c, l) : c.replace(this.rules.other.leadingSpaceTab, (e) => at(e, l)), d = e.split("\n", 1)[0], f = !u.trim(), p = 0;
+				let c = t[2].split("\n", 1)[0], l = t[1].length, u = this.options.pedantic ? ot(c, l) : c.replace(this.rules.other.leadingSpaceTab, (e) => ot(e, l)), d = e.split("\n", 1)[0], f = !u.trim(), p = 0;
 				if (this.options.pedantic ? (p = 2, s = u.trimStart()) : f ? p = l + 1 : (p = u.search(this.rules.other.nonSpaceChar), p = p > 4 ? 1 : p, s = u.slice(p), p += l), f && this.rules.other.blankLine.test(d) && (r += d + "\n", e = e.substring(d.length + 1), n = !0), !n) {
 					let t = this.rules.other.nextBulletRegex(p), n = this.rules.other.hrRegex(p), i = this.rules.other.fencesBeginRegex(p), a = this.rules.other.headingBeginRegex(p), o = this.rules.other.htmlBeginRegex(p), c = this.rules.other.blockquoteBeginRegex(p);
 					for (; e;) {
@@ -651,7 +651,7 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 	html(e) {
 		let t = this.rules.block.html.exec(e);
 		if (t) {
-			let e = rt(t[0]);
+			let e = it(t[0]);
 			return {
 				type: "html",
 				block: !0,
@@ -664,11 +664,11 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 	def(e) {
 		let t = this.rules.block.def.exec(e);
 		if (t) {
-			let e = N(t[1]).replace(this.rules.other.multipleSpaceGlobal, " "), n = t[2] ? t[2].replace(this.rules.other.hrefBrackets, "$1").replace(this.rules.inline.anyPunctuation, "$1") : "", r = t[3] ? t[3].substring(1, t[3].length - 1).replace(this.rules.inline.anyPunctuation, "$1") : t[3];
+			let e = M(t[1]).replace(this.rules.other.multipleSpaceGlobal, " "), n = t[2] ? t[2].replace(this.rules.other.hrefBrackets, "$1").replace(this.rules.inline.anyPunctuation, "$1") : "", r = t[3] ? t[3].substring(1, t[3].length - 1).replace(this.rules.inline.anyPunctuation, "$1") : t[3];
 			return {
 				type: "def",
 				tag: e,
-				raw: M(t[0], "\n"),
+				raw: j(t[0], "\n"),
 				href: n,
 				title: r
 			};
@@ -677,9 +677,9 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 	table(e) {
 		let t = this.rules.block.table.exec(e);
 		if (!t || !this.rules.other.tableDelimiter.test(t[2])) return;
-		let n = nt(t[1]), r = t[2].replace(this.rules.other.tableAlignChars, "").split("|"), i = t[3]?.trim() ? t[3].replace(this.rules.other.tableRowBlankLine, "").split("\n") : [], a = {
+		let n = rt(t[1]), r = t[2].replace(this.rules.other.tableAlignChars, "").split("|"), i = t[3]?.trim() ? t[3].replace(this.rules.other.tableRowBlankLine, "").split("\n") : [], a = {
 			type: "table",
-			raw: M(t[0], "\n"),
+			raw: j(t[0], "\n"),
 			header: [],
 			align: [],
 			rows: []
@@ -692,7 +692,7 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 				header: !0,
 				align: a.align[e]
 			});
-			for (let e of i) a.rows.push(nt(e, a.header.length).map((e, t) => ({
+			for (let e of i) a.rows.push(rt(e, a.header.length).map((e, t) => ({
 				text: e,
 				tokens: this.lexer.inline(e),
 				header: !1,
@@ -707,7 +707,7 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 			let e = t[1].trim();
 			return {
 				type: "heading",
-				raw: M(t[0], "\n"),
+				raw: j(t[0], "\n"),
 				depth: t[2].charAt(0) === "=" ? 1 : 2,
 				text: e,
 				tokens: this.lexer.inline(e)
@@ -758,14 +758,14 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 		let t = this.rules.inline.link.exec(e);
 		if (t) {
 			let n = t[0].charAt(0) === "!" ? 2 : 1;
-			if (!this.options.pedantic && ct(e, t[1], n, this.rules)) return;
+			if (!this.options.pedantic && lt(e, t[1], n, this.rules)) return;
 			let r = t[2].trim();
 			if (!this.options.pedantic && this.rules.other.startAngleBracket.test(r)) {
 				if (!this.rules.other.endAngleBracket.test(r)) return;
-				let e = M(r.slice(0, -1), "\\");
+				let e = j(r.slice(0, -1), "\\");
 				if ((r.length - e.length) % 2 == 0) return;
 			} else {
-				let e = it(t[2], "()");
+				let e = at(t[2], "()");
 				if (e === -2) return;
 				if (e > -1) {
 					let n = (t[0].indexOf("!") === 0 ? 5 : 4) + t[1].length + e;
@@ -777,7 +777,7 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 				let e = this.rules.other.pedanticHrefTitle.exec(i);
 				e && (i = e[1], a = e[3]);
 			} else a = t[3] ? t[3].slice(1, -1) : "";
-			return i = i.trim(), this.rules.other.startAngleBracket.test(i) && (i = this.options.pedantic && !this.rules.other.endAngleBracket.test(r) ? i.slice(1) : i.slice(1, -1)), ot(t, {
+			return i = i.trim(), this.rules.other.startAngleBracket.test(i) && (i = this.options.pedantic && !this.rules.other.endAngleBracket.test(r) ? i.slice(1) : i.slice(1, -1)), st(t, {
 				href: i && i.replace(this.rules.inline.anyPunctuation, "$1"),
 				title: a && a.replace(this.rules.inline.anyPunctuation, "$1")
 			}, t[0], this.lexer, this.rules);
@@ -787,8 +787,8 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 		let n;
 		if ((n = this.rules.inline.reflink.exec(e)) || (n = this.rules.inline.nolink.exec(e))) {
 			let r = n[0].charAt(0) === "!" ? 2 : 1;
-			if (!this.options.pedantic && ct(e, n[1], r, this.rules)) return;
-			let i = t[N((n[2] || n[1]).replace(this.rules.other.multipleSpaceGlobal, " "))];
+			if (!this.options.pedantic && lt(e, n[1], r, this.rules)) return;
+			let i = t[M((n[2] || n[1]).replace(this.rules.other.multipleSpaceGlobal, " "))];
 			if (!i) {
 				let e = n[0].charAt(0);
 				return {
@@ -797,7 +797,7 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 					text: e
 				};
 			}
-			return ot(n, i, n[0], this.lexer, this.rules);
+			return st(n, i, n[0], this.lexer, this.rules);
 		}
 	}
 	emStrong(e, t, n = "") {
@@ -930,19 +930,19 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 			return {
 				type: "text",
 				raw: t[0],
-				text: e ? t[0] : et(t[0]),
+				text: e ? t[0] : tt(t[0]),
 				escaped: e
 			};
 		}
 	}
-}, F = class e {
+}, P = class e {
 	tokens;
 	options;
 	state;
 	inlineQueue;
 	tokenizer;
 	constructor(e) {
-		this.tokens = [], this.tokens.links = Object.create(null), this.options = e || s, this.options.tokenizer = this.options.tokenizer || new P(), this.tokenizer = this.options.tokenizer, this.tokenizer.options = this.options, this.tokenizer.lexer = this, this.inlineQueue = [], this.state = {
+		this.tokens = [], this.tokens.links = Object.create(null), this.options = e || s, this.options.tokenizer = this.options.tokenizer || new N(), this.tokenizer = this.options.tokenizer, this.tokenizer.options = this.options, this.tokenizer.lexer = this, this.inlineQueue = [], this.state = {
 			inLink: !1,
 			inRawBlock: !1,
 			linkEmitted: !1,
@@ -950,15 +950,15 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 		};
 		let t = {
 			other: p,
-			block: k.normal,
-			inline: A.normal
+			block: O.normal,
+			inline: k.normal
 		};
-		this.options.pedantic ? (t.block = k.pedantic, t.inline = A.pedantic) : this.options.gfm && (t.block = k.gfm, t.inline = this.options.breaks ? A.breaks : A.gfm), this.tokenizer.rules = t;
+		this.options.pedantic ? (t.block = O.pedantic, t.inline = k.pedantic) : this.options.gfm && (t.block = O.gfm, t.inline = this.options.breaks ? k.breaks : k.gfm), this.tokenizer.rules = t;
 	}
 	static get rules() {
 		return {
-			block: k,
-			inline: A
+			block: O,
+			inline: k
 		};
 	}
 	static lex(t, n) {
@@ -1076,7 +1076,7 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 		for (let n of e.matchAll(this.tokenizer.rules.inline.blockSkip)) if (t.test(n[0]) && e.charAt(n.index - 1) !== "!") return !0;
 		for (let t of e.matchAll(this.tokenizer.rules.inline.reflinkSearch)) {
 			let e = t[0], n = e.lastIndexOf("[");
-			if (e.charAt(0) !== "!" && Object.hasOwn(this.tokens.links, N(e.slice(n + 1, -1))) && !(n > 1 && this.linkInText(e.slice(1, n - 1)))) return !0;
+			if (e.charAt(0) !== "!" && Object.hasOwn(this.tokens.links, M(e.slice(n + 1, -1))) && !(n > 1 && this.linkInText(e.slice(1, n - 1)))) return !0;
 		}
 		return !1;
 	}
@@ -1086,7 +1086,7 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 		if (this.tokens.links && e.includes("[")) {
 			let e = this.tokenizer.rules.inline.reflinkSearch, t = (n) => {
 				let r = n.lastIndexOf("[");
-				if (!Object.hasOwn(this.tokens.links, N(n.slice(r + 1, -1)))) return n;
+				if (!Object.hasOwn(this.tokens.links, M(n.slice(r + 1, -1)))) return n;
 				if (r > 1 && n.charAt(0) !== "!") {
 					let i = n.slice(1, r - 1);
 					if (this.linkInText(i)) return "[" + i.replace(e, t) + "][" + "a".repeat(n.length - r - 2) + "]";
@@ -1176,7 +1176,7 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 		if (this.options.silent) console.error(t);
 		else throw Error(t);
 	}
-}, I = class {
+}, F = class {
 	options;
 	parser;
 	constructor(e) {
@@ -1187,7 +1187,7 @@ ${d.join("\n")}`), r = r.substring(0, r.length - t.text.length) + s.text;
 	}
 	code({ text: e, lang: t, escaped: n }) {
 		let r = (t || "").match(p.notSpaceStart)?.[0], i = e ? e.replace(p.endingNewline, "") + "\n" : "";
-		return r ? "<pre><code class=\"language-" + j(r) + "\">" + (n ? i : j(i, !0)) + "</code></pre>\n" : "<pre><code>" + (n ? i : j(i, !0)) + "</code></pre>\n";
+		return r ? "<pre><code class=\"language-" + A(r) + "\">" + (n ? i : A(i, !0)) + "</code></pre>\n" : "<pre><code>" + (n ? i : A(i, !0)) + "</code></pre>\n";
 	}
 	blockquote({ tokens: e }) {
 		return `<blockquote>
@@ -1257,7 +1257,7 @@ ${e}</tr>
 		return `<em>${this.parser.parseInline(e)}</em>`;
 	}
 	codespan({ text: e }) {
-		return `<code>${j(e, !0)}</code>`;
+		return `<code>${A(e, !0)}</code>`;
 	}
 	br(e) {
 		return "<br>";
@@ -1266,24 +1266,24 @@ ${e}</tr>
 		return `<del>${this.parser.parseInline(e)}</del>`;
 	}
 	link({ href: e, title: t, text: n, tokens: r, autolink: i }) {
-		let a = i ? j(n, !0) : this.parser.parseInline(r), o = tt(e);
+		let a = i ? A(n, !0) : this.parser.parseInline(r), o = nt(e);
 		if (o === null) return a;
-		e = j(o, i);
+		e = A(o, i);
 		let s = "<a href=\"" + e + "\"";
-		return t && (s += " title=\"" + j(t) + "\""), s += ">" + a + "</a>", s;
+		return t && (s += " title=\"" + A(t) + "\""), s += ">" + a + "</a>", s;
 	}
 	image({ href: e, title: t, text: n, tokens: r }) {
 		r && (n = this.parser.parseInline(r, this.parser.textRenderer));
-		let i = tt(e);
-		if (i === null) return j(n);
+		let i = nt(e);
+		if (i === null) return A(n);
 		e = i;
-		let a = `<img src="${j(e)}" alt="${j(n)}"`;
-		return t && (a += ` title="${j(t)}"`), a += ">", a;
+		let a = `<img src="${A(e)}" alt="${A(n)}"`;
+		return t && (a += ` title="${A(t)}"`), a += ">", a;
 	}
 	text(e) {
-		return "tokens" in e && e.tokens ? this.parser.parseInline(e.tokens) : "escaped" in e && e.escaped ? e.text : j(e.text);
+		return "tokens" in e && e.tokens ? this.parser.parseInline(e.tokens) : "escaped" in e && e.escaped ? e.text : A(e.text);
 	}
-}, L = class {
+}, ut = class {
 	strong({ text: e }) {
 		return e;
 	}
@@ -1314,12 +1314,12 @@ ${e}</tr>
 	checkbox({ raw: e }) {
 		return e;
 	}
-}, R = class e {
+}, I = class e {
 	options;
 	renderer;
 	textRenderer;
 	constructor(e) {
-		this.options = e || s, this.options.renderer = this.options.renderer || new I(), this.renderer = this.options.renderer, this.renderer.options = this.options, this.renderer.parser = this, this.textRenderer = new L();
+		this.options = e || s, this.options.renderer = this.options.renderer || new F(), this.renderer = this.options.renderer, this.renderer.options = this.options, this.renderer.parser = this, this.textRenderer = new ut();
 	}
 	static parse(t, n) {
 		return new e(n).parse(t);
@@ -1467,7 +1467,7 @@ ${e}</tr>
 		}
 		return n;
 	}
-}, z = class {
+}, L = class {
 	options;
 	block;
 	constructor(e) {
@@ -1497,22 +1497,22 @@ ${e}</tr>
 		return e;
 	}
 	provideLexer(e = this.block) {
-		return e ? F.lex : F.lexInline;
+		return e ? P.lex : P.lexInline;
 	}
 	provideParser(e = this.block) {
-		return e ? R.parse : R.parseInline;
+		return e ? I.parse : I.parseInline;
 	}
-}, lt = class {
+}, dt = class {
 	defaults = o();
 	options = this.setOptions;
 	parse = this.parseMarkdown(!0);
 	parseInline = this.parseMarkdown(!1);
-	Parser = R;
-	Renderer = I;
-	TextRenderer = L;
-	Lexer = F;
-	Tokenizer = P;
-	Hooks = z;
+	Parser = I;
+	Renderer = F;
+	TextRenderer = ut;
+	Lexer = P;
+	Tokenizer = N;
+	Hooks = L;
 	constructor(...e) {
 		this.use(...e);
 	}
@@ -1563,7 +1563,7 @@ ${e}</tr>
 				}
 				"childTokens" in e && e.childTokens && (t.childTokens[e.name] = e.childTokens);
 			}), n.extensions = t), e.renderer) {
-				let t = this.defaults.renderer || new I(this.defaults);
+				let t = this.defaults.renderer || new F(this.defaults);
 				for (let n in e.renderer) {
 					if (!(n in t)) throw Error(`renderer '${n}' does not exist`);
 					if (["options", "parser"].includes(n)) continue;
@@ -1576,7 +1576,7 @@ ${e}</tr>
 				n.renderer = t;
 			}
 			if (e.tokenizer) {
-				let t = this.defaults.tokenizer || new P(this.defaults);
+				let t = this.defaults.tokenizer || new N(this.defaults);
 				for (let n in e.tokenizer) {
 					if (!(n in t)) throw Error(`tokenizer '${n}' does not exist`);
 					if ([
@@ -1593,13 +1593,13 @@ ${e}</tr>
 				n.tokenizer = t;
 			}
 			if (e.hooks) {
-				let t = this.defaults.hooks || new z();
+				let t = this.defaults.hooks || new L();
 				for (let n in e.hooks) {
 					if (!(n in t)) throw Error(`hook '${n}' does not exist`);
 					if (["options", "block"].includes(n)) continue;
 					let r = n, i = e.hooks[r], a = t[r];
-					t[r] = z.passThroughHooks.has(n) ? (e) => {
-						if (this.defaults.async && z.passThroughHooksRespectAsync.has(n)) return (async () => {
+					t[r] = L.passThroughHooks.has(n) ? (e) => {
+						if (this.defaults.async && L.passThroughHooksRespectAsync.has(n)) return (async () => {
 							let n = await i.call(t, e);
 							return a.call(t, n);
 						})();
@@ -1636,10 +1636,10 @@ ${e}</tr>
 		}, this;
 	}
 	lexer(e, t) {
-		return F.lex(e, t ?? this.defaults);
+		return P.lex(e, t ?? this.defaults);
 	}
 	parser(e, t) {
-		return R.parse(e, t ?? this.defaults);
+		return I.parse(e, t ?? this.defaults);
 	}
 	parseMarkdown(e) {
 		return (t, n) => {
@@ -1651,16 +1651,16 @@ ${e}</tr>
 			if (typeof t > "u" || t === null) return a(/* @__PURE__ */ Error("marked(): input parameter is undefined or null"));
 			if (typeof t != "string") return a(/* @__PURE__ */ Error("marked(): input parameter is of type " + Object.prototype.toString.call(t) + ", string expected"));
 			if (i.hooks && (i.hooks.options = i, i.hooks.block = e), i.async) return (async () => {
-				let n = i.hooks ? await i.hooks.preprocess(t) : t, r = await (i.hooks ? await i.hooks.provideLexer(e) : e ? F.lex : F.lexInline)(n, i), a = i.hooks ? await i.hooks.processAllTokens(r) : r;
+				let n = i.hooks ? await i.hooks.preprocess(t) : t, r = await (i.hooks ? await i.hooks.provideLexer(e) : e ? P.lex : P.lexInline)(n, i), a = i.hooks ? await i.hooks.processAllTokens(r) : r;
 				i.walkTokens && await Promise.all(this.walkTokens(a, i.walkTokens));
-				let o = await (i.hooks ? await i.hooks.provideParser(e) : e ? R.parse : R.parseInline)(a, i);
+				let o = await (i.hooks ? await i.hooks.provideParser(e) : e ? I.parse : I.parseInline)(a, i);
 				return i.hooks ? await i.hooks.postprocess(o) : o;
 			})().catch(a);
 			try {
 				i.hooks && (t = i.hooks.preprocess(t));
-				let n = (i.hooks ? i.hooks.provideLexer(e) : e ? F.lex : F.lexInline)(t, i);
+				let n = (i.hooks ? i.hooks.provideLexer(e) : e ? P.lex : P.lexInline)(t, i);
 				i.hooks && (n = i.hooks.processAllTokens(n)), i.walkTokens && this.walkTokens(n, i.walkTokens);
-				let r = (i.hooks ? i.hooks.provideParser(e) : e ? R.parse : R.parseInline)(n, i);
+				let r = (i.hooks ? i.hooks.provideParser(e) : e ? I.parse : I.parseInline)(n, i);
 				return i.hooks && (r = i.hooks.postprocess(r)), r;
 			} catch (e) {
 				return a(e);
@@ -1670,48 +1670,73 @@ ${e}</tr>
 	onError(e, t) {
 		return (n) => {
 			if (n.message += "\nPlease report this to https://github.com/markedjs/marked.", e) {
-				let e = "<p>An error occurred:</p><pre>" + j(n.message + "", !0) + "</pre>";
+				let e = "<p>An error occurred:</p><pre>" + A(n.message + "", !0) + "</pre>";
 				return t ? Promise.resolve(e) : e;
 			}
 			if (t) return Promise.reject(n);
 			throw n;
 		};
 	}
-}, B = new lt();
-function V(e, t) {
-	return B.parse(e, t);
+}, R = new dt();
+function z(e, t) {
+	return R.parse(e, t);
 }
-V.options = V.setOptions = function(e) {
-	return B.setOptions(e), V.defaults = B.defaults, c(V.defaults), V;
-}, V.getDefaults = o, V.defaults = s;
-function ut(...e) {
-	return B.use(...e), V.defaults = B.defaults, c(V.defaults), V;
+z.options = z.setOptions = function(e) {
+	return R.setOptions(e), z.defaults = R.defaults, c(z.defaults), z;
+}, z.getDefaults = o, z.defaults = s;
+function ft(...e) {
+	return R.use(...e), z.defaults = R.defaults, c(z.defaults), z;
 }
-V.use = ut, V.walkTokens = function(e, t) {
-	return B.walkTokens(e, t);
-}, V.parseInline = B.parseInline, V.Parser = R, V.parser = R.parse, V.Renderer = I, V.TextRenderer = L, V.Lexer = F, V.lexer = F.lex, V.Tokenizer = P, V.Hooks = z, V.parse = V, V.options, V.setOptions, V.walkTokens, V.parseInline, R.parse, F.lex;
+z.use = ft, z.walkTokens = function(e, t) {
+	return R.walkTokens(e, t);
+}, z.parseInline = R.parseInline, z.Parser = I, z.parser = I.parse, z.Renderer = F, z.TextRenderer = ut, z.Lexer = P, z.lexer = P.lex, z.Tokenizer = N, z.Hooks = L, z.parse = z, z.options, z.setOptions, z.walkTokens, z.parseInline, I.parse, P.lex;
 //#endregion
 //#region resources/js/markdown.js
-var H = (e) => String(e).replace(/[&<>"']/g, (e) => ({
+var pt = /* @__PURE__ */ new WeakMap();
+function mt(e, t = [], n) {
+	for (let n of e.querySelectorAll("a[data-artifact-autolink]")) t.some((e) => typeof e?.name == "string" && e.name === n.getAttribute("data-artifact-autolink")) && n.replaceWith(document.createTextNode(n.textContent));
+	for (let r of e.querySelectorAll("a")) {
+		let i = pt.get(r) || r.getAttribute("data-generated-source") || r.getAttribute("href");
+		if (!i) continue;
+		let a = !1;
+		try {
+			a = new URL(i, "https://fourmix.invalid").pathname.replace(/\/$/, "") === "/api/v3/generated-artifacts";
+		} catch {}
+		if (!a) continue;
+		pt.set(r, i), r.removeAttribute("href"), r.removeAttribute("target"), r.removeAttribute("data-generated-source"), r.setAttribute("role", "button"), r.tabIndex = 0;
+		let o = t.find((e) => e && typeof e.download_url == "string" && e.download_url === i), s = (t) => {
+			if (t.preventDefault(), t.stopPropagation(), o && typeof n == "function") {
+				n(o);
+				return;
+			}
+			let r = e.querySelector("[data-generated-link-notice]");
+			r || (r = document.createElement("p"), r.setAttribute("data-generated-link-notice", ""), r.setAttribute("role", "status"), e.append(r)), r.textContent = "このリンクは利用できません。「作成したファイル」の保存ボタンをご利用ください。表示されない場合はファイルを作成し直してください。";
+		};
+		r.onclick = s, r.onkeydown = (e) => {
+			(e.key === "Enter" || e.key === " ") && s(e);
+		};
+	}
+}
+var B = (e) => String(e).replace(/[&<>"']/g, (e) => ({
 	"&": "&amp;",
 	"<": "&lt;",
 	">": "&gt;",
 	"\"": "&quot;",
 	"'": "&#39;"
-})[e]), dt = {}, ft = 0, pt = /* @__PURE__ */ new Set([
+})[e]), ht = {}, gt = 0, _t = /* @__PURE__ */ new Set([
 	"image/png",
 	"image/jpeg",
 	"image/webp",
 	"image/gif",
 	"image/avif"
-]), U = (e, t = "", n = "") => {
+]), V = (e, t = "", n = "") => {
 	let r = document.createElement(e);
 	return r.textContent = t, r.className = n, r;
 };
-function mt(e = {}) {
-	dt = { ...e };
+function vt(e = {}) {
+	ht = { ...e };
 }
-function W(e) {
+function H(e) {
 	if (typeof e != "string" || /[\u0000-\u0020\u007f]|&(?:#(?:x[0-9a-f]+|[0-9]+)|[a-z]+);/i.test(e)) return null;
 	try {
 		let t = new URL(e, window.location.href);
@@ -1720,23 +1745,23 @@ function W(e) {
 		return null;
 	}
 }
-function ht(e, t) {
+function yt(e, t) {
 	if (!e) return null;
 	try {
 		if (/\.svg(?:z)?$/i.test(decodeURIComponent(e.pathname))) return null;
 	} catch {
 		return null;
 	}
-	let n = e.origin === window.location.origin, r = (t.attachmentUrls || []).some((t) => W(t)?.href === e.href), i = (t.attachmentUrlPrefixes || []).some((t) => {
-		let n = W(t);
+	let n = e.origin === window.location.origin, r = (t.attachmentUrls || []).some((t) => H(t)?.href === e.href), i = (t.attachmentUrlPrefixes || []).some((t) => {
+		let n = H(t);
 		return n && n.origin === window.location.origin && !n.search && !n.hash && n.pathname.endsWith("/") && e.pathname.startsWith(n.pathname);
-	}), a = n && (r || i), o = (t.allowedImageOrigins || []).some((t) => W(t)?.origin === e.origin);
+	}), a = n && (r || i), o = (t.allowedImageOrigins || []).some((t) => H(t)?.origin === e.origin);
 	return {
 		attachment: a,
 		auto: a || o
 	};
 }
-function gt(e, t) {
+function bt(e, t) {
 	let n = /* @__PURE__ */ new Uint8Array(64), r = 0;
 	for (let t of e) {
 		let e = t.subarray(0, n.length - r);
@@ -1758,7 +1783,7 @@ function gt(e, t) {
 		255
 	]) : t === "image/gif" ? ["GIF87a", "GIF89a"].includes(a(0, 6)) : t === "image/webp" ? a(0, 4) === "RIFF" && a(8, 12) === "WEBP" : t === "image/avif" && a(4, 8) === "ftyp" && /(?:avif|avis)/.test(a(8, r));
 }
-async function _t(e, t, n, r, i, a) {
+async function xt(e, t, n, r, i, a) {
 	r.textContent = "画像を読み込んでいます…";
 	let o = await fetch(e.href, {
 		credentials: t.attachment ? "same-origin" : "omit",
@@ -1766,7 +1791,7 @@ async function _t(e, t, n, r, i, a) {
 		referrerPolicy: "no-referrer",
 		signal: i
 	}), s = o.headers.get("content-type")?.split(";")[0].trim().toLowerCase();
-	if (!o.ok || !pt.has(s)) throw Error("対応する形式の画像を取得できませんでした。");
+	if (!o.ok || !_t.has(s)) throw Error("対応する形式の画像を取得できませんでした。");
 	let c = 8388608;
 	if (Number(o.headers.get("content-length")) > c) throw Error("画像が大きすぎます（上限8MB）。");
 	let l = o.body?.getReader();
@@ -1782,7 +1807,7 @@ async function _t(e, t, n, r, i, a) {
 	} finally {
 		l.releaseLock();
 	}
-	if (i.throwIfAborted(), !gt(u, s)) throw Error("画像の形式を確認できませんでした。");
+	if (i.throwIfAborted(), !bt(u, s)) throw Error("画像の形式を確認できませんでした。");
 	let f = URL.createObjectURL(new Blob(u, { type: s }));
 	n.onload = () => {
 		URL.revokeObjectURL(f), r.textContent = "";
@@ -1792,8 +1817,8 @@ async function _t(e, t, n, r, i, a) {
 		URL.revokeObjectURL(f), n.removeAttribute("src");
 	}, { once: !0 }), n.src = f;
 }
-function vt(t, n, r, i) {
-	let a = t.parentElement, o = U("div", "", "fi-code-toolbar fi:flex fi:items-center fi:justify-between fi:gap-3"), s = U("span", n || "テキスト"), c = U("button", "コピー", "fi-button fi-button-ghost fi:whitespace-nowrap");
+function St(t, n, r, i) {
+	let a = t.parentElement, o = V("div", "", "fi-code-toolbar fi:flex fi:items-center fi:justify-between fi:gap-3"), s = V("span", n || "テキスト"), c = V("button", "コピー", "fi-button fi-button-ghost fi:whitespace-nowrap");
 	c.type = "button", c.setAttribute("aria-live", "polite");
 	let l = t.textContent;
 	c.onclick = async () => {
@@ -1817,18 +1842,18 @@ function vt(t, n, r, i) {
 		t.replaceChildren(a);
 	}).catch(() => {}));
 }
-function G(t, n = {}) {
+function U(t, n = {}) {
 	let r = {
-		...dt,
+		...ht,
 		...n
 	}, i = new AbortController(), a = [], o = [], s = document.createElement("div");
 	s.className = "fi-markdown fi:min-w-0 fi:space-y-3 fi:break-words", s.dispose = () => i.abort();
-	let c = `fi-embed-${++ft}-`, l = new lt({
+	let c = `fi-embed-${++gt}-`, l = new dt({
 		gfm: !0,
 		breaks: !0,
 		async: !1,
 		renderer: {
-			html: ({ text: e }) => H(e),
+			html: ({ text: e }) => B(e),
 			image: (e) => {
 				let t = c + o.length;
 				return o.push({
@@ -1844,14 +1869,16 @@ function G(t, n = {}) {
 				}), `<div id="${t}"></div>`;
 			},
 			link: function(e) {
-				let t = W(e.href), n = this.parser.parseInline(e.tokens);
-				return t ? `<a href="${H(t.href)}"${e.title ? ` title="${H(e.title)}"` : ""}>${n}</a>` : n;
+				let t = H(e.href), n = this.parser.parseInline(e.tokens);
+				if (t && /^\/connection-actions\/[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(t.pathname) && !t.search && !t.hash) return `${n}（正式な操作確認カードで内容を確認してください）`;
+				let r = e.raw === e.text && !/^(?:https?:\/\/|www\.)/i.test(e.raw || "") ? ` data-artifact-autolink="${B(e.text)}"` : "", i = t?.pathname.replace(/\/$/, "") === "/api/v3/generated-artifacts" ? ` data-generated-source="${B(e.href)}"` : "";
+				return t ? `<a href="${B(t.href)}"${i}${r}${e.title ? ` title="${B(e.title)}"` : ""}>${n}</a>` : n;
 			}
 		}
 	});
 	if (!e.isSupported) return s.textContent = String(t), s.ready = Promise.resolve(), s;
 	let u = String(t);
-	s.append(e.sanitize(u.length <= 2e5 ? l.parse(u) : `<p>${H(u)}</p>`, {
+	s.append(e.sanitize(u.length <= 2e5 ? l.parse(u) : `<p>${B(u)}</p>`, {
 		RETURN_DOM_FRAGMENT: !0,
 		ALLOWED_TAGS: /* @__PURE__ */ "div.span.p.br.strong.em.del.blockquote.ul.ol.li.code.pre.table.thead.tbody.tr.th.td.a.h1.h2.h3.h4.h5.h6.hr".split("."),
 		ALLOWED_ATTR: [
@@ -1877,39 +1904,45 @@ function G(t, n = {}) {
 		let t = s.querySelector(`#${e.id}`);
 		if (t) {
 			if (t.removeAttribute("id"), e.code) {
-				let n = (e.code.lang || "").split(/\s+/)[0].toLowerCase(), o = /^[a-z0-9_.+#-]{1,40}$/.test(n) ? n : "", s = U("div", "", "fi-code-block fi:min-w-0 fi:overflow-hidden"), c = U("pre"), l = U("code", e.code.text);
-				if (c.append(l), s.append(c), t.replaceWith(s), r.streaming || vt(l, o, a, i.signal), !r.streaming && o === "mermaid" && ++d <= 6) {
-					let t = U("figure", "", "fi-diagram fi:max-w-full fi:overflow-x-auto"), n = U("p", "図を作成しています…", "fi:my-2 fi:text-sm");
+				let n = (e.code.lang || "").split(/\s+/)[0].toLowerCase(), o = /^[a-z0-9_.+#-]{1,40}$/.test(n) ? n : "", s = V("div", "", "fi-code-block fi:min-w-0 fi:overflow-hidden"), c = V("pre"), l = V("code", e.code.text);
+				if (c.append(l), s.append(c), t.replaceWith(s), r.streaming || St(l, o, a, i.signal), !r.streaming && o === "mermaid" && ++d <= 6) {
+					let t = V("figure", "", "fi-diagram fi:max-w-full fi:overflow-x-auto"), n = V("p", "図を作成しています…", "fi:my-2 fi:text-sm");
 					n.setAttribute("role", "status"), t.append(n), s.before(t), a.push(import("./mermaid-D3tOjArB.js").then(({ renderDiagram: t }) => t(e.code.text, { signal: i.signal })).then((e) => {
 						if (i.signal.aborted) return;
-						t.replaceChildren(e);
-						let n = U("details");
-						n.append(U("summary", "図のコードを確認"), s), t.append(n);
+						let n = V("div", "", "fi-diagram-canvas");
+						n.tabIndex = 0, n.setAttribute("role", "region"), n.setAttribute("aria-label", "図（拡大時は上下左右にスクロールできます）"), n.append(e);
+						let r = e.getAttribute("width"), a = (e.getAttribute("viewBox") || "").trim().split(/[\s,]+/).map(Number), o = a.length === 4 && a.every(Number.isFinite) ? Math.min(1920, Math.max(1, a[2])) : Number(r), c = V("button", "図を拡大", "fi-button fi-button-secondary");
+						c.type = "button", c.setAttribute("aria-pressed", "false"), c.onclick = () => {
+							let t = c.getAttribute("aria-pressed") !== "true";
+							c.setAttribute("aria-pressed", String(t)), c.textContent = t ? "図を元の大きさに戻す" : "図を拡大", e.setAttribute("width", t ? String(o) : r), e.style.maxWidth = t ? "none" : "100%";
+						}, t.replaceChildren(c, n);
+						let l = V("details");
+						l.append(V("summary", "図のコードを確認"), s), t.append(l);
 					}).catch(() => {
 						i.signal.aborted || (n.textContent = "図を表示できませんでした。以下のコードを確認してください。");
 					}));
-				} else !r.streaming && o === "mermaid" && s.before(U("p", "1つの回答で表示できる図は6つまでです。以下のコードを確認してください。", "fi:text-sm"));
+				} else !r.streaming && o === "mermaid" && s.before(V("p", "1つの回答で表示できる図は6つまでです。以下のコードを確認してください。", "fi:text-sm"));
 			} else {
 				if (r.streaming) {
-					t.replaceWith(U("span", `${e.token.text || "画像"}（回答後に表示）`));
+					t.replaceWith(V("span", `${e.token.text || "画像"}（回答後に表示）`));
 					continue;
 				}
-				let n = W(e.token.href), o = ht(n, r);
+				let n = H(e.token.href), o = yt(n, r);
 				if (!o) {
-					t.replaceWith(U("span", `${e.token.text || "画像"}（この画像形式・URLは表示できません）`));
+					t.replaceWith(V("span", `${e.token.text || "画像"}（この画像形式・URLは表示できません）`));
 					continue;
 				}
-				let s = U("span", "", "fi-image-placeholder fi:inline-flex fi:max-w-full fi:flex-col fi:gap-2"), c = U("span", o.auto ? "画像を読み込んでいます…" : "外部画像です。読み込むと画像の提供元にアクセスします。", "fi:text-sm");
+				let s = V("span", "", "fi-image-placeholder fi:inline-flex fi:max-w-full fi:flex-col fi:gap-2"), c = V("span", o.auto ? "画像を読み込んでいます…" : "外部画像です。読み込むと画像の提供元にアクセスします。", "fi:text-sm");
 				c.setAttribute("role", "status");
-				let l = U("img");
+				let l = V("img");
 				l.alt = e.token.text || "AI回答の画像", l.className = "fi:max-w-full fi:h-auto fi:rounded-lg", l.referrerPolicy = "no-referrer";
-				let u = U("button", o.auto ? "再読み込み" : "画像を読み込む", "fi-button fi-button-secondary fi:whitespace-nowrap");
+				let u = V("button", o.auto ? "再読み込み" : "画像を読み込む", "fi-button fi-button-secondary fi:whitespace-nowrap");
 				u.type = "button";
 				let d = async () => {
 					if (!i.signal.aborted) {
 						u.disabled = !0;
 						try {
-							await _t(n, o, l, c, i.signal, () => {
+							await xt(n, o, l, c, i.signal, () => {
 								u.hidden = !1;
 							}), i.signal.aborted || (s.append(l), u.hidden = !0);
 						} catch (e) {
@@ -1932,11 +1965,11 @@ function G(t, n = {}) {
 			subtree: !0
 		}), i.signal.addEventListener("abort", () => t.disconnect(), { once: !0 });
 	}
-	return s;
+	return mt(s), s;
 }
 //#endregion
 //#region resources/js/chat.js
-var yt = class {
+var Ct = class {
 	constructor(e = "/fourmix-intelligence", t, n = "page") {
 		this.base = e.replace(/\/$/, ""), this.csrfToken = t, this.surfaceName = n;
 	}
@@ -2008,6 +2041,19 @@ var yt = class {
 			}
 		});
 	}
+	runControl(e, t, n, r = !1) {
+		return this.call("run-control", {
+			method: "POST",
+			body: {
+				surface: this.surfaceName,
+				alias: e,
+				...this.selectionBody(),
+				conversation_id: t,
+				run_id: n,
+				cancel: r
+			}
+		});
+	}
 	attachments(e, t) {
 		return this.call(`attachments?${new URLSearchParams({
 			surface: this.surfaceName,
@@ -2033,6 +2079,13 @@ var yt = class {
 			...this.selectionQuery()
 		})}`;
 	}
+	artifactUrl(e, t, n) {
+		return `${this.base}/artifacts/${encodeURIComponent(t)}/${encodeURIComponent(n)}/content?${new URLSearchParams({
+			surface: this.surfaceName,
+			alias: e,
+			...this.selectionQuery()
+		})}`;
+	}
 	deleteAttachment(e, t, n) {
 		return this.call(`attachments/${encodeURIComponent(t)}/${encodeURIComponent(n)}`, {
 			method: "DELETE",
@@ -2045,24 +2098,24 @@ var yt = class {
 	}
 };
 window.FourmixIntelligenceSDK = {
-	Client: yt,
+	Client: Ct,
 	request: $,
 	Rendering: {
-		configure: mt,
-		render: G
+		configure: vt,
+		render: U
 	}
 };
-var K = (e, t = "", n = "") => {
+var W = (e, t = "", n = "") => {
 	let r = document.createElement(e);
 	return r.textContent = t, r.className = n, r;
-}, q = {
+}, G = {
 	confirmation_required: "確認待ち",
 	succeeded: "完了",
 	rejected: "実行せず終了",
 	unknown_effect: "結果の確認が必要",
 	running: "処理中",
 	expired: "確認期限切れ"
-}, bt = (e, t) => {
+}, wt = (e, t) => {
 	try {
 		return new Intl.DateTimeFormat("ja-JP", {
 			...t ? { timeZone: t } : {},
@@ -2073,7 +2126,7 @@ var K = (e, t = "", n = "") => {
 		return "";
 	}
 };
-function J(e) {
+function K(e) {
 	let t = {
 		chat: "M4 4h16v12H9l-5 4V4Z",
 		plus: "M12 5v14M5 12h14",
@@ -2101,11 +2154,11 @@ function J(e) {
 	let r = document.createElementNS("http://www.w3.org/2000/svg", "path");
 	return r.setAttribute("d", t[e] || t.chat), n.append(r), n;
 }
-var Y = (e, t, n = "primary", r) => {
-	let i = K("button", "", `fi-button ${n === "primary" ? "" : `fi-button-${n}`} fi:gap-2 fi:whitespace-nowrap`);
-	return i.type = "button", i.onclick = t, r && i.append(J(r)), e && i.append(K("span", e)), i;
-}, xt = 0, St = 0;
-function Ct(e) {
+var q = (e, t, n = "primary", r) => {
+	let i = W("button", "", `fi-button ${n === "primary" ? "" : `fi-button-${n}`} fi:gap-2 fi:whitespace-nowrap`);
+	return i.type = "button", i.onclick = t, r && i.append(K(r)), e && i.append(W("span", e)), i;
+}, Tt = 0, Et = 0;
+function Dt(e) {
 	if (typeof e != "string" || !e.trim()) return null;
 	try {
 		let t = new URL(e, location.origin);
@@ -2114,36 +2167,36 @@ function Ct(e) {
 		return null;
 	}
 }
-function wt(e, t) {
+function J(e, t) {
 	t.replaceChildren();
 	let n = e.data;
 	if (e.state === "succeeded") {
 		if (n && typeof n == "object" && !Array.isArray(n)) {
-			typeof n.message == "string" && n.message.trim() && t.append(K("p", n.message, "fi:leading-relaxed fi:whitespace-pre-wrap fi:break-words"));
-			let e = Ct(n.url);
+			typeof n.message == "string" && n.message.trim() && t.append(W("p", n.message, "fi:leading-relaxed fi:whitespace-pre-wrap fi:break-words"));
+			let e = Dt(n.url);
 			if (e) {
-				let n = K("a", "業務画面で結果を見る", "fi-button");
+				let n = W("a", "業務画面で結果を見る", "fi-button");
 				n.href = e, t.append(n);
 			}
-		} else typeof n == "string" && t.append(K("p", n, "fi:whitespace-pre-wrap fi:break-words"));
-	} else typeof e.message == "string" && t.append(K("p", e.message, "fi:leading-relaxed fi:whitespace-pre-wrap fi:break-words"));
+		} else typeof n == "string" && t.append(W("p", n, "fi:whitespace-pre-wrap fi:break-words"));
+	} else typeof e.message == "string" && t.append(W("p", e.message, "fi:leading-relaxed fi:whitespace-pre-wrap fi:break-words"));
 	if (n !== void 0 || e.preview !== void 0) {
-		let r = K("details", "", "fi:rounded-xl fi:bg-raised fi:p-3");
-		r.append(K("summary", "結果の詳細", "fi:cursor-pointer fi:text-sm fi:text-secondary"), K("pre", JSON.stringify(n ?? e.preview, null, 2), "fi:mt-3 fi:whitespace-pre-wrap fi:break-words fi:text-xs")), t.append(r);
+		let r = W("details", "", "fi:rounded-xl fi:bg-raised fi:p-3");
+		r.append(W("summary", "結果の詳細", "fi:cursor-pointer fi:text-sm fi:text-secondary"), W("pre", JSON.stringify(n ?? e.preview, null, 2), "fi:mt-3 fi:whitespace-pre-wrap fi:break-words fi:text-xs")), t.append(r);
 	}
 }
-async function Tt(e, t, n, r) {
-	let i = K("dialog", "", "fi-dialog fi:open:flex fi:open:flex-col fi:w-full fi:max-w-xl fi:max-h-[85dvh] fi:overflow-hidden fi:rounded-2xl fi:border fi:border-line fi:bg-surface fi:p-0 fi:text-ink"), a = K("header", "", "fi-dialog-header fi:flex fi:shrink-0 fi:items-start fi:gap-3 fi:border-b fi:border-line fi:px-6 fi:py-5"), o = K("span", "", "fi:flex fi:size-10 fi:shrink-0 fi:items-center fi:justify-center fi:rounded-xl fi:bg-raised fi:text-secondary");
-	o.append(J("shield"));
-	let s = K("div", "", "fi:min-w-0 fi:space-y-1"), c = K("h2", "業務操作の確認", "fi:text-lg fi:font-semibold");
-	c.id = `fi-action-title-${++xt}`;
-	let l = K("p", "操作の内容を読み込んでいます…", "fi:text-sm fi:text-secondary fi:break-words");
+async function Ot(e, t, n, r) {
+	let i = W("dialog", "", "fi-dialog fi:open:flex fi:open:flex-col fi:w-full fi:max-w-xl fi:max-h-[85dvh] fi:overflow-hidden fi:rounded-2xl fi:border fi:border-line fi:bg-surface fi:p-0 fi:text-ink"), a = W("header", "", "fi-dialog-header fi:flex fi:shrink-0 fi:items-start fi:gap-3 fi:border-b fi:border-line fi:px-6 fi:py-5"), o = W("span", "", "fi:flex fi:size-10 fi:shrink-0 fi:items-center fi:justify-center fi:rounded-xl fi:bg-raised fi:text-secondary");
+	o.append(K("shield"));
+	let s = W("div", "", "fi:min-w-0 fi:space-y-1"), c = W("h2", "業務操作の確認", "fi:text-lg fi:font-semibold");
+	c.id = `fi-action-title-${++Tt}`;
+	let l = W("p", "操作の内容を読み込んでいます…", "fi:text-sm fi:text-secondary fi:break-words");
 	l.setAttribute("role", "status"), l.setAttribute("aria-live", "polite"), s.append(c, l), a.append(o, s), i.setAttribute("aria-labelledby", c.id), i.setAttribute("aria-busy", "true");
-	let u = K("div", "", "fi-dialog-body fi:min-h-0 fi:flex-1 fi:overflow-y-auto fi:space-y-5 fi:px-6 fi:py-5"), d = K("footer", "", "fi-dialog-footer fi:flex fi:shrink-0 fi:flex-wrap fi:items-center fi:justify-end fi:gap-2 fi:border-t fi:border-line fi:px-6 fi:py-4");
-	d.append(Y("閉じる", () => i.close(), "secondary")), i.append(a, u, d), n.append(i), i.showModal(), i.addEventListener("close", () => i.remove(), { once: !0 });
+	let u = W("div", "", "fi-dialog-body fi:min-h-0 fi:flex-1 fi:overflow-y-auto fi:space-y-5 fi:px-6 fi:py-5"), d = W("footer", "", "fi-dialog-footer fi:flex fi:shrink-0 fi:flex-wrap fi:items-center fi:justify-end fi:gap-2 fi:border-t fi:border-line fi:px-6 fi:py-4");
+	d.append(q("閉じる", () => i.close(), "secondary")), i.append(a, u, d), n.append(i), i.showModal(), i.addEventListener("close", () => i.remove(), { once: !0 });
 	try {
 		let i = await e.call(`actions/${encodeURIComponent(t)}`);
-		l.textContent = `${i.operation} · ${q[i.state] || "状態を確認できません"}`, i.state !== "confirmation_required" && (c.textContent = "業務操作の結果");
+		l.textContent = `${i.operation} · ${G[i.state] || "状態を確認できません"}`, i.state !== "confirmation_required" && (c.textContent = "業務操作の結果");
 		let a = new CustomEvent("fourmix:review", {
 			detail: {
 				action: i,
@@ -2154,16 +2207,16 @@ async function Tt(e, t, n, r) {
 			cancelable: !0
 		});
 		n.dispatchEvent(a);
-		let o = !1, s = Ct(i.url);
+		let o = !1, s = Dt(i.url);
 		if (s) {
-			let e = K("a", "このアプリケーションの確認画面で確認", "fi-button");
+			let e = W("a", "このアプリケーションの確認画面で確認", "fi-button");
 			e.href = s, u.append(e), o = !0;
 		}
-		let f = K("div", "", "fi:space-y-3");
-		if (u.append(f), a.defaultPrevented || (i.state === "confirmation_required" ? o || f.append(K("pre", JSON.stringify(i.preview ?? {}, null, 2), "fi:whitespace-pre-wrap fi:break-words fi:rounded-lg fi:bg-raised fi:p-4 fi:text-sm")) : wt(i, f)), i.expires_at && u.append(K("p", `確認期限：${bt(i.expires_at, e.timezone)}`, "fi:text-sm fi:text-secondary")), i.state === "confirmation_required" && !o) {
-			let n = K("label", "", "fi:flex fi:items-start fi:gap-3 fi:rounded-xl fi:bg-raised fi:p-4 fi:text-sm fi:leading-relaxed"), i = K("input", "", "fi:mt-1 fi:shrink-0");
-			i.type = "checkbox", n.append(i, K("span", "対象と変更内容を確認しました。"));
-			let o = K("div", "", "fi:flex fi:flex-wrap fi:items-center fi:gap-2"), s = Y("確認して実行", () => m("confirm")), p = Y("実行しない", () => m("reject"), "danger");
+		let f = W("div", "", "fi:space-y-3");
+		if (u.append(f), a.defaultPrevented || (i.state === "confirmation_required" ? o || f.append(W("pre", JSON.stringify(i.preview ?? {}, null, 2), "fi:whitespace-pre-wrap fi:break-words fi:rounded-lg fi:bg-raised fi:p-4 fi:text-sm")) : J(i, f)), i.expires_at && u.append(W("p", `確認期限：${wt(i.expires_at, e.timezone)}`, "fi:text-sm fi:text-secondary")), i.state === "confirmation_required" && !o) {
+			let n = W("label", "", "fi:flex fi:items-start fi:gap-3 fi:rounded-xl fi:bg-raised fi:p-4 fi:text-sm fi:leading-relaxed"), i = W("input", "", "fi:mt-1 fi:shrink-0");
+			i.type = "checkbox", n.append(i, W("span", "対象と変更内容を確認しました。"));
+			let o = W("div", "", "fi:flex fi:flex-wrap fi:items-center fi:gap-2"), s = q("確認して実行", () => m("confirm")), p = q("実行しない", () => m("reject"), "danger");
 			s.disabled = !0, i.onchange = () => {
 				s.disabled = !i.checked;
 			};
@@ -2179,11 +2232,11 @@ async function Tt(e, t, n, r) {
 					l.textContent = `${e.message} 再実行の前に操作履歴を確認してください。`;
 					return;
 				}
-				l.textContent = q[d.state] || "状態を確認できません", c.textContent = "業務操作の結果", n.remove(), o.remove(), a.defaultPrevented || wt(d, f);
+				l.textContent = G[d.state] || "状態を確認できません", c.textContent = "業務操作の結果", n.remove(), o.remove(), a.defaultPrevented || J(d, f);
 				try {
 					await r(d);
 				} catch {
-					l.textContent = `${q[d.state] || "結果を受信しました"}。操作一覧を更新できませんでした。再読み込みして確認してください。`;
+					l.textContent = `${G[d.state] || "結果を受信しました"}。操作一覧を更新できませんでした。再読み込みして確認してください。`;
 				}
 				document.defaultView?.dispatchEvent(new CustomEvent("fourmix:action-changed", { detail: {
 					id: t,
@@ -2198,7 +2251,7 @@ async function Tt(e, t, n, r) {
 		i.setAttribute("aria-busy", "false");
 	}
 }
-var Et = class extends HTMLElement {
+var kt = class extends HTMLElement {
 	connectedCallback() {
 		if (this.surfaceHandler ||= (e) => {
 			let t = Array.isArray(e.detail) && e.detail.find((e) => e.name === this.getAttribute("surface"));
@@ -2207,52 +2260,50 @@ var Et = class extends HTMLElement {
 			this.mergePageHeader();
 			return;
 		}
-		this.initialized = !0, this.api = new yt(this.getAttribute("api-base") || "/fourmix-intelligence", this.getAttribute("csrf-token"), this.getAttribute("surface") || "page"), this.conversationId = this.getAttribute("conversation-id") || null, this.attachments = [], this.attachmentMetadata = /* @__PURE__ */ new Map(), this.attachmentPolicy = null, this.panel = K("section", "", "fi-chat"), this.append(this.panel);
-		let e = this.toolbar = K("header", "", "fi-chat-toolbar"), t = K("label", "", "fi-chat-agent");
-		t.append(J("chat"), K("span", "使用するAI", "fi:sr-only")), this.agentTitle = K("span", this.getAttribute("assistant-name") || "AIアシスタント", "fi-chat-agent-title"), t.append(this.agentTitle), this.activeAlias = "", this.fresh = Y("新しい会話", () => {
-			this.isBusy() || (this.resetConversation(), this.recover());
-		}, "ghost", "plus"), this.fresh.classList.add("fi-chat-header-button"), this.fresh.setAttribute("aria-label", "新しい会話"), this.fresh.title = "新しい会話", this.retry = Y("", () => this.recover(), "ghost", "refresh"), this.retry.classList.add("fi-chat-icon-button"), this.retry.setAttribute("aria-label", "AIと履歴を再読み込み"), this.retry.title = "AIと履歴を再読み込み", this.history = Y("会話履歴", () => {
+		this.initialized = !0, this.api = new Ct(this.getAttribute("api-base") || "/fourmix-intelligence", this.getAttribute("csrf-token"), this.getAttribute("surface") || "page"), this.conversationId = this.getAttribute("conversation-id") || null, this.attachments = [], this.attachmentMetadata = /* @__PURE__ */ new Map(), this.attachmentPolicy = null, this.artifactDownloads = /* @__PURE__ */ new Set(), this.panel = W("section", "", "fi-chat"), this.append(this.panel);
+		let e = this.toolbar = W("header", "", "fi-chat-toolbar"), t = W("label", "", "fi-chat-agent");
+		t.append(K("chat"), W("span", "使用するAI", "fi:sr-only")), this.agentTitle = W("span", this.getAttribute("assistant-name") || "AIアシスタント", "fi-chat-agent-title"), t.append(this.agentTitle), this.activeAlias = "", this.fresh = q("新しい会話", () => {
+			this.isBusy() || this.sendUncertain || (this.resetConversation(), this.recover());
+		}, "ghost", "plus"), this.fresh.classList.add("fi-chat-header-button"), this.fresh.setAttribute("aria-label", "新しい会話"), this.fresh.title = "新しい会話", this.retry = q("", () => this.recover(), "ghost", "refresh"), this.retry.classList.add("fi-chat-icon-button"), this.retry.setAttribute("aria-label", "AIと履歴を再読み込み"), this.retry.title = "AIと履歴を再読み込み", this.history = q("会話履歴", () => {
 			this.isBusy() || this.toggleHistory();
-		}, "ghost", "history"), this.history.classList.add("fi-chat-header-button"), this.history.setAttribute("aria-label", "会話履歴"), this.history.title = "会話履歴", this.history.setAttribute("aria-expanded", "false"), this.businessStatus = K("a", "", "fi-chat-business-status"), this.businessStatus.hidden = !0, e.append(t, this.businessStatus, this.history, this.fresh, this.retry), this.panel.append(e), this.mergePageHeader();
+		}, "ghost", "history"), this.history.classList.add("fi-chat-header-button"), this.history.setAttribute("aria-label", "会話履歴"), this.history.title = "会話履歴", this.history.setAttribute("aria-expanded", "false"), this.businessStatus = W("a", "", "fi-chat-business-status"), this.businessStatus.hidden = !0, e.append(t, this.businessStatus, this.history, this.fresh, this.retry), this.panel.append(e), this.mergePageHeader();
 		let n = this.getAttribute("history-layout");
-		if (this.historyLayout = ["drawer", "dropdown"].includes(n) ? n : this.closest?.("fourmix-intelligence-floating-chat") ? "dropdown" : "drawer", this.historyPanel = K("div", "", `fi-chat-history-panel fi-chat-history-${this.historyLayout}`), this.historyPanel.hidden = !0, this.historyPanel.id = `fi-chat-history-${++St}`, this.history.setAttribute("aria-controls", this.historyPanel.id), this.historyLayout === "drawer") {
-			let e = Y("", () => this.toggleHistory(!1), "ghost");
+		if (this.historyLayout = ["drawer", "dropdown"].includes(n) ? n : this.closest?.("fourmix-intelligence-floating-chat") ? "dropdown" : "drawer", this.historyPanel = W("div", "", `fi-chat-history-panel fi-chat-history-${this.historyLayout}`), this.historyPanel.hidden = !0, this.historyPanel.id = `fi-chat-history-${++Et}`, this.history.setAttribute("aria-controls", this.historyPanel.id), this.historyLayout === "drawer") {
+			let e = q("", () => this.toggleHistory(!1), "ghost");
 			e.className = "fi-chat-history-backdrop", e.setAttribute("aria-label", "会話履歴を閉じる"), e.tabIndex = -1, this.historyPanel.append(e);
 		}
-		let r = K("aside", "", "fi-chat-history-content");
+		let r = W("aside", "", "fi-chat-history-content");
 		r.setAttribute("role", "region");
-		let i = K("header", "", "fi-chat-history-header"), a = K("h2", "会話履歴");
-		a.id = `${this.historyPanel.id}-title`, r.setAttribute("aria-labelledby", a.id), this.historyClose = Y("", () => this.toggleHistory(!1), "ghost", "close"), this.historyClose.classList.add("fi-chat-icon-button"), this.historyClose.setAttribute("aria-label", "会話履歴を閉じる"), i.append(a, this.historyClose), r.append(i), this.historyStatus = K("p", "会話履歴はまだありません", "fi-chat-history-status"), this.historyStatus.setAttribute("role", "status"), this.historyStatus.setAttribute("aria-live", "polite"), this.historyList = K("div", "", "fi-chat-history-list"), this.historyList.setAttribute("aria-label", "これまでの会話"), r.append(this.historyStatus, this.historyList), this.historyPanel.append(r), this.panel.append(this.historyPanel), this.panel.onkeydown = (e) => {
+		let i = W("header", "", "fi-chat-history-header"), a = W("h2", "会話履歴");
+		a.id = `${this.historyPanel.id}-title`, r.setAttribute("aria-labelledby", a.id), this.historyClose = q("", () => this.toggleHistory(!1), "ghost", "close"), this.historyClose.classList.add("fi-chat-icon-button"), this.historyClose.setAttribute("aria-label", "会話履歴を閉じる"), i.append(a, this.historyClose), r.append(i), this.historyStatus = W("p", "会話履歴はまだありません", "fi-chat-history-status"), this.historyStatus.setAttribute("role", "status"), this.historyStatus.setAttribute("aria-live", "polite"), this.historyList = W("div", "", "fi-chat-history-list"), this.historyList.setAttribute("aria-label", "これまでの会話"), r.append(this.historyStatus, this.historyList), this.historyPanel.append(r), this.panel.append(this.historyPanel), this.panel.onkeydown = (e) => {
 			e.key === "Escape" && !this.historyPanel.hidden && (e.preventDefault(), e.stopPropagation(), this.toggleHistory(!1));
-		}, this.notice = K("p", "", "fi-chat-notice fi:shrink-0 fi:px-5 fi:py-3 fi:text-sm fi:leading-relaxed fi:text-secondary"), this.notice.hidden = !0, this.notice.setAttribute("role", "status"), this.notice.setAttribute("aria-live", "polite"), this.notice.setAttribute("aria-atomic", "true"), this.panel.append(this.notice), this.setupLink = K("a", "接続とチャットを設定", "fi:shrink-0 fi:px-5 fi:py-2 fi:text-sm fi:underline fi:underline-offset-4"), this.setupLink.href = `${this.api.base}#fi-surfaces`, this.setupLink.hidden = !0, this.panel.append(this.setupLink), this.viewport = K("div", "", "fi-chat-viewport fi:min-h-0 fi:flex-1 fi:overflow-y-auto fi:overscroll-contain fi:px-5 fi:py-6 fi:sm:px-7"), this.empty = K("div", "", "fi-chat-empty fi:flex fi:min-h-52 fi:h-full fi:flex-col fi:items-center fi:justify-center fi:gap-4 fi:py-6 fi:text-center");
-		let o = K("div", "", "fi:flex fi:size-14 fi:shrink-0 fi:items-center fi:justify-center fi:rounded-2xl fi:bg-raised fi:text-secondary");
-		o.append(J("chat")), this.empty.append(o, K("h2", "どのようなお手伝いをしましょうか？", "fi:text-lg fi:font-semibold fi:tracking-tight"), K("p", "質問や相談したいことを入力してください。", "fi:max-w-sm fi:text-sm fi:leading-relaxed fi:text-secondary"));
-		let s = K("div", "", "fi:flex fi:flex-wrap fi:justify-center fi:gap-2 fi:pt-1");
+		}, this.notice = W("p", "", "fi-chat-notice fi:shrink-0 fi:px-5 fi:py-3 fi:text-sm fi:leading-relaxed fi:text-secondary"), this.notice.hidden = !0, this.notice.setAttribute("role", "status"), this.notice.setAttribute("aria-live", "polite"), this.notice.setAttribute("aria-atomic", "true"), this.panel.append(this.notice), this.setupLink = W("a", "接続とチャットを設定", "fi:shrink-0 fi:px-5 fi:py-2 fi:text-sm fi:underline fi:underline-offset-4"), this.setupLink.href = `${this.api.base}#fi-surfaces`, this.setupLink.hidden = !0, this.panel.append(this.setupLink), this.viewport = W("div", "", "fi-chat-viewport fi:min-h-0 fi:flex-1 fi:overflow-y-auto fi:overscroll-contain fi:px-5 fi:py-6 fi:sm:px-7"), this.empty = W("div", "", "fi-chat-empty fi:flex fi:min-h-52 fi:h-full fi:flex-col fi:items-center fi:justify-center fi:gap-4 fi:py-6 fi:text-center");
+		let o = W("div", "", "fi:flex fi:size-14 fi:shrink-0 fi:items-center fi:justify-center fi:rounded-2xl fi:bg-raised fi:text-secondary");
+		o.append(K("chat")), this.empty.append(o, W("h2", "どのようなお手伝いをしましょうか？", "fi:text-lg fi:font-semibold fi:tracking-tight"), W("p", "質問や相談したいことを入力してください。", "fi:max-w-sm fi:text-sm fi:leading-relaxed fi:text-secondary"));
+		let s = W("div", "", "fi:flex fi:flex-wrap fi:justify-center fi:gap-2 fi:pt-1");
 		for (let e of [
 			"情報を整理する",
 			"内容を確認する",
 			"アイデアを相談する"
-		]) s.append(K("span", e, "fi:rounded-full fi:bg-raised fi:px-3 fi:py-1.5 fi:text-xs fi:text-secondary"));
-		this.empty.append(s), this.messages = K("div", "", "fi:space-y-6"), this.messages.setAttribute("role", "log"), this.messages.setAttribute("aria-label", "AIとの会話"), this.messages.setAttribute("aria-live", "polite"), this.messages.setAttribute("aria-relevant", "additions"), this.more = Y("以前のメッセージを表示", async () => {
+		]) s.append(W("span", e, "fi:rounded-full fi:bg-raised fi:px-3 fi:py-1.5 fi:text-xs fi:text-secondary"));
+		this.empty.append(s), this.messages = W("div", "", "fi:space-y-6"), this.messages.setAttribute("role", "log"), this.messages.setAttribute("aria-label", "AIとの会話"), this.messages.setAttribute("aria-live", "polite"), this.messages.setAttribute("aria-relevant", "additions"), this.more = q("以前のメッセージを表示", async () => {
 			if (!this.isBusy() && this.ready) try {
 				await this.loadHistory(this.conversationId, this.beforeId);
 			} catch (e) {
 				this.setNotice(e.message, "error");
 			}
-		}, "ghost", "history"), this.more.hidden = !0, this.viewport.append(this.empty, this.more, this.messages), this.panel.append(this.viewport), this.progress = K("div", "", "fi-chat-progress"), this.progress.hidden = !0;
-		let c = this.progressActivity = K("span", "", "fi:size-1.5 fi:shrink-0 fi:rounded-full fi:bg-emerald-500");
-		c.setAttribute("aria-hidden", "true"), this.progressLabel = K("span", "", "fi:min-w-0 fi:truncate"), this.progressLabel.setAttribute("role", "status"), this.progressLabel.setAttribute("aria-live", "polite"), this.progressTime = K("span", "", "fi:shrink-0 fi:tabular-nums"), this.progressTime.setAttribute("aria-live", "off"), this.progress.append(c, this.progressLabel, this.progressTime), this.panel.append(this.progress), this.approvals = K("div", "", "fi-chat-approvals fi:flex fi:shrink-0 fi:flex-wrap fi:gap-2 fi:border-t fi:border-line fi:px-5 fi:py-3"), this.approvals.hidden = !0, this.panel.append(this.approvals);
-		let l = K("form", "", "fi-chat-composer"), u = K("label", "", "fi:block");
-		u.append(K("span", "AIへの依頼", "fi:sr-only")), this.input = K("textarea", "", "fi-chat-input"), this.input.rows = 1, this.input.maxLength = 1e4, this.input.placeholder = this.getAttribute("input-placeholder") || "質問や依頼を入力…", this.input.value = this.getAttribute("initial-prompt") || "", this.input.oninput = () => this.resizeInput(), u.append(this.input), this.attachmentCards = K("div", "", "fi-chat-attachments"), this.attachmentCards.hidden = !0, this.attachmentCards.setAttribute("aria-label", "送信する添付ファイル"), l.append(this.attachmentCards), this.fileInput = K("input"), this.fileInput.type = "file", this.fileInput.multiple = !0, this.fileInput.hidden = !0, this.fileInput.setAttribute("aria-label", "添付するファイル"), this.fileInput.onchange = () => {
+		}, "ghost", "history"), this.more.hidden = !0, this.viewport.append(this.empty, this.more, this.messages), this.panel.append(this.viewport), this.progress = W("div", "", "fi-chat-progress"), this.progress.hidden = !0;
+		let c = this.progressActivity = W("span", "", "fi:size-1.5 fi:shrink-0 fi:rounded-full fi:bg-emerald-500");
+		c.setAttribute("aria-hidden", "true"), this.progressLabel = W("span", "", "fi:min-w-0 fi:truncate"), this.progressLabel.setAttribute("role", "status"), this.progressLabel.setAttribute("aria-live", "polite"), this.progressTime = W("span", "", "fi:shrink-0 fi:tabular-nums"), this.progressTime.setAttribute("aria-live", "off"), this.progress.append(c, this.progressLabel, this.progressTime), this.panel.append(this.progress), this.approvals = W("div", "", "fi-chat-approvals fi:flex fi:shrink-0 fi:flex-wrap fi:gap-2 fi:border-t fi:border-line fi:px-5 fi:py-3"), this.approvals.hidden = !0, this.panel.append(this.approvals);
+		let l = W("form", "", "fi-chat-composer"), u = W("label", "", "fi:block");
+		u.append(W("span", "AIへの依頼", "fi:sr-only")), this.input = W("textarea", "", "fi-chat-input"), this.input.rows = 1, this.input.maxLength = 1e4, this.input.placeholder = this.getAttribute("input-placeholder") || "質問や依頼を入力…", this.input.value = this.getAttribute("initial-prompt") || "", this.input.oninput = () => this.resizeInput(), u.append(this.input), this.attachmentCards = W("div", "", "fi-chat-attachments"), this.attachmentCards.hidden = !0, this.attachmentCards.setAttribute("aria-label", "送信する添付ファイル"), l.append(this.attachmentCards), this.fileInput = W("input"), this.fileInput.type = "file", this.fileInput.multiple = !0, this.fileInput.hidden = !0, this.fileInput.setAttribute("aria-label", "添付するファイル"), this.fileInput.onchange = () => {
 			let e = [...this.fileInput.files || []];
 			this.fileInput.value = "", this.addFiles(e);
-		}, this.attachButton = Y("ファイルを添付", () => {
+		}, this.attachButton = q("ファイルを添付", () => {
 			this.additions.open = !1, this.fileInput.click();
-		}, "ghost", "attach"), this.attachButton.setAttribute("aria-label", "ファイルを添付"), l.append(this.fileInput), this.storedButton = Y("保存済みファイル", () => {
-			this.additions.open = !1, this.checkAttachments();
-		}, "ghost", "files"), this.storedButton.setAttribute("aria-label", "保存済みファイル");
-		let d = K("details", "", "fi-chat-help"), f = K("summary", "", "fi-button fi-button-ghost");
-		f.append(J("help"), K("span", "添付形式と利用条件")), f.setAttribute("aria-label", "添付形式と利用条件"), this.attachmentHelp = K("p", "添付の利用条件を確認しています…", "fi-attachment-help"), d.append(f, this.attachmentHelp), this.storedAttachments = K("details", "", "fi-attachment-stored"), this.storedAttachments.hidden = !0, l.append(this.storedAttachments), l.ondragover = (e) => {
+		}, "ghost", "attach"), this.attachButton.setAttribute("aria-label", "ファイルを添付"), l.append(this.fileInput), this.storedButton = q("保存済みファイル", () => this.checkAttachments(), "ghost", "files"), this.storedButton.setAttribute("aria-label", "保存済みファイル");
+		let d = W("details", "", "fi-chat-help"), f = W("summary", "", "fi-button fi-button-ghost");
+		f.append(K("help"), W("span", "添付形式と利用条件")), f.setAttribute("aria-label", "添付形式と利用条件"), this.attachmentHelp = W("p", "添付の利用条件を確認しています…", "fi-attachment-help"), d.append(f, this.attachmentHelp), this.storedAttachments = W("details", "", "fi-attachment-stored"), this.storedAttachments.hidden = !0, l.ondragover = (e) => {
 			e.dataTransfer?.types?.includes("Files") && (e.preventDefault(), e.dataTransfer && (e.dataTransfer.dropEffect = this.isBusy() ? "none" : "copy"));
 		}, l.ondrop = (e) => {
 			e.dataTransfer?.files?.length && (e.preventDefault(), this.addFiles([...e.dataTransfer.files]));
@@ -2260,17 +2311,17 @@ var Et = class extends HTMLElement {
 			let t = [...e.clipboardData?.files || []];
 			t.length && (e.preventDefault(), this.addFiles(t));
 		};
-		let p = K("div", "", "fi-chat-composer-row");
-		this.additions = K("details", "", "fi-chat-additions");
-		let m = K("summary", "", "fi-chat-additions-toggle"), h = J("plus");
+		let p = W("div", "", "fi-chat-composer-row");
+		this.additions = W("details", "", "fi-chat-additions");
+		let m = W("summary", "", "fi-chat-additions-toggle"), h = K("plus");
 		h.setAttribute("width", "20"), h.setAttribute("height", "20"), m.append(h), m.setAttribute("aria-label", "添付と利用条件"), m.title = "ファイルを添付・保存済みファイル・利用条件";
-		let g = K("div", "", "fi-chat-additions-menu");
-		g.append(this.attachButton, this.storedButton, d), this.additions.append(m, g), this.submit = Y("", null, "primary", "send"), this.submit.classList.add("fi-chat-send"), this.submit.type = "submit", this.submit.setAttribute("aria-label", "送信"), this.submit.title = "送信", this.cancel = Y("", () => this.abort?.abort(), "secondary", "close"), this.cancel.classList.add("fi-chat-send"), this.cancel.setAttribute("aria-label", "応答の待機をやめる"), this.cancel.title = "応答の待機をやめる", this.cancel.hidden = !0, p.append(this.additions, u, this.cancel, this.submit), l.append(p), this.panel.append(l), this.resizeInput(), l.onsubmit = (e) => {
+		let g = W("div", "", "fi-chat-additions-menu");
+		g.append(this.attachButton, this.storedButton, this.storedAttachments, d), this.additions.append(m, g), this.submit = q("", null, "primary", "send"), this.submit.classList.add("fi-chat-send"), this.submit.type = "submit", this.submit.setAttribute("aria-label", "送信"), this.submit.title = "送信", this.cancel = q("", () => this.requestStop(), "secondary", "close"), this.cancel.classList.add("fi-chat-send"), this.cancel.setAttribute("aria-label", "停止"), this.cancel.title = "停止", this.cancel.hidden = !0, this.recovery = q("結果を確認", () => this.checkRunResult(), "secondary", "history"), this.recovery.hidden = !0, this.panel.append(this.recovery), p.append(this.additions, u, this.cancel, this.submit), l.append(p), this.panel.append(l), this.resizeInput(), l.onsubmit = (e) => {
 			e.preventDefault(), this.send();
 		}, this.recover();
 	}
 	disconnectedCallback() {
-		document.defaultView?.removeEventListener("fourmix:surfaces", this.surfaceHandler), document.defaultView?.removeEventListener("fourmix:action-changed", this.actionHandler), document.defaultView?.removeEventListener("focus", this.actionHandler), this.abort?.abort(), this.stopProgress(), this.clearStreamRender(), this.uploadAbort?.abort(), this.disposeMessages();
+		this.historyRequest = (this.historyRequest || 0) + 1, this.attachmentListRequest = (this.attachmentListRequest || 0) + 1, document.defaultView?.removeEventListener("fourmix:surfaces", this.surfaceHandler), document.defaultView?.removeEventListener("fourmix:action-changed", this.actionHandler), document.defaultView?.removeEventListener("focus", this.actionHandler), this.abort?.abort(), this.stopProgress(), this.clearStreamRender(), this.uploadAbort?.abort(), this.disposeMessages();
 		for (let e of this.attachments || []) this.revokePreview(e);
 	}
 	mergePageHeader() {
@@ -2306,10 +2357,53 @@ var Et = class extends HTMLElement {
 		this.progressTimer != null && (this.tickProgress(), document.defaultView.clearInterval(this.progressTimer)), this.progressTimer = null, this.progressActivity?.classList.remove("fi:motion-safe:animate-pulse");
 	}
 	streamEvent(e) {
-		if (this.event("progress", e), e.type === "run.created" && typeof e.data.conversation_id == "string" && (this.conversationId = e.data.conversation_id), e.type === "run.status" && (this.progressLabel.textContent = typeof e.data.message == "string" ? e.data.message : "AIが作業しています"), ["assistant.delta", "assistant.message"].includes(e.type) && typeof e.data.text == "string") {
+		if (this.event("progress", e), e.type === "run.created" && typeof e.data.conversation_id == "string" && (this.conversationId = e.data.conversation_id), e.type === "run.created" && /^[0-9a-f-]{36}$/i.test(e.data.run_id || "") && (this.activeRunId = e.data.run_id, this.saveRunRecovery(), this.stopQueued && this.requestStop()), e.type === "run.failed" && (this.runCancelled = e.data.code === "RUN_CANCELLED", this.runTerminal = this.runCancelled), e.type === "run.completed" && (this.runTerminal = !0), e.type === "run.status" && (this.progressLabel.textContent = typeof e.data.message == "string" ? e.data.message : "AIが作業しています"), ["assistant.delta", "assistant.message"].includes(e.type) && typeof e.data.text == "string") {
 			let t = this.viewport.scrollHeight - this.viewport.scrollTop - this.viewport.clientHeight < 160;
 			this.liveAnswer || (this.liveAnswer = this.message("assistant", ""), this.liveAnswer.content = this.liveAnswer.querySelector(".fi-markdown"), this.liveAnswer.content?.dispose?.(), this.liveAnswer.text = ""), this.liveAnswer.text = e.type === "assistant.delta" ? this.liveAnswer.text + e.data.text : e.data.text, this.renderStreamAnswer(e.type === "assistant.message"), this.progressLabel.textContent = "回答を作成しています", t && this.liveAnswer.scrollIntoView({ block: "nearest" });
 		}
+	}
+	async requestStop() {
+		if (this.abort && !this.stopRequested) {
+			if (this.stopQueued = !0, this.cancel.disabled = !0, !this.activeRunId) {
+				this.progressLabel.textContent = "接続後に停止を依頼します";
+				return;
+			}
+			try {
+				let e = await this.api.runControl(this.activeAlias, this.conversationId, this.activeRunId, !0);
+				this.stopRequested = e.cancel_requested === !0, this.progressLabel.textContent = this.stopRequested ? "停止を依頼しました。終了を確認しています" : "処理の結果を確認しています", ["completed", "failed"].includes(e.status) && (this.runTerminal = !0);
+			} catch {
+				this.cancel.disabled = !1, this.setNotice("停止の受付を確認できませんでした。結果は未確認です。", "error");
+			}
+		}
+	}
+	async checkRunResult() {
+		if (!this.activeRunId || !this.conversationId) {
+			this.setNotice("処理IDを受け取る前に通信が終了しました。結果は未確認です。", "error");
+			return;
+		}
+		try {
+			let e = await this.api.runControl(this.activeAlias, this.conversationId, this.activeRunId);
+			if (!["completed", "failed"].includes(e.status)) {
+				this.setNotice("処理中です。新しく送信せず、しばらくして結果を確認してください。");
+				return;
+			}
+			this.sendUncertain = !1, this.runTerminal = !0, this.runCancelled = e.cancelled === !0, this.clearRunRecovery(), this.setNotice(e.cancelled ? "停止が完了しました。実行済みの操作は元に戻りません。" : "処理が終了したことを確認しました。"), await this.loadHistory(this.conversationId), this.recovery.hidden = !0, this.updateControls();
+		} catch {
+			this.setNotice("結果を確認できませんでした。重複して送信しないでください。", "error");
+		}
+	}
+	saveRunRecovery() {
+		try {
+			this.recoveryKey && sessionStorage.setItem(this.recoveryKey, JSON.stringify({
+				run_id: this.activeRunId || null,
+				conversation_id: this.conversationId || null
+			}));
+		} catch {}
+	}
+	clearRunRecovery() {
+		try {
+			this.recoveryKey && sessionStorage.removeItem(this.recoveryKey);
+		} catch {}
 	}
 	renderStreamAnswer(e = !1) {
 		if (!this.liveAnswer) return;
@@ -2321,7 +2415,7 @@ var Et = class extends HTMLElement {
 			return;
 		}
 		this.clearStreamRender();
-		let n = G(this.liveAnswer.text, {
+		let n = U(this.liveAnswer.text, {
 			...this.rendering,
 			streaming: !0
 		});
@@ -2331,15 +2425,14 @@ var Et = class extends HTMLElement {
 		this.renderTimer != null && document.defaultView.clearTimeout(this.renderTimer), this.renderTimer = null;
 	}
 	finishAnswer(e) {
-		if (this.clearStreamRender(), !this.liveAnswer) {
-			this.message("assistant", e);
-			return;
-		}
-		let t = this.viewport.scrollHeight - this.viewport.scrollTop - this.viewport.clientHeight < 160, n = G(e, this.rendering);
-		this.liveAnswer.content?.replaceWith(n), t && this.liveAnswer.scrollIntoView({ block: "nearest" }), this.liveAnswer = null;
+		if (this.clearStreamRender(), !this.liveAnswer) return this.message("assistant", e);
+		let t = this.viewport.scrollHeight - this.viewport.scrollTop - this.viewport.clientHeight < 160, n = U(e, this.rendering);
+		this.liveAnswer.content?.replaceWith(n), t && this.liveAnswer.scrollIntoView({ block: "nearest" });
+		let r = this.liveAnswer;
+		return this.liveAnswer = null, r;
 	}
 	invalidateSelection() {
-		this.selectionStale = !0, this.setNotice("このチャットの接続・AI・権限が変更されています。草稿は保持しています。「再読み込み」で現在の設定を確認してから送信してください。", "error"), this.updateControls();
+		this.abortArtifactDownloads(), this.selectionStale = !0, this.setNotice("このチャットの接続・AI・権限が変更されています。草稿は保持しています。「再読み込み」で現在の設定を確認してから送信してください。", "error"), this.updateControls();
 	}
 	refreshEmpty() {
 		if (this.empty) {
@@ -2350,8 +2443,60 @@ var Et = class extends HTMLElement {
 	isBusy() {
 		return this.loading || !!this.abort || !!this.uploading;
 	}
+	abortArtifactDownloads() {
+		for (let e of this.artifactDownloads || []) e.abort();
+		this.artifactDownloads?.clear();
+	}
 	disposeMessages() {
+		this.abortArtifactDownloads();
 		for (let e of this.messages?.querySelectorAll?.(".fi-markdown") || []) e.dispose?.();
+	}
+	renderArtifacts(e, t, n = this.conversationId) {
+		if (!e || !n || !Array.isArray(t)) return;
+		let r = W("div", "", "fi-message-attachments fi-generated-files");
+		r.setAttribute("aria-label", "生成ファイル");
+		for (let e of t.slice(0, 20)) {
+			if (!e || typeof e.id != "string" || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(e.id) || typeof e.name != "string") continue;
+			let t = W("div", "", "fi-generated-file"), i = W("span", `${e.name} · ${this.fileSize(e.size)}`), a = W("p", "", "fi:text-xs fi:text-secondary");
+			a.setAttribute("role", "status");
+			let o = this.api.artifactUrl(this.activeAlias, n, e.id), s = q("ダウンロード", async () => {
+				if (this.selectionStale || !this.ready) {
+					a.textContent = "現在のAI設定を再読み込みしてください。";
+					return;
+				}
+				if (this.attachmentExpired(e)) {
+					a.textContent = "生成ファイルの利用期限が切れています。";
+					return;
+				}
+				let t = new AbortController();
+				this.artifactDownloads.add(t), s.disabled = !0, a.textContent = "";
+				try {
+					let n = await fetch(o, {
+						credentials: "same-origin",
+						signal: t.signal,
+						headers: { Accept: "application/octet-stream" },
+						redirect: "error"
+					});
+					if (!n.ok) throw Error({
+						401: "再ログインして取得してください。",
+						403: "この生成ファイルを取得する権限がありません。",
+						404: "この会話の生成ファイルを確認できません。",
+						410: "生成ファイルの利用期限が切れています。"
+					}[n.status] || "生成ファイルを取得できませんでした。再試行してください。");
+					let r = await n.blob();
+					if (t.signal.aborted) return;
+					if (Number.isFinite(e.size) && r.size !== e.size) throw Error("生成ファイルの内容を確認できませんでした。");
+					let i = URL.createObjectURL(r), a = W("a");
+					a.href = i, a.download = e.name, a.click(), document.defaultView.setTimeout(() => URL.revokeObjectURL(i), 1e3);
+				} catch (e) {
+					t.signal.aborted || (a.textContent = e.message || "生成ファイルを取得できませんでした。");
+				} finally {
+					this.artifactDownloads.delete(t), s.disabled = !1;
+				}
+			}, "secondary");
+			s.dataset.artifactId = e.id, t.append(i, s, a), r.append(t);
+		}
+		r.childNodes.length && e.querySelector(".fi-chat-assistant")?.append(r), mt?.(e, t, (t) => e.querySelector(`[data-artifact-id="${t.id}"]`)?.click());
 	}
 	clearMessages() {
 		this.disposeMessages(), this.messages.replaceChildren();
@@ -2364,7 +2509,7 @@ var Et = class extends HTMLElement {
 		this.attachments = [], this.renderAttachments();
 	}
 	resetConversation() {
-		this.clearStreamRender(), this.stopProgress(), this.startedAt = null, this.progress.hidden = !0, this.conversationId = null, this.toggleHistory(!1, !1), this.conversations = [], this.renderConversations(), this.clearMessages(), this.clearAttachments(), this.attachmentMetadata.clear(), this.storedAttachments.hidden = !0, this.storedAttachments.open = !1, this.storedAttachments.replaceChildren(), this.sendUncertain = !1, this.beforeId = null, this.more.hidden = !0, this.refreshEmpty();
+		this.historyRequest = (this.historyRequest || 0) + 1, this.attachmentListRequest = (this.attachmentListRequest || 0) + 1, this.historyLoadingOwner != null && (this.loading = !1, this.historyLoadingOwner = null), this.clearStreamRender(), this.stopProgress(), this.startedAt = null, this.progress.hidden = !0, this.conversationId = null, this.toggleHistory(!1, !1), this.conversations = [], this.renderConversations(), this.clearMessages(), this.clearAttachments(), this.attachmentMetadata.clear(), this.storedAttachments.hidden = !0, this.storedAttachments.open = !1, this.storedAttachments.replaceChildren(), this.sendUncertain = !1, this.beforeId = null, this.more.hidden = !0, this.refreshEmpty();
 	}
 	businessContext() {
 		let e = this.context;
@@ -2385,8 +2530,8 @@ var Et = class extends HTMLElement {
 	}
 	updateControls() {
 		let e = this.isBusy(), t = !this.ready || !this.activeAlias || !!this.selectionStale;
-		this.submit.disabled = e || t || !!this.sendUncertain || this.attachments.some((e) => e.state !== "uploaded"), this.input.disabled = t, this.submit.hidden = !!this.abort, this.cancel.hidden = !this.abort, this.fresh.disabled = this.retry.disabled = e, this.history.disabled = this.more.disabled = e || t;
-		for (let n of this.historyList.querySelectorAll?.("button") || []) n.disabled = e || t;
+		this.submit.disabled = e || t || !!this.sendUncertain || this.attachments.some((e) => e.state !== "uploaded"), this.input.disabled = t, this.submit.hidden = !!this.abort, this.cancel.hidden = !this.abort, this.fresh.disabled = e || !!this.sendUncertain, this.retry.disabled = e, this.history.disabled = this.more.disabled = e || t || !!this.sendUncertain;
+		for (let n of this.historyList.querySelectorAll?.("button") || []) n.disabled = e || t || !!this.sendUncertain;
 		this.attachButton.disabled = this.fileInput.disabled = e || t || !this.attachmentPolicy, this.storedButton.disabled = e || t || !this.conversationId, this.panel.setAttribute("aria-busy", String(e));
 		for (let t of this.attachmentCards.querySelectorAll?.("button") || []) t.disabled = e;
 		for (let t of this.storedAttachments.querySelectorAll?.("button") || []) {
@@ -2412,9 +2557,13 @@ var Et = class extends HTMLElement {
 			attachmentUrlPrefixes: [],
 			allowedImageOrigins: [],
 			...e.rendering || {}
-		}, mt(this.rendering), this.api.timezone = e.timezone;
+		}, vt(this.rendering), this.api.timezone = e.timezone;
 		let t = this.getAttribute("surface"), n = (e.surfaces || []).find((e) => e.name === t), r = t ? n?.enabled ? n.alias : "" : this.getAttribute("alias"), i = (e.agents || []).find((e) => e.alias === r), a = (e.connections || []).find((e) => e.id === i?.connection_id), o = i?.connection_revision ?? a?.revision, s = i ? `${i.alias}:${i.connection_id || ""}:${i.grant_id || ""}:${o || ""}` : "";
-		this.bindingIdentity !== void 0 && this.bindingIdentity !== s && this.resetConversation(), this.bindingIdentity = s, this.activeAlias = i ? r : "", this.api.expectation(i?.connection_id && i?.grant_id && o != null ? {
+		if (this.bindingIdentity !== void 0 && this.bindingIdentity !== s && this.resetConversation(), this.bindingIdentity = s, this.activeAlias = i ? r : "", this.recoveryKey = s ? `fourmix-run:${this.api.base}:${t || ""}:${s}` : null, !this.activeRunId && this.recoveryKey) try {
+			let e = JSON.parse(sessionStorage.getItem(this.recoveryKey) || "null");
+			e && (this.activeRunId = e.run_id, this.conversationId = e.conversation_id, this.sendUncertain = !0, this.recovery.hidden = !1);
+		} catch {}
+		this.api.expectation(i?.connection_id && i?.grant_id && o != null ? {
 			connection_id: i.connection_id,
 			grant_id: i.grant_id,
 			connection_revision: o
@@ -2428,7 +2577,7 @@ var Et = class extends HTMLElement {
 	renderConversations() {
 		this.historyList.replaceChildren(), this.historyStatus.hidden = !!this.conversations?.length, this.historyStatus.textContent = "会話履歴はまだありません";
 		for (let e of this.conversations || []) {
-			let t = Y("", async () => {
+			let t = q("", async () => {
 				if (!this.isBusy() && this.ready) {
 					this.historyStatus.hidden = !1, this.historyStatus.textContent = "会話を読み込んでいます…";
 					try {
@@ -2438,7 +2587,7 @@ var Et = class extends HTMLElement {
 					}
 				}
 			}, "ghost");
-			t.className = "fi-chat-history-item", t.setAttribute("aria-current", String(e.identify === this.conversationId)), t.append(K("span", e.title || "会話", "fi-chat-history-item-title")), e.updated_at && t.append(K("span", bt(e.updated_at, this.api.timezone), "fi-chat-history-item-date")), this.historyList.append(t);
+			t.className = "fi-chat-history-item", t.setAttribute("aria-current", String(e.identify === this.conversationId)), t.append(W("span", e.title || "会話", "fi-chat-history-item-title")), e.updated_at && t.append(W("span", wt(e.updated_at, this.api.timezone), "fi-chat-history-item-date")), this.historyList.append(t);
 		}
 		this.updateControls();
 	}
@@ -2454,12 +2603,15 @@ var Et = class extends HTMLElement {
 		}
 	}
 	async refreshAttachmentList(e = this.conversationId) {
+		let t = this.activeAlias, n = this.attachmentListRequest = (this.attachmentListRequest || 0) + 1, r = () => n === this.attachmentListRequest && t === this.activeAlias && e === this.conversationId && !this.selectionStale;
 		this.attachmentError = !1;
 		try {
 			let t = await this.api.attachments(this.activeAlias, e);
+			if (!r()) return;
 			if (!t.policy || !Array.isArray(t.data)) throw Error("添付の利用条件を確認できませんでした。");
 			this.attachmentPolicy = t.policy, this.attachmentMetadata = new Map(t.data.map((e) => [e.id, e])), this.fileInput.accept = (t.policy.extensions || []).map((e) => `.${String(e).replace(/^\./, "")}`).join(","), this.attachmentHelp.textContent = `添付：${(t.policy.extensions || []).join("・")} ／ 1ファイル最大 ${this.fileSize(t.policy.max_bytes)} ／ 1回の送信は最大${t.policy.max_files}件`;
 		} catch (e) {
+			if (!r()) return;
 			if (e.status === 409) throw this.invalidateSelection(), e;
 			this.attachmentError = !0, this.attachmentPolicy = null, this.attachmentMetadata.clear(), this.storedAttachments.hidden = !0, this.attachmentHelp.textContent = `${e.message} 文字での会話は利用できます。`;
 		}
@@ -2472,8 +2624,8 @@ var Et = class extends HTMLElement {
 		return Number.isFinite(e?.expires_at) && e.expires_at * 1e3 <= Date.now();
 	}
 	attachmentLink(e, t = this.conversationId) {
-		if (this.attachmentExpired(e)) return K("p", `${e.name || "添付ファイル"}（利用期限切れ）`, "fi:text-xs fi:text-secondary");
-		let n = K("a", e.name || "添付ファイル", "fi-attachment-link");
+		if (this.attachmentExpired(e)) return W("p", `${e.name || "添付ファイル"}（利用期限切れ）`, "fi:text-xs fi:text-secondary");
+		let n = W("a", e.name || "添付ファイル", "fi-attachment-link");
 		if (n.href = this.api.attachmentUrl(this.activeAlias, t, e.id), n.target = "_blank", n.rel = "noopener noreferrer", [
 			"image/png",
 			"image/jpeg",
@@ -2481,7 +2633,7 @@ var Et = class extends HTMLElement {
 			"image/webp",
 			"image/avif"
 		].includes(e.mime)) {
-			let t = K("img", "", "fi-attachment-preview");
+			let t = W("img", "", "fi-attachment-preview");
 			t.src = n.href, t.alt = e.name || "添付画像", t.loading = "lazy", t.onerror = () => t.remove(), n.prepend(t);
 		}
 		return n;
@@ -2490,28 +2642,28 @@ var Et = class extends HTMLElement {
 		if (this.attachmentCards) {
 			this.attachmentCards.replaceChildren(), this.attachmentCards.hidden = !this.attachments.length;
 			for (let e of this.attachments) {
-				let t = K("div", "", "fi-attachment-card");
+				let t = W("div", "", "fi-attachment-card");
 				if (t.dataset.state = e.state, e.previewUrl) {
-					let n = K("img", "", "fi-attachment-preview");
+					let n = W("img", "", "fi-attachment-preview");
 					n.src = e.previewUrl, n.alt = e.file.name, t.append(n);
 				}
-				let n = K("div", "", "fi-attachment-caption");
-				if (n.append(K("p", e.attachment?.name || e.file?.name || "添付ファイル", "fi:font-medium"), K("p", `${this.fileSize(e.attachment?.size ?? e.file?.size)} · ${{
+				let n = W("div", "", "fi-attachment-caption");
+				if (n.append(W("p", e.attachment?.name || e.file?.name || "添付ファイル", "fi:font-medium"), W("p", `${this.fileSize(e.attachment?.size ?? e.file?.size)} · ${{
 					queued: "アップロード待ち",
 					uploading: "アップロード中",
 					uploaded: "送信するファイル",
 					unknown: "結果の確認が必要",
 					failed: "アップロードできませんでした"
-				}[e.state]}`, "fi:text-xs fi:text-secondary")), t.append(n), e.error && t.append(K("p", e.error, "fi:text-xs fi:text-secondary")), [
+				}[e.state]}`, "fi:text-xs fi:text-secondary")), t.append(n), e.error && t.append(W("p", e.error, "fi:text-xs fi:text-secondary")), [
 					"unknown",
 					"failed",
 					"queued"
 				].includes(e.state)) {
-					let n = Y(e.state === "queued" ? "アップロード" : "同じアップロードを再確認", () => this.uploadEntries([e]), "secondary");
+					let n = q(e.state === "queued" ? "アップロード" : "同じアップロードを再確認", () => this.uploadEntries([e]), "secondary");
 					t.append(n);
 				}
-				e.state === "unknown" && t.append(Y("保存済みファイルを確認", () => this.checkAttachments(), "ghost"));
-				let r = Y("選択を外す", () => {
+				e.state === "unknown" && t.append(q("保存済みファイルを確認", () => this.checkAttachments(), "ghost"));
+				let r = q("選択を外す", () => {
 					this.isBusy() || (this.revokePreview(e), this.attachments = this.attachments.filter((t) => t !== e), this.renderAttachments(), this.updateControls());
 				}, "ghost");
 				t.append(r), this.attachmentCards.append(t);
@@ -2523,18 +2675,18 @@ var Et = class extends HTMLElement {
 		if (!(this.isBusy() || this.selectionStale)) {
 			this.loading = !0, this.updateControls();
 			try {
-				await this.refreshAttachmentList(), this.attachmentError || (this.storedAttachments.open = !0, this.renderStoredAttachments(), this.setNotice("保存済みのファイルを確認してください。選択を外しても、保存済みファイルは削除されません。"));
+				await this.refreshAttachmentList(), this.attachmentError || (this.additions.open = !0, this.storedAttachments.open = !0, this.renderStoredAttachments());
 			} finally {
 				this.loading = !1, this.updateControls();
 			}
 		}
 	}
 	renderStoredAttachments() {
-		this.storedAttachments.hidden = !1, this.storedAttachments.replaceChildren(K("summary", `保存済みファイル ${this.attachmentMetadata.size}件`));
+		this.storedAttachments.hidden = !1, this.storedAttachments.replaceChildren(W("summary", `保存済みファイル ${this.attachmentMetadata.size}件`)), this.storedAttachments.append(W("p", "今回送信するファイルを選択してください。選択を外しても、保存済みファイルは削除されません。", "fi:text-xs fi:text-secondary"));
 		for (let e of this.attachmentMetadata.values()) {
-			let t = K("div", "", "fi-attachment-card");
+			let t = W("div", "", "fi-attachment-card");
 			t.append(this.attachmentLink(e));
-			let n = Y("送信対象に追加", () => {
+			let n = q("送信対象に追加", () => {
 				if (!(this.isBusy() || !this.attachmentPolicy || this.attachments.some((t) => t.attachment?.id === e.id))) {
 					if (this.attachments.length >= this.attachmentPolicy.max_files) {
 						this.setNotice(`1回の送信で選べるファイルは最大${this.attachmentPolicy.max_files}件です。不要な選択を外してください。`, "error");
@@ -2576,6 +2728,7 @@ var Et = class extends HTMLElement {
 			this.setNotice(`${r.name}は添付できません。対応する形式とサイズを確認してください。`, "error");
 			return;
 		}
+		this.setNotice("");
 		let r = e.map((e) => ({
 			file: e,
 			requestId: crypto.randomUUID(),
@@ -2615,50 +2768,63 @@ var Et = class extends HTMLElement {
 			}
 		}
 	}
-	message(e, t, n = [], r = this.conversationId, i = null) {
-		let a = e === "user", o = K("article", "", `fi-chat-message fi:min-w-0 fi:flex ${a ? "fi:justify-end" : "fi:justify-start"}`), s = K("div", "", a ? "fi-chat-user fi:max-w-[88%] fi:space-y-1 fi:rounded-2xl fi:rounded-tr-md fi:bg-raised fi:px-4 fi:py-3" : "fi-chat-assistant fi:w-full fi:min-w-0 fi:space-y-3"), c = !a && i && [
+	message(e, t, n = [], r = this.conversationId, i = null, a = []) {
+		let o = e === "user", s = W("article", "", `fi-chat-message fi:min-w-0 fi:flex ${o ? "fi:justify-end" : "fi:justify-start"}`), c = W("div", "", o ? "fi-chat-user fi:max-w-[88%] fi:space-y-1 fi:rounded-2xl fi:rounded-tr-md fi:bg-raised fi:px-4 fi:py-3" : "fi-chat-assistant fi:w-full fi:min-w-0 fi:space-y-3"), l = !o && i && [
 			"succeeded",
 			"rejected",
 			"expired"
-		].includes(i.state) ? i : null, l = K("p", "", "fi:flex fi:items-center fi:gap-2 fi:text-xs fi:font-semibold fi:text-secondary");
-		if (a || l.append(J(c ? "shield" : "chat")), l.append(K("span", a ? "あなた" : c ? "このアプリケーション" : this.agentName || "AI アシスタント")), c) {
-			let e = K("div", "", "fi:space-y-3");
-			wt(c, e), s.append(l, K("p", {
+		].includes(i.state) ? i : null, u = W("p", "", "fi:flex fi:items-center fi:gap-2 fi:text-xs fi:font-semibold fi:text-secondary");
+		if (o || u.append(K(l ? "shield" : "chat")), u.append(W("span", o ? "あなた" : l ? "このアプリケーション" : this.agentName || "AI アシスタント")), l) {
+			let e = W("div", "", "fi:space-y-3");
+			J(l, e), c.append(u, W("p", {
 				succeeded: "業務操作が完了しました。",
 				rejected: "業務操作は実行せず終了しました。",
 				expired: "確認期限が切れました。業務操作は実行されていません。"
-			}[c.state]), e);
-		} else s.append(l, a ? K("p", t, "fi:text-sm fi:leading-relaxed fi:whitespace-pre-wrap fi:break-words") : G(t, this.rendering));
+			}[l.state]), e);
+		} else c.append(u, o ? W("p", t, "fi:text-sm fi:leading-relaxed fi:whitespace-pre-wrap fi:break-words") : U(t, this.rendering));
 		if (n.length) {
-			let e = K("div", "", "fi-message-attachments");
+			let e = W("div", "", "fi-message-attachments");
 			for (let t of n) {
 				let n = this.attachmentMetadata.get(t);
-				e.append(n ? this.attachmentLink(n, r) : K("p", "添付ファイル（利用期限や権限を確認してください）", "fi:text-xs fi:text-secondary"));
+				if (n) e.append(this.attachmentLink(n, r));
+				else {
+					let n = W("p", "添付ファイルを確認しています…", "fi:text-xs fi:text-secondary");
+					n.dataset.pendingAttachment = t, e.append(n);
+				}
 			}
-			s.append(e);
+			c.append(e);
 		}
-		return o.append(s), this.messages.append(o), this.refreshEmpty(), o.scrollIntoView({ block: "nearest" }), o;
+		return s.append(c), this.messages.append(s), o || this.renderArtifacts(s, a, r), this.refreshEmpty(), s.scrollIntoView({ block: "nearest" }), s;
 	}
 	async loadHistory(e, t) {
 		if (this.abort || this.uploading || this.selectionStale || !e) return;
-		let n = !this.loading;
-		n && (this.loading = !0, this.setNotice("会話を読み込んでいます…")), this.updateControls();
+		let n = this.activeAlias, r = this.historyRequest = (this.historyRequest || 0) + 1, i = () => r === this.historyRequest && n === this.activeAlias && !this.selectionStale;
+		e !== this.conversationId && this.abortArtifactDownloads();
+		let a = !this.loading || this.historyLoadingOwner != null;
+		a && (this.historyLoadingOwner = r, this.loading = !0, this.setNotice("会話を読み込んでいます…")), this.updateControls();
 		try {
-			let r = await this.api.history(this.activeAlias, e, t);
-			this.conversationId !== e && (this.stopProgress(), this.startedAt = null, this.progress.hidden = !0, this.conversationId && (this.clearAttachments(), this.storedAttachments.hidden = !0, this.storedAttachments.open = !1, this.storedAttachments.replaceChildren())), this.conversationId = e, await this.refreshAttachmentList(e);
-			let i = t ? [...this.messages.childNodes] : [];
+			let n = await this.api.history(this.activeAlias, e, t);
+			if (!i()) return;
+			this.conversationId !== e && (this.stopProgress(), this.startedAt = null, this.progress.hidden = !0, this.conversationId && (this.clearAttachments(), this.storedAttachments.hidden = !0, this.storedAttachments.open = !1, this.storedAttachments.replaceChildren())), this.conversationId = e, this.attachmentMetadata.clear();
+			let r = t ? [...this.messages.childNodes] : [];
 			t ? this.messages.replaceChildren() : this.clearMessages();
-			for (let t of r.messages || []) this.message(t.role, String(t.content || ""), t.attachment_ids || [], e, t.application_receipt);
-			this.messages.append(...i), this.refreshEmpty(), this.beforeId = r.has_more ? r.before_id : null, this.more.hidden = !this.beforeId, this.renderConversations(), this.sendUncertain = !1, this.event("history", r), n && this.setNotice("");
+			for (let t of n.messages || []) this.message(t.role, String(t.content || ""), t.attachment_ids || [], e, t.application_receipt, t.artifacts || []);
+			if (this.messages.append(...r), this.refreshEmpty(), this.beforeId = n.has_more ? n.before_id : null, this.more.hidden = !this.beforeId, this.renderConversations(), this.runTerminal && (this.sendUncertain = !1), this.event("history", n), !t && n.latest_run?.status === "failed" && this.message("assistant", n.latest_run.cancelled === !0 ? "この依頼は停止しました。実行済みの操作は元に戻りません。" : "この依頼の応答を完了できませんでした。再送する前に、会話履歴と操作結果を確認してください。"), await this.refreshAttachmentList(e), !i() || this.conversationId !== e) return;
+			for (let t of this.messages.querySelectorAll("[data-pending-attachment]")) {
+				let n = this.attachmentMetadata.get(t.dataset.pendingAttachment);
+				n ? t.replaceWith(this.attachmentLink(n, e)) : t.textContent = "添付ファイル（利用期限や取得権限を確認してください）";
+			}
+			a && this.setNotice(this.attachmentError ? this.attachmentHelp.textContent : "", this.attachmentError ? "error" : "info");
 		} catch (e) {
+			if (!i()) return;
 			throw e.status === 409 && this.invalidateSelection(), e;
 		} finally {
-			n && (this.loading = !1), this.updateControls();
+			this.historyLoadingOwner === r && (this.loading = !1, this.historyLoadingOwner = null), this.updateControls();
 		}
 	}
 	async refreshActionResults(e) {
 		if (this.ready && !this.isBusy() && !this.selectionStale && this.conversationId) try {
-			await this.loadHistory(this.conversationId), await this.pending(await this.api.state()), this.approvals.hidden && q[e] && (this.progressLabel.textContent = q[e]);
+			await this.loadHistory(this.conversationId), await this.pending(await this.api.state()), this.approvals.hidden && G[e] && (this.progressLabel.textContent = G[e]);
 		} catch {
 			this.setNotice("操作の実行結果を会話へ反映できませんでした。再読み込みして結果を確認してください。同じ操作を再実行する必要はありません。", "error");
 		}
@@ -2666,7 +2832,7 @@ var Et = class extends HTMLElement {
 	async pending(e) {
 		this.approvals.replaceChildren();
 		for (let t of e.actions || []) if (t.state === "confirmation_required") {
-			let n = (e.tools || []).find((e) => e.name === t.operation)?.description, r = Y(`操作を確認：${n || t.operation}`, () => Tt(this.api, t.id, this, async () => this.pending(await this.api.state())), "secondary", "shield");
+			let n = (e.tools || []).find((e) => e.name === t.operation)?.description, r = q(`操作を確認：${n || t.operation}`, () => Ot(this.api, t.id, this, async () => this.pending(await this.api.state())), "secondary", "shield");
 			r.title = n || t.operation, this.approvals.append(r);
 		}
 		this.approvals.hidden = this.approvals.childNodes.length === 0;
@@ -2687,7 +2853,7 @@ var Et = class extends HTMLElement {
 			return;
 		}
 		let i = e.trim() || "添付ファイルの内容を確認し、要点を日本語でまとめてください。";
-		this.message("user", i, n), this.abort = new AbortController(), this.liveAnswer = null, this.updateControls(), this.cancel.hidden = !1, this.setNotice(""), this.startProgress(), this.input.value = "", this.resizeInput();
+		this.message("user", i, n), this.activeRunId = null, this.stopQueued = !1, this.stopRequested = !1, this.runTerminal = !1, this.runCancelled = !1, this.cancel.disabled = !1, this.recovery.hidden = !0, this.abort = new AbortController(), this.saveRunRecovery(), this.liveAnswer = null, this.updateControls(), this.cancel.hidden = !1, this.setNotice(""), this.startProgress(), this.input.value = "", this.resizeInput();
 		try {
 			let e = await this.api.ask(this.activeAlias, i, {
 				conversationId: this.conversationId,
@@ -2696,7 +2862,7 @@ var Et = class extends HTMLElement {
 				signal: this.abort.signal,
 				onEvent: (e) => this.streamEvent(e)
 			});
-			this.conversationId = e.conversation_id || this.conversationId, this.renderConversations(), this.finishAnswer(e.result?.answer || e.answer || "応答を受け取りました。"), this.stopProgress(), this.progressLabel.textContent = e.result?.data?.run_outcome === "confirmation_required" ? "内容を確認して承認してください" : "回答が完了しました";
+			this.runTerminal = !0, this.conversationId = e.conversation_id || this.conversationId, this.renderConversations(), this.renderArtifacts(this.finishAnswer(e.result?.answer || e.answer || "応答を受け取りました。"), e.result?.data?.artifacts || e.result?.artifacts || e.data?.artifacts || e.artifacts || []), this.stopProgress(), this.progressLabel.textContent = e.result?.data?.run_outcome === "confirmation_required" ? "内容を確認して承認してください" : "回答が完了しました";
 			for (let e of t) this.revokePreview(e);
 			this.attachments = this.attachments.filter((e) => !t.includes(e)), this.renderAttachments(), this.setNotice("");
 			try {
@@ -2706,32 +2872,32 @@ var Et = class extends HTMLElement {
 			}
 			this.event("response", e);
 		} catch (t) {
-			this.stopProgress(), this.progressLabel.textContent = t.name === "AbortError" ? "待機を終了しました" : "応答が中断されました", this.liveAnswer &&= (this.renderStreamAnswer(!0), this.liveAnswer.append(K("p", "途中まで受信した回答です。完了結果は会話履歴で確認してください。", "fi:text-xs fi:text-secondary")), null), this.input.value || (this.input.value = e, this.resizeInput()), this.sendUncertain = !0, t.status === 409 ? this.invalidateSelection() : this.setNotice(t.name === "AbortError" ? "応答の待機をやめました。サーバー側の処理は続く場合があります。草稿と添付は保持しています。履歴と操作結果を確認してください。" : `${t.message} 草稿と添付は保持しています。履歴と操作結果を確認してから、次の依頼を送ってください。`, "error"), this.event("error", { message: this.notice.textContent });
+			this.stopProgress(), this.progressLabel.textContent = t.name === "AbortError" ? "待機を終了しました" : "応答が中断されました", this.liveAnswer &&= (this.renderStreamAnswer(!0), this.liveAnswer.append(W("p", "途中まで受信した回答です。完了結果は会話履歴で確認してください。", "fi:text-xs fi:text-secondary")), null), this.input.value || (this.input.value = e, this.resizeInput()), this.sendUncertain = !this.runTerminal, this.recovery.hidden = this.runTerminal, this.runCancelled ? (this.progressLabel.textContent = "停止が完了しました", this.setNotice("停止が完了しました。実行済みの操作は元に戻りません。")) : t.status === 409 ? this.invalidateSelection() : this.setNotice(t.name === "AbortError" ? "応答の待機をやめました。サーバー側の処理は続く場合があります。草稿と添付は保持しています。履歴と操作結果を確認してください。" : `${t.message} 草稿と添付は保持しています。履歴と操作結果を確認してから、次の依頼を送ってください。`, "error"), this.event("error", { message: this.notice.textContent });
 		} finally {
-			this.stopProgress(), this.abort = null, this.updateControls(), this.cancel.hidden = !0;
+			this.stopProgress(), this.runTerminal && this.clearRunRecovery(), this.abort = null, this.updateControls(), this.cancel.hidden = !0;
 			try {
 				await this.pending(await this.api.state());
 			} catch {}
 		}
 	}
 };
-customElements.get("fourmix-intelligence-chat") || customElements.define("fourmix-intelligence-chat", Et);
+customElements.get("fourmix-intelligence-chat") || customElements.define("fourmix-intelligence-chat", kt);
 //#endregion
 //#region resources/js/tool-groups.js
-var X = (e, t = "", n = "") => {
+var Y = (e, t = "", n = "") => {
 	let r = document.createElement(e);
 	return r.textContent = t, r.className = n, r;
 };
-function Dt(e, t, { labels: n = {}, permissions: r = {}, mode: i = "permissions" } = {}) {
+function At(e, t, { labels: n = {}, permissions: r = {}, mode: i = "permissions" } = {}) {
 	if (e.replaceChildren(), !t.length) {
-		e.append(X("p", "利用できる業務操作はありません。アプリケーションの管理者に確認してください。", "fi-empty-state"));
+		e.append(Y("p", "利用できる業務操作はありません。アプリケーションの管理者に確認してください。", "fi-empty-state"));
 		return;
 	}
-	let a = X("label", "", "fi-tool-search fi-form-field");
-	a.append(X("span", "業務操作を検索", "fi-form-label"));
-	let o = X("input", "", "fi-field");
+	let a = Y("label", "", "fi-tool-search fi-form-field");
+	a.append(Y("span", "業務操作を検索", "fi-form-label"));
+	let o = Y("input", "", "fi-field");
 	o.type = "search", o.placeholder = "業務名・操作名で絞り込み", a.append(o), e.append(a);
-	let s = X("p", "条件に一致する操作はありません。検索語を変えてください。", "fi-empty-state");
+	let s = Y("p", "条件に一致する操作はありません。検索語を変えてください。", "fi-empty-state");
 	s.hidden = !0;
 	let c = /* @__PURE__ */ new Map();
 	for (let e of t) {
@@ -2739,15 +2905,15 @@ function Dt(e, t, { labels: n = {}, permissions: r = {}, mode: i = "permissions"
 		c.has(t) || c.set(t, []), c.get(t).push(e);
 	}
 	for (let [t, a] of c) {
-		let o = X("details", "", "fi-tool-group"), s = n[t] || a[0].keywords?.[0] || (t === "general" ? "その他の業務" : t), c = X("summary", "", "fi-tool-summary");
-		c.append(X("span", s, "fi-tool-summary-title"));
-		let l = X("span", "", "fi-tool-summary-count");
+		let o = Y("details", "", "fi-tool-group"), s = n[t] || a[0].keywords?.[0] || (t === "general" ? "その他の業務" : t), c = Y("summary", "", "fi-tool-summary");
+		c.append(Y("span", s, "fi-tool-summary-title"));
+		let l = Y("span", "", "fi-tool-summary-count");
 		c.append(l), o.append(c);
-		let u = X("div", "", "fi-tool-content fi:space-y-3"), d = () => {
+		let u = Y("div", "", "fi-tool-content fi:space-y-3"), d = () => {
 			let e = [...o.querySelectorAll("[data-tool-row] input, [data-tool-row] select")].filter((e) => i === "permissions" ? e.value !== "disabled" : e.checked).length;
 			l.textContent = `${a.length}件 · ${i === "permissions" ? "許可" : "選択"} ${e}件`;
-		}, f = X("div", "", "fi-tool-bulk-actions fi:flex fi:flex-wrap fi:gap-2"), p = (e, t, n) => {
-			let r = X("button", e, "fi-button fi-button-quiet");
+		}, f = Y("div", "", "fi-tool-bulk-actions fi:flex fi:flex-wrap fi:gap-2"), p = (e, t, n) => {
+			let r = Y("button", e, "fi-button fi-button-quiet");
 			r.type = "button", r.onclick = () => {
 				for (let e of o.querySelectorAll("[data-tool-row]")) if (!e.hidden && (t === "all" || e.dataset.readOnly === "true" == (t === "read"))) {
 					let t = e.querySelector("input, select");
@@ -2758,30 +2924,30 @@ function Dt(e, t, { labels: n = {}, permissions: r = {}, mode: i = "permissions"
 		};
 		i === "permissions" ? (p("参照を許可", "read", "review"), p("更新は毎回確認", "write", "review"), p("すべて許可しない", "all", "disabled")) : (p("参照を選択", "read", !0), p("更新を選択", "write", !0), p("選択を解除", "all", !1)), u.append(f);
 		for (let e of a) {
-			let t = X("label", "", `fi-tool-row${i === "selection" ? " fi-tool-selection" : ""}`);
+			let t = Y("label", "", `fi-tool-row${i === "selection" ? " fi-tool-selection" : ""}`);
 			t.dataset.toolRow = "", t.dataset.readOnly = String(e.read_only), t.dataset.search = [
 				e.name,
 				e.description,
 				s,
 				...e.keywords || []
 			].join(" ").toLocaleLowerCase();
-			let n = e.description || e.name, a = n.split(/[。\n]/)[0], o = X("span", "", "fi-tool-caption fi:min-w-0 fi:break-words");
-			o.title = n, o.append(X("span", a.length > 90 ? `${a.slice(0, 90)}…` : a, "fi-tool-title"));
-			let c = X("span", e.read_only ? "参照" : "更新", "fi-pill");
+			let n = e.description || e.name, a = n.split(/[。\n]/)[0], o = Y("span", "", "fi-tool-caption fi:min-w-0 fi:break-words");
+			o.title = n, o.append(Y("span", a.length > 90 ? `${a.slice(0, 90)}…` : a, "fi-tool-title"));
+			let c = Y("span", e.read_only ? "参照" : "更新", "fi-pill");
 			if (c.dataset.effect = e.read_only ? "read" : "write", o.append(c), i === "permissions") {
-				let n = X("select", "", "fi-field fi-tool-control fi:shrink-0");
+				let n = Y("select", "", "fi-field fi-tool-control fi:shrink-0");
 				n.name = e.name;
 				for (let [t, r] of [
 					["disabled", "許可しない"],
 					["review", e.read_only ? "参照を許可" : "毎回内容を確認"],
 					...e.read_only ? [] : [["automatic", "継続して許可"]]
 				]) {
-					let e = X("option", r);
+					let e = Y("option", r);
 					e.value = t, n.append(e);
 				}
 				n.value = e.read_only && r[e.name] === "automatic" ? "review" : r[e.name] || "disabled", n.onchange = d, t.append(o, n);
 			} else {
-				let n = X("input");
+				let n = Y("input");
 				n.type = "checkbox", n.name = "allowed_operations", n.value = e.name, n.onchange = d, t.append(n, o);
 			}
 			u.append(t);
@@ -2800,14 +2966,14 @@ function Dt(e, t, { labels: n = {}, permissions: r = {}, mode: i = "permissions"
 }
 //#endregion
 //#region resources/js/management.js
-var Z = (e, t = "", n = "") => {
+var X = (e, t = "", n = "") => {
 	let r = document.createElement(e);
 	return r.textContent = t, r.className = n, r;
-}, Ot = {
+}, jt = {
 	personal: "個人",
 	workspace: "ワークスペース",
 	organization: "組織"
-}, kt = {
+}, Mt = {
 	pending: "接続確認待ち",
 	ready: "接続済み",
 	confirmation_required: "確認待ち",
@@ -2816,22 +2982,22 @@ var Z = (e, t = "", n = "") => {
 	unknown_effect: "結果の確認が必要",
 	running: "処理中",
 	expired: "確認期限切れ"
-}, Q = (e, t) => {
+}, Z = (e, t) => {
 	let n = e.textContent;
 	return e.disabled = !0, e.textContent = t, () => {
 		e.disabled = !1, e.textContent = n;
 	};
-}, At = (e, t, n = "fi-button fi-button-secondary") => {
-	let r = Z("button", e, n);
+}, Nt = (e, t, n = "fi-button fi-button-secondary") => {
+	let r = X("button", e, n);
 	return r.type = "button", r.onclick = t, r;
-}, jt = (e, t) => {
-	let n = Z("label", "", "fi-form-field");
-	return n.append(Z("span", e, "fi-form-label"), t), n;
-}, Mt = (e) => Object.fromEntries([...e.querySelectorAll("select")].map((e) => [e.name, e.value])), Nt = () => {
-	let e = Z("label", "", "fi-permission-acknowledgement"), t = Z("input");
-	return t.type = "checkbox", t.name = "acknowledge_automatic", e.append(t, Z("span", "継続して許可する更新は、毎回の確認なしで実行されることを確認しました。")), e;
+}, Q = (e, t) => {
+	let n = X("label", "", "fi-form-field");
+	return n.append(X("span", e, "fi-form-label"), t), n;
+}, Pt = (e) => Object.fromEntries([...e.querySelectorAll("select")].map((e) => [e.name, e.value])), Ft = () => {
+	let e = X("label", "", "fi-permission-acknowledgement"), t = X("input");
+	return t.type = "checkbox", t.name = "acknowledge_automatic", e.append(t, X("span", "継続して許可する更新は、毎回の確認なしで実行されることを確認しました。")), e;
 };
-function Pt(e, { request: t, Client: n, showAction: r, datetime: i, renderToolGroups: a }) {
+function It(e, { request: t, Client: n, showAction: r, datetime: i, renderToolGroups: a }) {
 	let o = new n(e.dataset.base), s, c, l = (t, n = "error") => {
 		let r = e.querySelector("[data-notice]");
 		r.textContent = t, r.dataset.tone = n, r.hidden = !1;
@@ -2840,7 +3006,7 @@ function Pt(e, { request: t, Client: n, showAction: r, datetime: i, renderToolGr
 	}, d = (t) => {
 		c = t.id, e.querySelector("[data-code]").value = t.code, e.querySelector("[data-application-url]").value = t.application_url, e.querySelector("[data-pairing]").hidden = !1, e.querySelector("[data-pairing]").scrollIntoView({ block: "nearest" });
 	}, f = (e) => {
-		let t = Z("span", kt[e] || "状態を確認してください", "fi-pill");
+		let t = X("span", Mt[e] || "状態を確認してください", "fi-pill");
 		return t.dataset.tone = ["ready", "succeeded"].includes(e) ? "success" : [
 			"pending",
 			"confirmation_required",
@@ -2853,16 +3019,16 @@ function Pt(e, { request: t, Client: n, showAction: r, datetime: i, renderToolGr
 		let n = e.querySelector("[data-connections]");
 		n.replaceChildren();
 		for (let e of s.connections.filter((e) => e.state !== "revoked")) {
-			let t = Z("section", "", "fi-connection-card"), r = Z("div", "", "fi-record-body");
-			r.append(Z("h3", e.name, "fi-record-title"), Z("p", `${e.state === "pending" ? "Fourmix Intelligenceでの接続待ち" : Ot[e.scope] || "接続範囲を確認"} · ${e.host_mode === "system" ? "システム権限" : "本人のアカウント権限"}`, "fi-record-meta")), t.append(r, f(e.state));
-			let i = Z("details", "", "fi:basis-full fi:space-y-4");
-			i.append(Z("summary", "接続名と権限を変更", "fi:cursor-pointer fi:text-sm"));
-			let m = Z("form", "", "fi:space-y-3"), h = Z("input", "", "fi-field");
+			let t = X("section", "", "fi-connection-card"), r = X("div", "", "fi-record-body");
+			r.append(X("h3", e.name, "fi-record-title"), X("p", `${e.state === "pending" ? "Fourmix Intelligenceでの接続待ち" : jt[e.scope] || "接続範囲を確認"} · ${e.host_mode === "system" ? "システム権限" : "本人のアカウント権限"}`, "fi-record-meta")), t.append(r, f(e.state));
+			let i = X("details", "", "fi:basis-full fi:space-y-4");
+			i.append(X("summary", "接続名と権限を変更", "fi:cursor-pointer fi:text-sm"));
+			let m = X("form", "", "fi:space-y-3"), h = X("input", "", "fi-field");
 			h.required = !0, h.maxLength = 100, h.value = e.name;
-			let g = Z("button", "接続名を保存", "fi-button fi-button-secondary");
-			g.type = "submit", m.append(jt("接続名", h), g), m.onsubmit = async (t) => {
+			let g = X("button", "接続名を保存", "fi-button fi-button-secondary");
+			g.type = "submit", m.append(Q("接続名", h), g), m.onsubmit = async (t) => {
 				t.preventDefault();
-				let n = Q(g, "保存しています…");
+				let n = Z(g, "保存しています…");
 				try {
 					await o.call(`connections/${encodeURIComponent(e.id)}`, {
 						method: "PATCH",
@@ -2874,20 +3040,20 @@ function Pt(e, { request: t, Client: n, showAction: r, datetime: i, renderToolGr
 					n();
 				}
 			};
-			let _ = Z("form", "", "fi:space-y-4"), v = Z("div");
+			let _ = X("form", "", "fi:space-y-4"), v = X("div");
 			a(v, s.tools, {
 				labels: s.domain_labels,
 				permissions: e.permissions || {}
 			});
-			let y = Nt(), b = Z("button", "権限を保存して接続キーを再発行", "fi-button");
-			b.type = "submit", _.append(Z("p", "この接続に許可する業務を設定します。変更すると現在の接続とAI設定を解除し、新しいキーで接続を確認します。", "fi-form-help"), v, y, b), _.onsubmit = async (t) => {
+			let y = Ft(), b = X("button", "権限を保存して接続キーを再発行", "fi-button");
+			b.type = "submit", _.append(X("p", "この接続に許可する業務を設定します。変更すると現在の接続とAI設定を解除し、新しいキーで接続を確認します。", "fi-form-help"), v, y, b), _.onsubmit = async (t) => {
 				t.preventDefault();
-				let n = Q(b, "接続キーを再発行しています…");
+				let n = Z(b, "接続キーを再発行しています…");
 				try {
 					let t = await o.call(`connections/${encodeURIComponent(e.id)}/permissions`, {
 						method: "PUT",
 						body: {
-							modes: Mt(v),
+							modes: Pt(v),
 							acknowledge_automatic: y.querySelector("input").checked
 						}
 					});
@@ -2897,8 +3063,8 @@ function Pt(e, { request: t, Client: n, showAction: r, datetime: i, renderToolGr
 				} finally {
 					n();
 				}
-			}, i.append(m, _), t.append(i), t.append(At(e.state === "pending" ? "接続をキャンセル" : "接続を削除", async (t) => {
-				let n = Q(t.currentTarget, "削除しています…");
+			}, i.append(m, _), t.append(i), t.append(Nt(e.state === "pending" ? "接続をキャンセル" : "接続を削除", async (t) => {
+				let n = Z(t.currentTarget, "削除しています…");
 				try {
 					await o.call(`connections/${encodeURIComponent(e.id)}`, { method: "DELETE" }), c === e.id && u(), await p(), l("接続を削除しました。", "success");
 				} catch (e) {
@@ -2908,7 +3074,7 @@ function Pt(e, { request: t, Client: n, showAction: r, datetime: i, renderToolGr
 				}
 			}, "fi-button fi-button-danger")), n.append(t);
 		}
-		n.childElementCount || n.append(Z("p", "現在の接続はありません。新しい接続を作成してください。", "fi-empty-state")), a(e.querySelector("[data-new-tools]"), s.tools, {
+		n.childElementCount || n.append(X("p", "現在の接続はありません。新しい接続を作成してください。", "fi-empty-state")), a(e.querySelector("[data-new-tools]"), s.tools, {
 			labels: s.domain_labels,
 			permissions: {}
 		}), e.querySelector("[data-connection-form] button[type=submit]").disabled = !1;
@@ -2916,45 +3082,45 @@ function Pt(e, { request: t, Client: n, showAction: r, datetime: i, renderToolGr
 		m.replaceChildren();
 		let h = /* @__PURE__ */ new Map();
 		for (let e of s.surfaces || []) {
-			let t = Z("section", "", "fi-card fi:space-y-4"), n = e.type === "page" ? "チャットページ" : "フローティングチャット";
-			t.append(Z("h3", e.title || n, "fi-record-title"), Z("p", `${n} · ${e.configured ? e.agent_name : "AI未設定"}`, "fi-record-meta"));
-			let r = Z("form", "", "fi-form-grid");
+			let t = X("section", "", "fi-card fi:space-y-4"), n = e.type === "page" ? "チャットページ" : "フローティングチャット";
+			t.append(X("h3", e.title || n, "fi-record-title"), X("p", `${n} · ${e.configured ? e.agent_name : "AI未設定"}`, "fi-record-meta"));
+			let r = X("form", "", "fi-form-grid");
 			r.dataset.surface = e.name;
-			let i = Z("input");
+			let i = X("input");
 			i.type = "checkbox", i.checked = e.enabled;
-			let a = Z("label", "", "fi:flex fi:items-center fi:gap-2 fi:sm:col-span-2");
-			a.append(i, Z("span", "このチャットを表示する"));
-			let c = Z("select", "", "fi-field"), u = Z("option", "接続を選択してください");
+			let a = X("label", "", "fi:flex fi:items-center fi:gap-2 fi:sm:col-span-2");
+			a.append(i, X("span", "このチャットを表示する"));
+			let c = X("select", "", "fi-field"), u = X("option", "接続を選択してください");
 			u.value = "", c.append(u);
 			for (let e of s.connections.filter((e) => e.state === "ready")) {
-				let t = Z("option", e.name);
+				let t = X("option", e.name);
 				t.value = e.id, c.append(t);
 			}
 			c.value = e.connection_id || "";
-			let d = Z("select", "", "fi-field"), f = Z("p", "", "fi-form-help fi:sm:col-span-2");
+			let d = X("select", "", "fi-field"), f = X("p", "", "fi-form-help fi:sm:col-span-2");
 			f.setAttribute("role", "status");
-			let g = Z("button", "このチャットの設定を保存", "fi-button");
+			let g = X("button", "このチャットの設定を保存", "fi-button");
 			g.type = "submit";
 			let _ = [], v = 0, y = !1, b = () => {
 				g.disabled = i.checked && y && !(c.value && d.value && _.some((e) => e.grant_id === d.value && (e.audience || "internal") === "internal"));
 			}, x = () => {
 				let e = _.find((e) => e.grant_id === d.value);
-				f.textContent = e ? `Fourmix Intelligenceの利用範囲：${Ot[e.scope] || "未確認"} · 資料庫 ${(e.dataset_ids || []).length}件 · 外部サービス ${(e.capability_ids || []).length}件。能力はFourmix Intelligenceで管理します。` : "この接続に利用を許可したAIがありません。Fourmix IntelligenceでAIの利用許可を確認してください。", b();
+				f.textContent = e ? `Fourmix Intelligenceの利用範囲：${jt[e.scope] || "未確認"} · 資料庫 ${(e.dataset_ids || []).length}件 · 外部サービス ${(e.capability_ids || []).length}件。能力はFourmix Intelligenceで管理します。` : "この接続に利用を許可したAIがありません。Fourmix IntelligenceでAIの利用許可を確認してください。", b();
 			}, ee = async () => {
 				let t = ++v, n = c.value;
 				_ = [], d.replaceChildren(), d.disabled = !0, g.disabled = !0;
-				let i = Z("option", n ? "AIを読み込んでいます…" : "接続を選択してください");
+				let i = X("option", n ? "AIを読み込んでいます…" : "接続を選択してください");
 				if (i.value = "", d.append(i), f.textContent = "接続と、このチャットで使うAIを設定してください。", b(), n) try {
 					h.has(n) || h.set(n, o.agents(n));
 					let i = await h.get(n);
 					if (v !== t || !r.isConnected) return;
 					_ = i.agents || [], d.replaceChildren();
 					for (let e of _) {
-						let t = (e.audience || "internal") !== "internal", n = Z("option", `${e.name || "AIアシスタント"}${t ? "（対外向け・開発者API専用）" : ""}`);
+						let t = (e.audience || "internal") !== "internal", n = X("option", `${e.name || "AIアシスタント"}${t ? "（対外向け・開発者API専用）" : ""}`);
 						n.value = e.grant_id, n.disabled = t, d.append(n);
 					}
 					if (!_.length) {
-						let e = Z("option", "利用できるAIがありません");
+						let e = X("option", "利用できるAIがありません");
 						e.value = "", d.append(e);
 					}
 					n === e.connection_id && _.some((t) => t.grant_id === e.grant_id) && (d.value = e.grant_id);
@@ -2963,15 +3129,15 @@ function Pt(e, { request: t, Client: n, showAction: r, datetime: i, renderToolGr
 				} catch (e) {
 					if (v !== t || !r.isConnected) return;
 					h.delete(n), d.replaceChildren();
-					let i = Z("option", "AIの一覧を取得できませんでした");
+					let i = X("option", "AIの一覧を取得できませんでした");
 					i.value = "", d.append(i), d.disabled = !0, f.textContent = e.message, b();
 				}
 			};
 			c.onchange = () => (y = !0, ee()), d.onchange = () => {
 				y = !0, x();
-			}, i.onchange = b, r.append(a, jt("接続", c), jt("使用するAI", d), f, g), t.append(r), m.append(t), ee(), r.onsubmit = async (t) => {
+			}, i.onchange = b, r.append(a, Q("接続", c), Q("使用するAI", d), f, g), t.append(r), m.append(t), ee(), r.onsubmit = async (t) => {
 				t.preventDefault();
-				let n = Q(g, "保存しています…");
+				let n = Z(g, "保存しています…");
 				try {
 					let t = {
 						enabled: i.checked,
@@ -2988,26 +3154,26 @@ function Pt(e, { request: t, Client: n, showAction: r, datetime: i, renderToolGr
 				}
 			};
 		}
-		(s.surfaces || []).length || m.append(Z("p", "チャットUIはアプリケーションの設定で無効になっています。", "fi-empty-state"));
+		(s.surfaces || []).length || m.append(X("p", "チャットUIはアプリケーションの設定で無効になっています。", "fi-empty-state"));
 		let g = e.querySelector("[data-actions]");
 		g.replaceChildren();
 		let _ = new Map((s.tools || []).map((e) => [e.name, e]));
 		for (let t of s.actions || []) {
-			let n = Z("div", "", "fi-history-row"), a = Z("div", "", "fi-record-body");
-			a.append(Z("h3", _.get(t.operation)?.description?.split(/[。\n]/)[0] || t.operation, "fi-record-title"), Z("p", i(t.created_at, o.timezone), "fi-record-meta")), n.append(a, f(t.state), At(t.state === "confirmation_required" ? "内容を確認" : "実行結果を見る", () => r(o, t.id, e, p))), g.append(n);
+			let n = X("div", "", "fi-history-row"), a = X("div", "", "fi-record-body");
+			a.append(X("h3", _.get(t.operation)?.description?.split(/[。\n]/)[0] || t.operation, "fi-record-title"), X("p", i(t.created_at, o.timezone), "fi-record-meta")), n.append(a, f(t.state), Nt(t.state === "confirmation_required" ? "内容を確認" : "実行結果を見る", () => r(o, t.id, e, p))), g.append(n);
 		}
-		(s.actions || []).length || g.append(Z("p", "操作履歴はまだありません。", "fi-empty-state"));
+		(s.actions || []).length || g.append(X("p", "操作履歴はまだありません。", "fi-empty-state"));
 	}
 	e.querySelector("[data-connection-form]").onsubmit = async (n) => {
 		n.preventDefault();
-		let r = n.target, i = Q(r.querySelector("button[type=submit]"), "接続キーを作成しています…");
+		let r = n.target, i = Z(r.querySelector("button[type=submit]"), "接続キーを作成しています…");
 		try {
 			let n = await t(e.dataset.key, {
 				method: "POST",
 				body: {
 					name: r.elements.name.value,
 					host_mode: r.elements.host_mode.value,
-					modes: Mt(e.querySelector("[data-new-tools]")),
+					modes: Pt(e.querySelector("[data-new-tools]")),
 					acknowledge_automatic: r.elements.acknowledge_automatic.checked
 				}
 			});
@@ -3018,7 +3184,7 @@ function Pt(e, { request: t, Client: n, showAction: r, datetime: i, renderToolGr
 			i();
 		}
 	}, e.querySelector("[data-refresh]").onclick = async (e) => {
-		let t = Q(e.currentTarget, "更新しています…");
+		let t = Z(e.currentTarget, "更新しています…");
 		try {
 			await p(), l("接続状態を更新しました。", "success");
 		} catch (e) {
@@ -3041,7 +3207,7 @@ function Pt(e, { request: t, Client: n, showAction: r, datetime: i, renderToolGr
 }
 //#endregion
 //#region resources/js/stream.js
-async function Ft(e, t) {
+async function Lt(e, t) {
 	if (!e.body?.getReader) throw Error("応答を読み取れません。会話履歴を確認してください。");
 	let n = e.body.getReader(), r = new TextDecoder("utf-8", { fatal: !0 }), i = "";
 	try {
@@ -3112,7 +3278,7 @@ async function $(e, { method: t = "GET", body: n, signal: r, csrfToken: i, onEve
 	} catch (e) {
 		throw e.name === "AbortError" ? e : Error("通信できませんでした。接続を確認してから、AIと履歴を再読み込みしてください。");
 	}
-	if (c.ok && a && c.headers.get("Content-Type")?.includes("application/x-ndjson")) return Ft(c, a);
+	if (c.ok && a && c.headers.get("Content-Type")?.includes("application/x-ndjson")) return Lt(c, a);
 	let l = await c.json().catch(() => ({}));
 	if (!c.ok) {
 		let e = "処理を完了できませんでした。接続と利用許可を確認してください。", t = {
@@ -3129,12 +3295,12 @@ async function $(e, { method: t = "GET", body: n, signal: r, csrfToken: i, onEve
 	}
 	return l;
 }
-for (let e of document.querySelectorAll("[data-fourmix-management]")) Pt(e, {
+for (let e of document.querySelectorAll("[data-fourmix-management]")) It(e, {
 	request: $,
-	Client: yt,
-	showAction: Tt,
-	datetime: bt,
-	renderToolGroups: Dt
+	Client: Ct,
+	showAction: Ot,
+	datetime: wt,
+	renderToolGroups: At
 });
 //#endregion
 export { $ as request };

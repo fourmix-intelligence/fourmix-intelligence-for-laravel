@@ -255,7 +255,10 @@ fourmix-intelligence-floating-chat { @apply fi:font-sans fi:text-sm fi:text-ink;
 .fi-image-placeholder { @apply fi:rounded-xl fi:border fi:border-line fi:bg-raised fi:p-3; }
 .fi-image-placeholder img { max-height: 28rem; object-fit: contain; }
 .fi-chat-attachments, .fi-message-attachments { @apply fi:flex fi:flex-wrap fi:gap-2; }
-.fi-chat-attachments { @apply fi:mb-3 fi:max-h-40 fi:overflow-y-auto; }
+.fi-chat-attachments { @apply fi:mb-3 fi:overflow-y-auto; max-height: min(6rem, 18dvh); overscroll-behavior: contain; }
+@media (max-width: 639px), (max-height: 640px) {
+    .fi-chat-attachments { max-height: min(4.5rem, 12dvh); }
+}
 .fi-attachment-card { @apply fi:flex fi:min-w-0 fi:max-w-full fi:flex-wrap fi:items-center fi:gap-2 fi:rounded-lg fi:border fi:border-line fi:bg-raised fi:p-2.5; }
 .fi-attachment-card[data-state='unknown'], .fi-attachment-card[data-state='failed'] { border-color: var(--danger-line, #ecc6ca); }
 .fi-attachment-card .fi-button { @apply fi:min-h-8 fi:px-2 fi:py-1.5 fi:text-xs; }
@@ -298,3 +301,8 @@ fourmix-intelligence-floating-chat [hidden] { display: none !important; }
 :root.dark { --fi-canvas: var(--canvas, #09090b); --fi-surface: var(--surface, #18181b); --fi-raised: var(--surface-raised, #27272a); --fi-ink: var(--ink, #f4f4f5); --fi-secondary: var(--secondary, #a1a1aa); --fi-line: var(--line, #3f3f46); }
 @media (prefers-color-scheme: dark) { :root:not([data-fi-theme='light']):not([data-theme='light']) { --fi-canvas: var(--canvas, #09090b); --fi-surface: var(--surface, #18181b); --fi-raised: var(--surface-raised, #27272a); --fi-ink: var(--ink, #f4f4f5); --fi-secondary: var(--secondary, #a1a1aa); --fi-line: var(--line, #3f3f46); } }
 @media (prefers-reduced-motion: reduce) { .fi-button, .fi-field, .fi-tool-summary::before { transition: none; } }
+
+.fi-diagram-canvas { max-height: min(32rem, 65dvh); overflow: auto; margin-top: .5rem; overscroll-behavior: contain; }
+.fi-diagram-canvas > svg { display: block; margin-inline: auto; height: auto; }
+
+.fi-generated-files{max-height:min(12rem,30dvh);overflow:auto;overscroll-behavior:contain}.fi-generated-file{display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;padding:.5rem;border:1px solid var(--fi-border,#dcdcde);border-radius:.5rem}.fi-generated-file>span{flex:1;min-width:0;overflow-wrap:anywhere}.fi-generated-file>p{flex-basis:100%;margin:0}.fi-generated-file>p:empty{display:none}

@@ -32,6 +32,7 @@
 | `stream(string $message, callable $onEvent)` | イベントを受け取り、完了時に AgentResult を取得 |
 | `conversations()` | 会話一覧の配列 |
 | `history(?int $beforeId = null)` | 指定済み会話の履歴配列 |
+| `runControl(string $runId, bool $cancel = false)` | 指定済み会話の実行結果を確認。`true` は停止を要求。実行 UUID 必須 |
 | `upload(UploadedFile $file, string $requestId)` | 検証済み添付のアップロード。受付 UUID 必須 |
 | `files()` | 指定済み会話の添付一覧 |
 | `file(string $id)` | 指定済み会話の添付取得 |
@@ -131,15 +132,21 @@ Webhook の署名・重複検証、受信イベント、資料同期の詳細は
 | `PUT /preferences` | 本人の相談入口。`chat_entry`はheader・floating・both・hidden |
 | `POST /chat` | `surface`、`message`、任意の会話・添付・補足情報で会話 |
 | `POST /history` | `surface` の会話一覧。会話IDでメッセージ、`before_id` で前ページ |
+| `POST /run-control` | `surface`、`conversation_id`、`run_id` を指定して実行結果を確認。任意の `cancel: true` で停止を要求（既定 false）。60回／分 |
 | `GET /attachments` | `surface` と任意の会話IDで私有添付と条件を確認 |
 | `POST /attachments` | multipartで `surface`、file、UUIDのrequest_idと任意の会話ID |
 | `GET /attachments/{conversation}/{attachment}/content` | `surface` を指定し本人の添付を取得 |
+| `GET /artifacts/{conversation}/{artifact}/content` | `surface` を指定し、会話に保存された生成ファイルを現在の許可で取得。会話・成果物 ID は UUID |
 | `DELETE /attachments/{conversation}/{attachment}` | `surface` を指定し本人の添付を削除 |
 | `GET /actions/{id}` | 本人の確認内容または実行結果 |
 | `POST /actions/{id}/confirm` | 本人が `acknowledge: true` を指定して承認 |
 | `POST /actions/{id}/reject` | 本人が実行せず終了 |
 
 署名付きの `/fourmix-intelligence/v1/handshake`、manifest、bindings、actions、receiptsはサーバー間通信専用です。ブラウザーから任意の利用者IDを渡して認可する経路ではありません。独自UIのルートも本人・接続・AI・会話を毎回検証します。
+
+実行結果の確認と停止は同じ `/run-control` を使い、独立した `/result` や `/cancel` はありません。`expected_selection` で画面が読み込んだ接続・AI・revision を指定できます。停止受付は終了の確定ではなく、実際の終了まで結果を確認します。結果不明の書込みを自動で再送せず、実行済みの変更を停止で取り消したとは案内しません。
+
+生成ファイルの取得にも現在の本人・接続・AI・会話の許可を適用します。成果物 ID はその会話の正式な結果から取得し、過去の一時ダウンロード URL を恒久的な履歴のリンクとして保存しません。取得に失敗した場合は再ログイン、権限、期限、現在の接続設定を確認し、別会話や別接続へ自動で切り替えません。
 
 `GET /assets/{asset}` は公開表示用の同梱資産を配信し、業務データを返しません。`POST /chat` は `Accept: application/x-ndjson` の場合に逐次応答を返し、それ以外はJSON応答です。各行をイベントとして処理し、HTTP 200だけでAI処理の成功と判断しません。未知のイベントも安全に扱います。
 

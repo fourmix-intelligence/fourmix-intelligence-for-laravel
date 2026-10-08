@@ -99,7 +99,17 @@ $result = $writer->stream('説明してください。', function (array $event)
 
 独自 UI では PHP の `response()->stream()` などで NDJSON または SSE に変換し、プロキシのバッファリングを調整してください。上記 callback だけではブラウザーへ配信されません。標準 UI の配信経路をそのまま使うこともできます。
 
-中止は受信を止める操作であり、実行済みの業務変更の取り消しではありません。応答が途切れた書込みを自動で再送せず、実行履歴を確認します。
+## 実行の停止と結果の確認
+
+```php
+$chat = $writer->conversation($conversationId);
+$accepted = $chat->runControl($runId, cancel: true);
+$current = $chat->runControl($runId);
+```
+
+会話 UUID と実行 UUID は、受け取った実行イベントまたは応答から取得します。`runControl()` は現在の本人・接続・AI・会話の許可を再確認し、`cancel: true` で実行の停止を要求します。既定の `false` は結果の確認だけを行い、停止を要求しません。標準 UI の停止もこの仕組みを使用します。
+
+停止の受付だけで処理が終了したとは判断せず、実際の終了状態を確認してから次の送信を許可します。受信接続を切るだけでは正式な停止になりません。すでに実行された業務変更は自動で取り消されません。実行番号が未確認の場合や通信断で結果が不明な場合は、自動で再送せず、会話履歴と操作結果を確認します。独自 UI の HTTP 経路は [API リファレンス](reference.md#標準の管理会話http-api) を参照してください。
 
 ## 添付
 
@@ -152,4 +162,3 @@ $result = $customer->ask('商品を比較してください。');
 通信先の失敗は `Exceptions\ApiException`、接続失敗は Laravel HTTP クライアントの `ConnectionException`、前提不足は `LogicException` / `InvalidArgumentException`、認可などは HTTP 例外として通知されます。`ApiException::$status` で利用者へ示す状態を判定できます。
 
 接続や AI の再確認が必要なエラーは、管理画面へ案内します。内部例外本文や Fourmix Intelligence の応答全体を画面へ表示しません。AI が「実行しました」と回答しても、業務実行の記録が成功していなければ完了として扱いません。
-

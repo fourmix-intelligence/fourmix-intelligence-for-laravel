@@ -1,3 +1,31 @@
+
+const generatedArtifactLinks = new WeakMap();
+export function bindGeneratedArtifactLinks(target, artifacts = [], open) {
+    for (const link of target.querySelectorAll('a[data-artifact-autolink]')) {
+        if (artifacts.some(item => typeof item?.name === 'string' && item.name === link.getAttribute('data-artifact-autolink'))) {
+            link.replaceWith(document.createTextNode(link.textContent));
+        }
+    }
+
+    for (const link of target.querySelectorAll('a')) {
+        const href = generatedArtifactLinks.get(link) || link.getAttribute('data-generated-source') || link.getAttribute('href');
+        if (!href) continue;
+        let generated = false;
+        try { generated = new URL(href, 'https://fourmix.invalid').pathname.replace(/\/$/, '') === '/api/v3/generated-artifacts'; } catch {}
+        if (!generated) continue;
+        generatedArtifactLinks.set(link, href); link.removeAttribute('href'); link.removeAttribute('target'); link.removeAttribute('data-generated-source');
+        link.setAttribute('role', 'button'); link.tabIndex = 0;
+        const artifact = artifacts.find(item => item && typeof item.download_url === 'string' && item.download_url === href);
+        const activate = event => {
+            event.preventDefault(); event.stopPropagation();
+            if (artifact && typeof open === 'function') { open(artifact); return; }
+            let notice = target.querySelector('[data-generated-link-notice]');
+            if (!notice) { notice = document.createElement('p'); notice.setAttribute('data-generated-link-notice', ''); notice.setAttribute('role', 'status'); target.append(notice); }
+            notice.textContent = 'このリンクは利用できません。「作成したファイル」の保存ボタンをご利用ください。表示されない場合はファイルを作成し直してください。';
+        };
+        link.onclick = activate; link.onkeydown = event => { if (event.key === 'Enter' || event.key === ' ') activate(event); };
+    }
+}
 import { Marked } from 'marked';
 import DOMPurify from 'dompurify';
 
@@ -108,7 +136,10 @@ export function renderMarkdown(text, overrides = {}) {
         code: token => { const id = marker + embeds.length; embeds.push({ id, code: token }); return `<div id="${id}"></div>`; },
         link: function (token) {
             const url = safeUrl(token.href); const label = this.parser.parseInline(token.tokens);
-            return url ? `<a href="${escape(url.href)}"${token.title ? ` title="${escape(token.title)}"` : ''}>${label}</a>` : label;
+            if (url && /^\/connection-actions\/[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(url.pathname) && !url.search && !url.hash) return `${label}（正式な操作確認カードで内容を確認してください）`;
+            const autoFile = token.raw === token.text && !/^(?:https?:\/\/|www\.)/i.test(token.raw || '') ? ` data-artifact-autolink="${escape(token.text)}"` : '';
+            const generatedSource = url?.pathname.replace(/\/$/, '') === '/api/v3/generated-artifacts' ? ` data-generated-source="${escape(token.href)}"` : '';
+            return url ? `<a href="${escape(url.href)}"${generatedSource}${autoFile}${token.title ? ` title="${escape(token.title)}"` : ''}>${label}</a>` : label;
         },
     } });
     if (!DOMPurify.isSupported) { container.textContent = String(text); container.ready = Promise.resolve(); return container; }
@@ -145,7 +176,12 @@ export function renderMarkdown(text, overrides = {}) {
                 const status = element('p', '図を作成しています…', 'fi:my-2 fi:text-sm'); status.setAttribute('role', 'status'); figure.append(status); block.before(figure);
                 tasks.push(import('./mermaid.js').then(({ renderDiagram }) => renderDiagram(embed.code.text, { signal: abort.signal })).then(svg => {
                     if (abort.signal.aborted) return;
-                    figure.replaceChildren(svg); const details = element('details'); details.append(element('summary', '図のコードを確認'), block); figure.append(details);
+                    const canvas = element('div', '', 'fi-diagram-canvas'); canvas.tabIndex = 0; canvas.setAttribute('role', 'region'); canvas.setAttribute('aria-label', '図（拡大時は上下左右にスクロールできます）'); canvas.append(svg);
+                    const fitWidth = svg.getAttribute('width'); const bounds = (svg.getAttribute('viewBox') || '').trim().split(/[\s,]+/).map(Number);
+                    const naturalWidth = bounds.length === 4 && bounds.every(Number.isFinite) ? Math.min(1920, Math.max(1, bounds[2])) : Number(fitWidth);
+                    const zoom = element('button', '図を拡大', 'fi-button fi-button-secondary'); zoom.type = 'button'; zoom.setAttribute('aria-pressed', 'false');
+                    zoom.onclick = () => { const expanded = zoom.getAttribute('aria-pressed') !== 'true'; zoom.setAttribute('aria-pressed', String(expanded)); zoom.textContent = expanded ? '図を元の大きさに戻す' : '図を拡大'; svg.setAttribute('width', expanded ? String(naturalWidth) : fitWidth); svg.style.maxWidth = expanded ? 'none' : '100%'; };
+                    figure.replaceChildren(zoom, canvas); const details = element('details'); details.append(element('summary', '図のコードを確認'), block); figure.append(details);
                 }).catch(() => { if (!abort.signal.aborted) status.textContent = '図を表示できませんでした。以下のコードを確認してください。'; }));
             } else if (!options.streaming && language === 'mermaid') {
                 block.before(element('p', '1つの回答で表示できる図は6つまでです。以下のコードを確認してください。', 'fi:text-sm'));
@@ -174,5 +210,6 @@ export function renderMarkdown(text, overrides = {}) {
         const observer = new MutationObserver(() => { if (container.isConnected) attached = true; else if (attached) { abort.abort(); observer.disconnect(); } });
         observer.observe(document.body, { childList: true, subtree: true }); abort.signal.addEventListener('abort', () => observer.disconnect(), { once: true });
     }
+    bindGeneratedArtifactLinks(container);
     return container;
 }

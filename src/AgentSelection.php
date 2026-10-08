@@ -83,7 +83,7 @@ final class AgentSelection
      */
     public function call(ToolContext $context, string $alias, string $action, array $payload, ?callable $onEvent = null): array
     {
-        abort_unless(in_array($action, ['agent_chat', 'agent_history', 'agent_attachments', 'agent_attachment_upload', 'agent_attachment_content', 'agent_attachment_delete'], true), 422);
+        abort_unless(in_array($action, ['agent_chat', 'agent_history', 'agent_run_cancel', 'agent_run_status', 'agent_attachments', 'agent_attachment_upload', 'agent_attachment_content', 'agent_attachment_delete', 'agent_artifact_content'], true), 422);
         $selection = DB::table('fourmix_intelligence_agent_bindings')->where('subject', $context->subject)->where('alias', $alias)->firstOrFail();
 
         if (isset($payload['expected_selection'])) {
@@ -113,7 +113,7 @@ final class AgentSelection
      */
     private function callResolved(ToolContext $context, string $connectionId, string $agent, string $action, array $payload, ?\stdClass $selection = null, ?callable $onEvent = null): array
     {
-        abort_unless(in_array($action, ['agent_chat', 'agent_history', 'agent_attachments', 'agent_attachment_upload', 'agent_attachment_content', 'agent_attachment_delete'], true), 422);
+        abort_unless(in_array($action, ['agent_chat', 'agent_history', 'agent_run_cancel', 'agent_run_status', 'agent_attachments', 'agent_attachment_upload', 'agent_attachment_content', 'agent_attachment_delete', 'agent_artifact_content'], true), 422);
         $bound = $this->bound($context, $connectionId);
         $matches = array_values(array_filter($this->available($context, $connectionId), fn (array $grant): bool => in_array($agent, array_filter([$grant['grant_id'], $grant['slug'] ?? null, $grant['identify'] ?? null], 'is_string'), true)));
         abort_unless(count($matches) === 1, 403, 'この接続で利用できるAIを指定してください。');

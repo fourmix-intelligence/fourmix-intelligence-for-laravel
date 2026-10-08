@@ -140,10 +140,15 @@ final class ManagementController
 
         $result = $agent->ask($input['message']);
         $outcome = $result->data['run_outcome'] ?? null;
+        $display = is_string($outcome) ? ['run_outcome' => $outcome] : [];
+        if (is_array($result->data['artifacts'] ?? null)) {
+            $display['artifacts'] = array_map(static fn (array $row): array => array_intersect_key($row, array_flip(['id', 'name', 'mime', 'size', 'expires_at', 'kind'])),
+                array_values(array_filter($result->data['artifacts'], 'is_array')));
+        }
 
         return response()->json(['run_id' => $result->runId, 'plugin' => $result->agent,
             'conversation_id' => $result->conversationId,
-            'result' => ['answer' => $result->answer, 'data' => is_string($outcome) ? ['run_outcome' => $outcome] : []]])->header('Cache-Control', 'no-store');
+            'result' => ['answer' => $result->answer, 'data' => $display]])->header('Cache-Control', 'no-store');
     }
 
     public function history(Request $request, FourmixIntelligenceManager $manager): JsonResponse
@@ -153,6 +158,16 @@ final class ManagementController
             ->expectSelection($this->expectation($request));
         $result = empty($input['conversation_id']) ? $agent->conversations() : $agent->conversation($input['conversation_id'])->history($input['before_id'] ?? null);
 
+        return response()->json($result)->header('Cache-Control', 'no-store');
+    }
+
+    public function runControl(Request $request, FourmixIntelligenceManager $manager): JsonResponse
+    {
+        $input = $request->validate(['surface' => ['required', 'string', 'regex:/^[a-z][a-z0-9-]{0,63}$/D'], 'alias' => ['sometimes', 'string', 'max:128'],
+            'conversation_id' => ['required', 'uuid'], 'run_id' => ['required', 'uuid'], 'cancel' => ['sometimes', 'boolean']]);
+        $context = $this->access->context($request);
+        $result = $manager->agent($this->surfaceAlias($request, $context, $input['surface']))->forUser($context)
+            ->expectSelection($this->expectation($request))->conversation($input['conversation_id'])->runControl($input['run_id'], $input['cancel'] ?? false);
         return response()->json($result)->header('Cache-Control', 'no-store');
     }
 

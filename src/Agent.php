@@ -161,6 +161,15 @@ final class Agent
     }
 
     /** @return array<string, mixed> */
+    public function runControl(string $runId, bool $cancel = false): array
+    {
+        if (! Str::isUuid($runId) || $this->conversation === null) {
+            throw new \InvalidArgumentException('処理IDと会話を指定してください。');
+        }
+        return $this->fileCall($cancel ? 'agent_run_cancel' : 'agent_run_status', ['run_id' => $runId]);
+    }
+
+    /** @return array<string, mixed> */
     public function upload(UploadedFile $file, string $requestId): array
     {
         if (! Str::isUuid($requestId)) {

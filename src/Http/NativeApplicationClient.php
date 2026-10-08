@@ -69,8 +69,8 @@ final class NativeApplicationClient
     /** @param array<string, mixed> $payload */
     private function send(string $action, array $payload, ?string $connectionId, ?int $expectedRevision, bool $stream = false): Response
     {
-        abort_unless(in_array($action, ['chat', 'history', 'status', 'agents', 'agent_chat', 'agent_history',
-            'agent_attachments', 'agent_attachment_upload', 'agent_attachment_content', 'agent_attachment_delete'], true), 422);
+        abort_unless(in_array($action, ['chat', 'history', 'status', 'agents', 'agent_chat', 'agent_history', 'agent_run_cancel', 'agent_run_status',
+            'agent_attachments', 'agent_attachment_upload', 'agent_attachment_content', 'agent_attachment_delete', 'agent_artifact_content'], true), 422);
         $configured = app(BridgeConnections::class)->get($connectionId);
         abort_if($expectedRevision !== null && $configured['revision'] !== $expectedRevision, 409, '接続が更新されました。もう一度接続とAIを設定してください。');
         $connection = $configured['id'];
@@ -99,6 +99,16 @@ final class NativeApplicationClient
 
     private function fail(Response $response, string $action): never
     {
+        if ($action === 'agent_artifact_content') {
+            abort(in_array($response->status(), [401, 403, 404, 409, 410, 429, 503], true) ? $response->status() : 502, match ($response->status()) {
+                401 => '再ログインして生成ファイルを取得してください。',
+                403 => 'この生成ファイルを取得する権限がありません。',
+                404 => 'この会話の生成ファイルを確認できません。',
+                409 => '現在の接続とAI設定を確認してください。',
+                410 => '生成ファイルの利用期限が切れています。',
+                default => '生成ファイルを取得できませんでした。再試行してください。',
+            });
+        }
         if (str_starts_with($action, 'agent_attachment') && in_array($response->status(), [403, 404, 409, 410, 413, 415, 422, 429], true)) {
             if ($action === 'agent_attachment_upload' && $response->status() === 409 && $response->json('state') === 'unknown'
                 && Str::isUuid((string) $response->json('conversation_id'))) {
