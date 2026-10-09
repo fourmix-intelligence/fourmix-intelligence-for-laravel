@@ -189,7 +189,7 @@ test('FinCubeと同じ一列の入力で添付を折り畳み、応答中は送�
     chat.additions.open = true; chat.attachButton.click(); assert.equal(chat.additions.open, false); assert.equal(calls.some(call => call.url.endsWith('/chat')), false);
     chat.input.value = '確認してください'; const sending = chat.send(); await tick();
     assert.equal(chat.submit.hidden, true); assert.equal(chat.cancel.hidden, false); assert.equal(chat.cancel.textContent, '');
-    assert.equal(chat.cancel.getAttribute('aria-label'), '応答の待機をやめる');
+    assert.equal(chat.cancel.getAttribute('aria-label'), '停止');
     response.resolve({ conversation_id: conversation, result: { answer: '確認しました。' } }); await sending;
     assert.equal(chat.submit.hidden, false); assert.equal(chat.cancel.hidden, true); assert.equal(chat.input.value, '');
 });
@@ -338,12 +338,12 @@ test('実行結果はAIの発言と区別し、保存案内と結果リンクを
     assert.equal(chat.messages.textContent.includes('内部結果の原文'), false);
 });
 
-test('送信に失敗した場合も草稿と添付を保持し、履歴を確認するまで同じ依頼を繰り返さない', async () => {
+test('送信に失敗した場合も草稿と添付を保持し、履歴の再読込だけで結果不明を解除せず同じ依頼を繰り返さない', async () => {
     const { chat, file, calls } = await fixture(url => url.endsWith('/chat') ? Promise.reject(new Error('通信できませんでした。')) : undefined);
     await chat.addFiles([file()]); chat.input.value = 'この資料で業務を確認'; await chat.send();
     assert.equal(chat.input.value, 'この資料で業務を確認'); assert.equal(chat.attachments.length, 1); assert.equal(chat.submit.disabled, true);
     await chat.send(); assert.equal(calls.filter(call => call.url.endsWith('/chat')).length, 1);
-    await chat.recover(); assert.equal(chat.sendUncertain, false); assert.equal(calls.filter(call => call.url.endsWith('/chat')).length, 1); assert.equal(chat.input.value, 'この資料で業務を確認');
+    await chat.recover(); assert.equal(chat.sendUncertain, true); assert.equal(calls.filter(call => call.url.endsWith('/chat')).length, 1); assert.equal(chat.input.value, 'この資料で業務を確認');
 });
 
 test('業務contextを実際に送り、巨大なcontextは送らず、Markdown設定を各チャットに適用する', async () => {

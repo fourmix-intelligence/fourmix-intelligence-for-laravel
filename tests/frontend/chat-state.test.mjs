@@ -12,6 +12,7 @@ class Element {
     getAttribute(name) { return this.attributes[name] ?? null; }
     dispatchEvent() { return true; }
     scrollIntoView() {}
+    querySelectorAll() { return []; }
 }
 
 const deferred = () => { let resolve, reject; const promise = new Promise((yes, no) => { resolve = yes; reject = no; }); return { promise, resolve, reject }; };
