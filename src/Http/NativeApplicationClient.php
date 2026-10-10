@@ -5,6 +5,7 @@ namespace FourmixIntelligence\Laravel\Http;
 use FourmixIntelligence\Laravel\Exceptions\ApiException;
 use FourmixIntelligence\Laravel\Tools\BridgeConnections;
 use GuzzleHttp\Psr7\Utils;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\Factory;
 use Illuminate\Http\Client\Response;
 use Illuminate\Http\Exceptions\HttpResponseException;
@@ -90,11 +91,15 @@ final class NativeApplicationClient
         $nonce = (string) Str::uuid();
         $canonical = implode("\n", [$timestamp, $nonce, 'POST', $path, $workspace, $connection, hash('sha256', $raw)]);
 
-        return $this->http->baseUrl($baseUrl)->accept($stream ? 'application/x-ndjson' : 'application/json')->withoutRedirecting()->withOptions(['stream' => $stream])
-            ->timeout((int) config('fourmix-intelligence.native.timeout', 250))->connectTimeout(5)
-            ->withHeaders(['X-Fourmix-Timestamp' => $timestamp, 'X-Fourmix-Nonce' => $nonce, 'X-Fourmix-Workspace' => $workspace,
-                'X-Fourmix-Connection' => $connection, 'X-Fourmix-Signature' => 'v1='.hash_hmac('sha256', $canonical, $secret)])
-            ->withBody($raw, 'application/json')->post($path);
+        try {
+            return $this->http->baseUrl($baseUrl)->accept($stream ? 'application/x-ndjson' : 'application/json')->withoutRedirecting()->withOptions(['stream' => $stream])
+                ->timeout((int) config('fourmix-intelligence.native.timeout', 250))->connectTimeout(5)
+                ->withHeaders(['X-Fourmix-Timestamp' => $timestamp, 'X-Fourmix-Nonce' => $nonce, 'X-Fourmix-Workspace' => $workspace,
+                    'X-Fourmix-Connection' => $connection, 'X-Fourmix-Signature' => 'v1='.hash_hmac('sha256', $canonical, $secret)])
+                ->withBody($raw, 'application/json')->post($path);
+        } catch (ConnectionException) {
+            throw new ApiException('接続先との通信を完了できませんでした。会話履歴と操作結果を確認してください。', 503);
+        }
     }
 
     private function fail(Response $response, string $action): never

@@ -159,6 +159,10 @@ $result = $customer->ask('商品を比較してください。');
 
 ## エラー
 
+標準UIのJSON要求では、利用拒否は403、設定変更は409、混雑は429、通信タイムアウトは503として返します。上流の異常な応答は502に統一し、応答本文や内部URL・認証情報は表示しません。上流の401は連携認証の失敗であり、アプリケーション利用者のログイン切れとして扱いません。`ApiException::status` はプログラムから確認できる元のHTTP statusを維持します。
+
+通信の中断は業務操作の失敗確定を意味しません。履歴と操作結果を確認してから再依頼してください。標準UIから送信したチャット・業務更新・接続握手は自動で再送しません。`NativeApplicationClient` の接続失敗は503の `ApiException` として通知します。
+
 通信先の失敗は `Exceptions\ApiException`、接続失敗は Laravel HTTP クライアントの `ConnectionException`、前提不足は `LogicException` / `InvalidArgumentException`、認可などは HTTP 例外として通知されます。`ApiException::$status` で利用者へ示す状態を判定できます。
 
 接続や AI の再確認が必要なエラーは、管理画面へ案内します。内部例外本文や Fourmix Intelligence の応答全体を画面へ表示しません。AI が「実行しました」と回答しても、業務実行の記録が成功していなければ完了として扱いません。
