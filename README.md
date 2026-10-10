@@ -395,7 +395,7 @@ php artisan fi:knowledge:sync storage/app/knowledge.json --no-interaction
 
 MIT License
 
-## v2.1.0 のチャットと更新
+## v2.1.1 のチャットと更新
 
 会話の閲覧領域を優先し、設定・詳しい画面情報・補足はメニューや折り畳みから確認できます。Markdownの回答、左右にスクロールできる表、Mermaidの図、逐次応答と公開された処理状態を表示します。履歴・確認操作・通信中断後の結果照会を利用でき、確認待ち・失敗・結果不明を完了と区別します。
 
