@@ -6,3 +6,6 @@
 *.log
 
 /node_modules/
+
+# ローカルの検証記録とスクリーンショット
+.local/
