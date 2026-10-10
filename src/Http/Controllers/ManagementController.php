@@ -74,10 +74,11 @@ final class ManagementController
                 403 => 'この接続を利用できません。Fourmix Intelligenceで接続の利用設定を確認してください。',
                 404, 409, 410 => '接続が見つからないか、更新されています。接続状態を確認してください。',
                 429 => 'AIの一覧取得が混み合っています。少し待ってから再試行してください。',
+                503 => 'Fourmix Intelligenceに接続できませんでした。しばらくしてから再試行してください。',
                 default => 'AIの一覧を取得できませんでした。しばらくしてから再試行してください。',
             };
 
-            return response()->json(['message' => $message], $exception->status === 429 ? 429 : 502)->header('Cache-Control', 'no-store');
+            return response()->json(['message' => $message], in_array($exception->status, [429, 503], true) ? $exception->status : 502)->header('Cache-Control', 'no-store');
         } catch (ConnectionException $exception) {
             return response()->json(['message' => 'Fourmix Intelligenceに接続できませんでした。しばらくしてから再試行してください。'], 503)->header('Cache-Control', 'no-store');
         }
@@ -133,7 +134,7 @@ final class ManagementController
                     report($error);
                     $status = $error instanceof ApiException ? $error->status : ($error instanceof HttpExceptionInterface ? $error->getStatusCode() : 502);
                     $write(['type' => 'run.failed', 'data' => ['message' => '応答を完了できませんでした。会話履歴と操作結果を確認してください。',
-                        'status_code' => in_array($status, [401, 403, 409, 422, 429], true) ? $status : 502]]);
+                        'status_code' => in_array($status, [401, 403, 409, 422, 429, 503], true) ? $status : 502]]);
                 }
             }, 200, ['Content-Type' => 'application/x-ndjson', 'Cache-Control' => 'private, no-store, no-transform', 'X-Accel-Buffering' => 'no']);
         }
@@ -168,6 +169,7 @@ final class ManagementController
         $context = $this->access->context($request);
         $result = $manager->agent($this->surfaceAlias($request, $context, $input['surface']))->forUser($context)
             ->expectSelection($this->expectation($request))->conversation($input['conversation_id'])->runControl($input['run_id'], $input['cancel'] ?? false);
+
         return response()->json($result)->header('Cache-Control', 'no-store');
     }
 

@@ -489,6 +489,11 @@ export class FourmixIntelligenceChat extends HTMLElement {
                     ? 'この依頼は停止しました。実行済みの操作は元に戻りません。'
                     : 'この依頼の応答を完了できませんでした。再送する前に、会話履歴と操作結果を確認してください。');
             }
+            if (!beforeId) {
+                const receipt = result.messages?.at(-1)?.application_receipt;
+                const outcome = { succeeded: '業務操作が完了しました', rejected: '業務操作は実行せず終了しました', expired: '確認期限が切れました' }[receipt?.state];
+                if (outcome) { this.stopProgress(); this.progressLabel.textContent = outcome; }
+            }
             await this.refreshAttachmentList(id);
             if (!current() || this.conversationId !== id) return;
             for (const placeholder of this.messages.querySelectorAll('[data-pending-attachment]')) {
@@ -502,12 +507,20 @@ export class FourmixIntelligenceChat extends HTMLElement {
     async refreshActionResults(actionState) {
         if (!this.ready || this.isBusy() || this.selectionStale || !this.conversationId) return;
         try {
-            await this.loadHistory(this.conversationId); await this.pending(await this.api.state());
-            if (this.approvals.hidden && states[actionState]) this.progressLabel.textContent = states[actionState];
+            await this.loadHistory(this.conversationId);
+        } catch (error) {
+            if (error.status !== 409) this.setNotice([401, 419].includes(error.status) ? `${error.message} 同じ操作を再実行する必要はありません。` : '操作の実行結果を会話へ反映できませんでした。再読み込みして結果を確認してください。同じ操作を再実行する必要はありません。', 'error');
+            return;
         }
-        catch { this.setNotice('操作の実行結果を会話へ反映できませんでした。再読み込みして結果を確認してください。同じ操作を再実行する必要はありません。', 'error'); }
+        try {
+            await this.pending(await this.api.state());
+            if (this.approvals.hidden && states[actionState]) this.progressLabel.textContent = states[actionState];
+        } catch (error) {
+            if (error.status === 409) this.invalidateSelection();
+            else this.setNotice([401, 419].includes(error.status) ? `${error.message} 同じ操作を再実行する必要はありません。` : '会話履歴は更新しました。確認待ちの一覧を更新できませんでした。再読み込みして確認してください。同じ操作を再実行する必要はありません。', 'error');
+        }
     }
-    async pending(state) { this.approvals.replaceChildren(); for (const action of state.actions || []) if (action.state === 'confirmation_required') { const description = (state.tools || []).find(tool => tool.name === action.operation)?.description; const review = button(`操作を確認：${description || action.operation}`, () => showAction(this.api, action.id, this, async () => this.pending(await this.api.state())), 'secondary', 'shield'); review.title = description || action.operation; this.approvals.append(review); } this.approvals.hidden = this.approvals.childNodes.length === 0; }
+    async pending(state) { this.approvals.replaceChildren(); for (const action of state.actions || []) if (action.state === 'confirmation_required') { const description = (state.tools || []).find(tool => tool.name === action.operation)?.description; const label = description?.split('。')[0] || action.operation; const review = button(`操作を確認：${label}`, () => showAction(this.api, action.id, this, async () => this.pending(await this.api.state())), 'secondary', 'shield'); review.title = description || action.operation; this.approvals.append(review); } this.approvals.hidden = this.approvals.childNodes.length === 0; }
     async send() {
         if (this.isBusy() || !this.ready || !this.activeAlias || this.selectionStale || this.sendUncertain || this.attachments.some(entry => entry.state !== 'uploaded')) return;
         const draft = this.input.value, entries = [...this.attachments], attachmentIds = entries.map(entry => entry.attachment.id); if (!draft.trim() && !attachmentIds.length) return;

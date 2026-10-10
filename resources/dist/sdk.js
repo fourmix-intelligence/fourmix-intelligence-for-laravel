@@ -2809,7 +2809,15 @@ var kt = class extends HTMLElement {
 			let r = t ? [...this.messages.childNodes] : [];
 			t ? this.messages.replaceChildren() : this.clearMessages();
 			for (let t of n.messages || []) this.message(t.role, String(t.content || ""), t.attachment_ids || [], e, t.application_receipt, t.artifacts || []);
-			if (this.messages.append(...r), this.refreshEmpty(), this.beforeId = n.has_more ? n.before_id : null, this.more.hidden = !this.beforeId, this.renderConversations(), this.runTerminal && (this.sendUncertain = !1), this.event("history", n), !t && n.latest_run?.status === "failed" && this.message("assistant", n.latest_run.cancelled === !0 ? "この依頼は停止しました。実行済みの操作は元に戻りません。" : "この依頼の応答を完了できませんでした。再送する前に、会話履歴と操作結果を確認してください。"), await this.refreshAttachmentList(e), !i() || this.conversationId !== e) return;
+			if (this.messages.append(...r), this.refreshEmpty(), this.beforeId = n.has_more ? n.before_id : null, this.more.hidden = !this.beforeId, this.renderConversations(), this.runTerminal && (this.sendUncertain = !1), this.event("history", n), !t && n.latest_run?.status === "failed" && this.message("assistant", n.latest_run.cancelled === !0 ? "この依頼は停止しました。実行済みの操作は元に戻りません。" : "この依頼の応答を完了できませんでした。再送する前に、会話履歴と操作結果を確認してください。"), !t) {
+				let e = {
+					succeeded: "業務操作が完了しました",
+					rejected: "業務操作は実行せず終了しました",
+					expired: "確認期限が切れました"
+				}[n.messages?.at(-1)?.application_receipt?.state];
+				e && (this.stopProgress(), this.progressLabel.textContent = e);
+			}
+			if (await this.refreshAttachmentList(e), !i() || this.conversationId !== e) return;
 			for (let t of this.messages.querySelectorAll("[data-pending-attachment]")) {
 				let n = this.attachmentMetadata.get(t.dataset.pendingAttachment);
 				n ? t.replaceWith(this.attachmentLink(n, e)) : t.textContent = "添付ファイル（利用期限や取得権限を確認してください）";
@@ -2823,16 +2831,24 @@ var kt = class extends HTMLElement {
 		}
 	}
 	async refreshActionResults(e) {
-		if (this.ready && !this.isBusy() && !this.selectionStale && this.conversationId) try {
-			await this.loadHistory(this.conversationId), await this.pending(await this.api.state()), this.approvals.hidden && G[e] && (this.progressLabel.textContent = G[e]);
-		} catch {
-			this.setNotice("操作の実行結果を会話へ反映できませんでした。再読み込みして結果を確認してください。同じ操作を再実行する必要はありません。", "error");
+		if (this.ready && !this.isBusy() && !this.selectionStale && this.conversationId) {
+			try {
+				await this.loadHistory(this.conversationId);
+			} catch (e) {
+				e.status !== 409 && this.setNotice([401, 419].includes(e.status) ? `${e.message} 同じ操作を再実行する必要はありません。` : "操作の実行結果を会話へ反映できませんでした。再読み込みして結果を確認してください。同じ操作を再実行する必要はありません。", "error");
+				return;
+			}
+			try {
+				await this.pending(await this.api.state()), this.approvals.hidden && G[e] && (this.progressLabel.textContent = G[e]);
+			} catch (e) {
+				e.status === 409 ? this.invalidateSelection() : this.setNotice([401, 419].includes(e.status) ? `${e.message} 同じ操作を再実行する必要はありません。` : "会話履歴は更新しました。確認待ちの一覧を更新できませんでした。再読み込みして確認してください。同じ操作を再実行する必要はありません。", "error");
+			}
 		}
 	}
 	async pending(e) {
 		this.approvals.replaceChildren();
 		for (let t of e.actions || []) if (t.state === "confirmation_required") {
-			let n = (e.tools || []).find((e) => e.name === t.operation)?.description, r = q(`操作を確認：${n || t.operation}`, () => Ot(this.api, t.id, this, async () => this.pending(await this.api.state())), "secondary", "shield");
+			let n = (e.tools || []).find((e) => e.name === t.operation)?.description, r = q(`操作を確認：${n?.split("。")[0] || t.operation}`, () => Ot(this.api, t.id, this, async () => this.pending(await this.api.state())), "secondary", "shield");
 			r.title = n || t.operation, this.approvals.append(r);
 		}
 		this.approvals.hidden = this.approvals.childNodes.length === 0;
