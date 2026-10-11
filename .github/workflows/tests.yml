@@ -20,5 +20,5 @@ jobs:
           tools: composer:v2
       - run: composer require "illuminate/support:${{ matrix.laravel }}" --no-update
       - run: composer update --prefer-dist --no-interaction
-      - run: composer test
+      - run: composer check
 
