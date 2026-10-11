@@ -8,6 +8,7 @@ Fourmix Intelligence for Laravel は、接続・AI 呼出し・業務ツール�
 | [AI API](ai-api.md) | 接続×AI、会話、ストリーミング応答、添付、ジョブ、対外向け AI |
 | [業務ツールと認可](business-tools.md) | 属性、登録、スキーマ、Policy、確認と重複実行防止 |
 | [UI と Artisan](ui-and-artisan.md) | 標準 UI、独立した設定、生成、配置、カスタマイズ |
+| [チャットの取得結果と業務画面](ai-business-results.md) | 取得した行の詳細・比較、履歴、正式な業務操作との区別 |
 | [テストと運用](testing-and-operations.md) | 合成データ、通信を偽装したテスト、移行、監視、障害対応 |
 | [資料同期とWebhook受信](sync-and-webhooks.md) | 同期キー、JSON、受付と完了、署名、再送と結果不明 |
 | [API・設定リファレンス](reference.md) | 公開メソッド、拡張インターフェース、設定、低レベル API |

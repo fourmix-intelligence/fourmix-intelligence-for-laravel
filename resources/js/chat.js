@@ -266,6 +266,23 @@ export class FourmixIntelligenceChat extends HTMLElement {
         const follow = this.viewport.scrollHeight - this.viewport.scrollTop - this.viewport.clientHeight < 160;
         const markup = renderMarkdown(text, this.rendering); this.liveAnswer.content?.replaceWith(markup); if (follow) this.liveAnswer.scrollIntoView({ block: 'nearest' }); const item = this.liveAnswer; this.liveAnswer = null; return item;
     }
+    async renderBusinessViews(item, views) {
+        if (!Array.isArray(views) || !views.length) return;
+        try {
+            const { renderBusinessResults } = await import('./business-results.js');
+            if (!item.isConnected || this.selectionStale) return;
+            const parent = item.querySelector('.fi-chat-assistant');
+            if (!parent || parent.querySelector('.fmi-business')) return;
+            renderBusinessResults(parent, { workbench: { views } }, ({ view, row }) => {
+                if (this.isBusy() || this.selectionStale || !item.isConnected) return;
+                const id = row?.id ?? row?.identify ?? row?.key ?? row?.record_id ?? row?.order_id ?? row?.product_class_id ?? row?.product_id;
+                this.input.value = `${view.title || '取得した情報'}${id != null ? `（ID: ${String(id)}）` : ''}について相談したいです。`;
+                this.resizeInput(); this.input.focus();
+            });
+        } catch {
+            if (item.isConnected) item.append(node('p', '取得結果の表示を読み込めませんでした。回答本文を確認し、必要に応じて再読み込みしてください。', 'fi:text-xs fi:text-secondary'));
+        }
+    }
     invalidateSelection() { this.abortArtifactDownloads(); this.selectionStale = true; this.setNotice('このチャットの接続・AI・権限が変更されています。草稿は保持しています。「再読み込み」で現在の設定を確認してから送信してください。', 'error'); this.updateControls(); }
     refreshEmpty() { if (this.empty) { const empty = this.messages.childNodes.length === 0; this.empty.hidden = !empty; this.messages.hidden = empty; } }
     isBusy() { return this.loading || !!this.abort || !!this.uploading; }
@@ -461,7 +478,7 @@ export class FourmixIntelligenceChat extends HTMLElement {
             this.renderAttachments();
         } } finally { this.uploading = false; this.uploadAbort = null; this.renderAttachments(); this.updateControls(); }
     }
-    message(role, text, attachmentIds = [], conversationId = this.conversationId, applicationReceipt = null, artifacts = []) {
+    message(role, text, attachmentIds = [], conversationId = this.conversationId, applicationReceipt = null, artifacts = [], businessViews = []) {
         const user = role === 'user'; const item = node('article', '', `fi-chat-message fi:min-w-0 fi:flex ${user ? 'fi:justify-end' : 'fi:justify-start'}`);
         const bubble = node('div', '', user ? 'fi-chat-user fi:max-w-[88%] fi:space-y-1 fi:rounded-2xl fi:rounded-tr-md fi:bg-raised fi:px-4 fi:py-3' : 'fi-chat-assistant fi:w-full fi:min-w-0 fi:space-y-3');
         const receipt = !user && applicationReceipt && ['succeeded', 'rejected', 'expired'].includes(applicationReceipt.state) ? applicationReceipt : null;
@@ -471,7 +488,7 @@ export class FourmixIntelligenceChat extends HTMLElement {
             bubble.append(author, node('p', { succeeded: '業務操作が完了しました。', rejected: '業務操作は実行せず終了しました。', expired: '確認期限が切れました。業務操作は実行されていません。' }[receipt.state]), result);
         } else bubble.append(author, user ? node('p', text, 'fi:text-sm fi:leading-relaxed fi:whitespace-pre-wrap fi:break-words') : renderMarkdown(text, this.rendering));
         if (attachmentIds.length) { const files = node('div', '', 'fi-message-attachments'); for (const id of attachmentIds) { const metadata = this.attachmentMetadata.get(id); if (metadata) files.append(this.attachmentLink(metadata, conversationId)); else { const placeholder = node('p', '添付ファイルを確認しています…', 'fi:text-xs fi:text-secondary'); placeholder.dataset.pendingAttachment = id; files.append(placeholder); } } bubble.append(files); }
-        item.append(bubble); this.messages.append(item); if (!user) this.renderArtifacts(item, artifacts, conversationId); this.refreshEmpty(); item.scrollIntoView({ block: 'nearest' }); return item;
+        item.append(bubble); this.messages.append(item); if (!user) { this.renderArtifacts(item, artifacts, conversationId); this.renderBusinessViews(item, businessViews); } this.refreshEmpty(); item.scrollIntoView({ block: 'nearest' }); return item;
     }
     async loadHistory(id, beforeId) {
         if (this.abort || this.uploading || this.selectionStale || !id) return;
@@ -483,7 +500,7 @@ export class FourmixIntelligenceChat extends HTMLElement {
             if (this.conversationId !== id) { this.stopProgress(); this.startedAt = null; this.progress.hidden = true; if (this.conversationId) { this.clearAttachments(); this.storedAttachments.hidden = true; this.storedAttachments.open = false; this.storedAttachments.replaceChildren(); } } this.conversationId = id;
             this.attachmentMetadata.clear();
             const previous = beforeId ? [...this.messages.childNodes] : []; if (beforeId) this.messages.replaceChildren(); else this.clearMessages();
-            for (const message of result.messages || []) this.message(message.role, String(message.content || ''), message.attachment_ids || [], id, message.application_receipt, message.artifacts || []); this.messages.append(...previous); this.refreshEmpty(); this.beforeId = result.has_more ? result.before_id : null; this.more.hidden = !this.beforeId; this.renderConversations(); if (this.runTerminal) this.sendUncertain = false; this.event('history', result);
+            for (const message of result.messages || []) this.message(message.role, String(message.content || ''), message.attachment_ids || [], id, message.application_receipt, message.artifacts || [], message.business_views || []); this.messages.append(...previous); this.refreshEmpty(); this.beforeId = result.has_more ? result.before_id : null; this.more.hidden = !this.beforeId; this.renderConversations(); if (this.runTerminal) this.sendUncertain = false; this.event('history', result);
             if (!beforeId && result.latest_run?.status === 'failed') {
                 this.message('assistant', result.latest_run.cancelled === true
                     ? 'この依頼は停止しました。実行済みの操作は元に戻りません。'
@@ -528,7 +545,7 @@ export class FourmixIntelligenceChat extends HTMLElement {
         let context; try { context = this.businessContext(); } catch (error) { this.setNotice(error.message, 'error'); return; }
         const message = draft.trim() || '添付ファイルの内容を確認し、要点を日本語でまとめてください。'; this.message('user', message, attachmentIds); this.activeRunId = null; this.stopQueued = false; this.stopRequested = false; this.runTerminal = false; this.runCancelled = false; this.cancel.disabled = false; this.recovery.hidden = true; this.abort = new AbortController(); this.saveRunRecovery(); this.liveAnswer = null; this.updateControls(); this.cancel.hidden = false; this.setNotice(''); this.startProgress();
         this.input.value = ''; this.resizeInput();
-        try { const result = await this.api.ask(this.activeAlias, message, { conversationId: this.conversationId, context, attachmentIds, signal: this.abort.signal, onEvent: event => this.streamEvent(event) }); this.runTerminal = true; this.conversationId = result.conversation_id || this.conversationId; this.renderConversations(); this.renderArtifacts(this.finishAnswer(result.result?.answer || result.answer || '応答を受け取りました。'), result.result?.data?.artifacts || result.result?.artifacts || result.data?.artifacts || result.artifacts || []);
+        try { const result = await this.api.ask(this.activeAlias, message, { conversationId: this.conversationId, context, attachmentIds, signal: this.abort.signal, onEvent: event => this.streamEvent(event) }); this.runTerminal = true; this.conversationId = result.conversation_id || this.conversationId; this.renderConversations(); const answer = this.finishAnswer(result.result?.answer || result.answer || '応答を受け取りました。'); this.renderArtifacts(answer, result.result?.data?.artifacts || result.result?.artifacts || result.data?.artifacts || result.artifacts || []); this.renderBusinessViews(answer, result.result?.data?.workbench?.views || result.data?.workbench?.views || []);
             this.stopProgress(); this.progressLabel.textContent = result.result?.data?.run_outcome === 'confirmation_required' ? '内容を確認して承認してください' : '回答が完了しました';
             for (const entry of entries) this.revokePreview(entry); this.attachments = this.attachments.filter(entry => !entries.includes(entry)); this.renderAttachments(); this.setNotice(''); try { await this.refreshConversations(); } catch { this.setNotice('回答は受信しました。会話一覧を更新できなかったため、再読み込みして履歴をご確認ください。', 'error'); } this.event('response', result);
         } catch (error) { this.stopProgress(); this.progressLabel.textContent = error.name === 'AbortError' ? '待機を終了しました' : '応答が中断されました'; if (this.liveAnswer) { this.renderStreamAnswer(true); this.liveAnswer.append(node('p', '途中まで受信した回答です。完了結果は会話履歴で確認してください。', 'fi:text-xs fi:text-secondary')); this.liveAnswer = null; } if (!this.input.value) { this.input.value = draft; this.resizeInput(); } this.sendUncertain = !this.runTerminal; this.recovery.hidden = this.runTerminal; if (this.runCancelled) { this.progressLabel.textContent = '停止が完了しました'; this.setNotice('停止が完了しました。実行済みの操作は元に戻りません。'); } else if (error.status === 409) this.invalidateSelection(); else this.setNotice(error.name === 'AbortError' ? '応答の待機をやめました。サーバー側の処理は続く場合があります。草稿と添付は保持しています。履歴と操作結果を確認してください。' : `${error.message} 草稿と添付は保持しています。履歴と操作結果を確認してから、次の依頼を送ってください。`, 'error'); this.event('error', { message: this.notice.textContent }); }

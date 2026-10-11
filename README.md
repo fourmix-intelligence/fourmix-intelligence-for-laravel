@@ -14,6 +14,7 @@ Fourmix Intelligence への接続、双方向通信、AI の選択、会話、�
 - [AI API](docs/ai-api.md)：接続×AI、会話、ストリーミング、添付、ジョブ、対外向け AI。
 - [業務ツールと認可](docs/business-tools.md)：属性による一覧生成、入力、Policy、確認、重複防止。
 - [UI と Artisan](docs/ui-and-artisan.md)：標準画面、独立した設定、生成と配置、カスタマイズ。
+- [取得結果と業務画面](docs/ai-business-results.md)：実際に取得した情報の詳細・比較、履歴、正式な操作との区別。
 - [テストと運用](docs/testing-and-operations.md)：合成データによる検証、移行、監視、障害対応。
 - [API・設定リファレンス](docs/reference.md)：公開メソッド、拡張インターフェース、構成。
 

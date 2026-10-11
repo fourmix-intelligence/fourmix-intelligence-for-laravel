@@ -2431,6 +2431,21 @@ var kt = class extends HTMLElement {
 		let r = this.liveAnswer;
 		return this.liveAnswer = null, r;
 	}
+	async renderBusinessViews(e, t) {
+		if (Array.isArray(t) && t.length) try {
+			let { renderBusinessResults: n } = await import("./business-results-Q2RQ9MQq.js");
+			if (!e.isConnected || this.selectionStale) return;
+			let r = e.querySelector(".fi-chat-assistant");
+			if (!r || r.querySelector(".fmi-business")) return;
+			n(r, { workbench: { views: t } }, ({ view: t, row: n }) => {
+				if (this.isBusy() || this.selectionStale || !e.isConnected) return;
+				let r = n?.id ?? n?.identify ?? n?.key ?? n?.record_id ?? n?.order_id ?? n?.product_class_id ?? n?.product_id;
+				this.input.value = `${t.title || "取得した情報"}${r == null ? "" : `（ID: ${String(r)}）`}について相談したいです。`, this.resizeInput(), this.input.focus();
+			});
+		} catch {
+			e.isConnected && e.append(W("p", "取得結果の表示を読み込めませんでした。回答本文を確認し、必要に応じて再読み込みしてください。", "fi:text-xs fi:text-secondary"));
+		}
+	}
 	invalidateSelection() {
 		this.abortArtifactDownloads(), this.selectionStale = !0, this.setNotice("このチャットの接続・AI・権限が変更されています。草稿は保持しています。「再読み込み」で現在の設定を確認してから送信してください。", "error"), this.updateControls();
 	}
@@ -2768,20 +2783,20 @@ var kt = class extends HTMLElement {
 			}
 		}
 	}
-	message(e, t, n = [], r = this.conversationId, i = null, a = []) {
-		let o = e === "user", s = W("article", "", `fi-chat-message fi:min-w-0 fi:flex ${o ? "fi:justify-end" : "fi:justify-start"}`), c = W("div", "", o ? "fi-chat-user fi:max-w-[88%] fi:space-y-1 fi:rounded-2xl fi:rounded-tr-md fi:bg-raised fi:px-4 fi:py-3" : "fi-chat-assistant fi:w-full fi:min-w-0 fi:space-y-3"), l = !o && i && [
+	message(e, t, n = [], r = this.conversationId, i = null, a = [], o = []) {
+		let s = e === "user", c = W("article", "", `fi-chat-message fi:min-w-0 fi:flex ${s ? "fi:justify-end" : "fi:justify-start"}`), l = W("div", "", s ? "fi-chat-user fi:max-w-[88%] fi:space-y-1 fi:rounded-2xl fi:rounded-tr-md fi:bg-raised fi:px-4 fi:py-3" : "fi-chat-assistant fi:w-full fi:min-w-0 fi:space-y-3"), u = !s && i && [
 			"succeeded",
 			"rejected",
 			"expired"
-		].includes(i.state) ? i : null, u = W("p", "", "fi:flex fi:items-center fi:gap-2 fi:text-xs fi:font-semibold fi:text-secondary");
-		if (o || u.append(K(l ? "shield" : "chat")), u.append(W("span", o ? "あなた" : l ? "このアプリケーション" : this.agentName || "AI アシスタント")), l) {
+		].includes(i.state) ? i : null, d = W("p", "", "fi:flex fi:items-center fi:gap-2 fi:text-xs fi:font-semibold fi:text-secondary");
+		if (s || d.append(K(u ? "shield" : "chat")), d.append(W("span", s ? "あなた" : u ? "このアプリケーション" : this.agentName || "AI アシスタント")), u) {
 			let e = W("div", "", "fi:space-y-3");
-			J(l, e), c.append(u, W("p", {
+			J(u, e), l.append(d, W("p", {
 				succeeded: "業務操作が完了しました。",
 				rejected: "業務操作は実行せず終了しました。",
 				expired: "確認期限が切れました。業務操作は実行されていません。"
-			}[l.state]), e);
-		} else c.append(u, o ? W("p", t, "fi:text-sm fi:leading-relaxed fi:whitespace-pre-wrap fi:break-words") : U(t, this.rendering));
+			}[u.state]), e);
+		} else l.append(d, s ? W("p", t, "fi:text-sm fi:leading-relaxed fi:whitespace-pre-wrap fi:break-words") : U(t, this.rendering));
 		if (n.length) {
 			let e = W("div", "", "fi-message-attachments");
 			for (let t of n) {
@@ -2792,9 +2807,9 @@ var kt = class extends HTMLElement {
 					n.dataset.pendingAttachment = t, e.append(n);
 				}
 			}
-			c.append(e);
+			l.append(e);
 		}
-		return s.append(c), this.messages.append(s), o || this.renderArtifacts(s, a, r), this.refreshEmpty(), s.scrollIntoView({ block: "nearest" }), s;
+		return c.append(l), this.messages.append(c), s || (this.renderArtifacts(c, a, r), this.renderBusinessViews(c, o)), this.refreshEmpty(), c.scrollIntoView({ block: "nearest" }), c;
 	}
 	async loadHistory(e, t) {
 		if (this.abort || this.uploading || this.selectionStale || !e) return;
@@ -2808,7 +2823,7 @@ var kt = class extends HTMLElement {
 			this.conversationId !== e && (this.stopProgress(), this.startedAt = null, this.progress.hidden = !0, this.conversationId && (this.clearAttachments(), this.storedAttachments.hidden = !0, this.storedAttachments.open = !1, this.storedAttachments.replaceChildren())), this.conversationId = e, this.attachmentMetadata.clear();
 			let r = t ? [...this.messages.childNodes] : [];
 			t ? this.messages.replaceChildren() : this.clearMessages();
-			for (let t of n.messages || []) this.message(t.role, String(t.content || ""), t.attachment_ids || [], e, t.application_receipt, t.artifacts || []);
+			for (let t of n.messages || []) this.message(t.role, String(t.content || ""), t.attachment_ids || [], e, t.application_receipt, t.artifacts || [], t.business_views || []);
 			if (this.messages.append(...r), this.refreshEmpty(), this.beforeId = n.has_more ? n.before_id : null, this.more.hidden = !this.beforeId, this.renderConversations(), this.runTerminal && (this.sendUncertain = !1), this.event("history", n), !t && n.latest_run?.status === "failed" && this.message("assistant", n.latest_run.cancelled === !0 ? "この依頼は停止しました。実行済みの操作は元に戻りません。" : "この依頼の応答を完了できませんでした。再送する前に、会話履歴と操作結果を確認してください。"), !t) {
 				let e = {
 					succeeded: "業務操作が完了しました",
@@ -2878,7 +2893,9 @@ var kt = class extends HTMLElement {
 				signal: this.abort.signal,
 				onEvent: (e) => this.streamEvent(e)
 			});
-			this.runTerminal = !0, this.conversationId = e.conversation_id || this.conversationId, this.renderConversations(), this.renderArtifacts(this.finishAnswer(e.result?.answer || e.answer || "応答を受け取りました。"), e.result?.data?.artifacts || e.result?.artifacts || e.data?.artifacts || e.artifacts || []), this.stopProgress(), this.progressLabel.textContent = e.result?.data?.run_outcome === "confirmation_required" ? "内容を確認して承認してください" : "回答が完了しました";
+			this.runTerminal = !0, this.conversationId = e.conversation_id || this.conversationId, this.renderConversations();
+			let a = this.finishAnswer(e.result?.answer || e.answer || "応答を受け取りました。");
+			this.renderArtifacts(a, e.result?.data?.artifacts || e.result?.artifacts || e.data?.artifacts || e.artifacts || []), this.renderBusinessViews(a, e.result?.data?.workbench?.views || e.data?.workbench?.views || []), this.stopProgress(), this.progressLabel.textContent = e.result?.data?.run_outcome === "confirmation_required" ? "内容を確認して承認してください" : "回答が完了しました";
 			for (let e of t) this.revokePreview(e);
 			this.attachments = this.attachments.filter((e) => !t.includes(e)), this.renderAttachments(), this.setNotice("");
 			try {

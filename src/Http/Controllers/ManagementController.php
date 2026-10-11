@@ -146,6 +146,10 @@ final class ManagementController
             $display['artifacts'] = array_map(static fn (array $row): array => array_intersect_key($row, array_flip(['id', 'name', 'mime', 'size', 'expires_at', 'kind'])),
                 array_values(array_filter($result->data['artifacts'], 'is_array')));
         }
+        if (is_array($result->data['workbench'] ?? null)) {
+            // 中核で本人・利用区分を確認し、内部引数を除いた取得結果だけを渡す。
+            $display['workbench'] = $result->data['workbench'];
+        }
 
         return response()->json(['run_id' => $result->runId, 'plugin' => $result->agent,
             'conversation_id' => $result->conversationId,
