@@ -121,7 +121,8 @@ final class ManagementController
         if (str_contains((string) $request->header('Accept'), 'application/x-ndjson')) {
             return response()->stream(function () use ($agent, $input): void {
                 $write = static function (array $event): void {
-                    echo json_encode($event, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR)."\n";
+                    echo ($event['type'] ?? '') === 'run.keepalive' ? "\n"
+                        : json_encode($event, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR)."\n";
                     if (ob_get_level() > 0) {
                         ob_flush();
                     }

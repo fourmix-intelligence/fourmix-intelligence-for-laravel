@@ -240,6 +240,29 @@ final class StudioAgentTest extends TestCase
         self::assertSame('完了', $result->answer);
     }
 
+    public function test_idle_heartbeat_is_forwarded_before_the_next_event_without_completing_the_run(): void
+    {
+        $this->select();
+        $received = [];
+        $chunks = ["\n", "{\"type\":\"run.completed\",\"data\":{\"result\":{\"answer\":\"完了\"}}}\n"];
+        $this->streamBody = new PumpStream(function () use (&$chunks, &$received): string|false {
+            if (count($chunks) === 1) {
+                self::assertSame([['type' => 'run.keepalive', 'data' => []]], $received);
+            }
+
+            return array_shift($chunks) ?? false;
+        });
+
+        $result = app(FourmixIntelligenceManager::class)->agent('sales-assistant')->forUser(new ToolContext('user:1'))
+            ->stream('合成の相談', static function (array $event) use (&$received): void {
+                $received[] = $event;
+            });
+
+        self::assertSame('完了', $result->answer);
+        self::assertSame(['run.keepalive', 'run.completed'], array_column($received, 'type'));
+        self::assertCount(1, Http::recorded()->filter(fn (array $record): bool => str_ends_with($record[0]->url(), '/agent_chat')));
+    }
+
     #[TestWith(['{"type":"run.completed","data":{"result":{"answer":"途中"}}}'])]
     #[TestWith(["{\"type\":\"assistant.delta\",\"data\":{\"text\":\"途中\"}}\n"])]
     #[TestWith(["{\"type\":\"run.failed\",\"data\":{}}\n"])]

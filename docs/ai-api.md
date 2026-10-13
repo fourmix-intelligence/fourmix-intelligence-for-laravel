@@ -97,6 +97,8 @@ $result = $writer->stream('説明してください。', function (array $event)
 
 代表的なイベントは `run.created`、`run.status`、`assistant.delta`、`run.completed`、`run.failed` です。`run.status` の phase や説明は変化するため、未知の状態も受け取れる表示にします。完了イベントの後で `AgentResult` が返ります。失敗イベントは例外として扱います。
 
+応答のない時間にも接続を維持するため、上流の保活空行はcallbackへ`run.keepalive`（`data`は空配列）として通知します。独自の配信ではNDJSONの空行、またはSSEのコメントとして直ちに転送してください。保活を本文・処理状態・完了として扱わないでください。標準UIは空行として配信し、画面には表示しません。
+
 独自 UI では PHP の `response()->stream()` などで NDJSON または SSE に変換し、プロキシのバッファリングを調整してください。上記 callback だけではブラウザーへ配信されません。標準 UI の配信経路をそのまま使うこともできます。
 
 ## 実行の停止と結果の確認

@@ -49,6 +49,7 @@ final class NativeApplicationClient
                 abort_unless(str_ends_with($line, "\n"), 502, '通信が途中で終了しました。会話履歴と操作結果を確認してください。');
                 $line = trim($line);
                 if ($line === '') {
+                    $onEvent(['type' => 'run.keepalive', 'data' => []]);
                     continue;
                 }
                 $event = json_decode($line, true, 64, JSON_THROW_ON_ERROR);
